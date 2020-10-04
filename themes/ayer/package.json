@@ -1,0 +1,35 @@
+{
+  "name": "hexo-theme-ayer",
+  "version": "1.8.7",
+  "description": "a clean and elegant theme for hexo.",
+  "scripts": {
+    "dev": "parcel serve source-src/main.js -d source/dist",
+    "build": "rimraf source/dist && parcel build source-src/main.js -d source/dist --no-source-maps",
+    "postinstall": "node ./move_config.js"
+  },
+  "source": "source-src/main.js",
+  "repository": {
+    "type": "git"
+  },
+  "keywords": [
+    "hexo",
+    "theme",
+    "blog",
+    "ayer"
+  ],
+  "author": "SunZhiqi <sunzhiqi@live.com>",
+  "license": "SATA",
+  "bugs": {
+    "url": "https://github.com/songhua-river",
+    "email": "sunzhiqi@live.com"
+  },
+  "homepage": "https://songhua-river.github.io/",
+  "devDependencies": {
+    "autoprefixer": "^9.8.6",
+    "parcel-bundler": "^1.12.4",
+    "parcel-plugin-bundle-visualiser": "^1.2.0",
+    "postcss-modules": "^1.5.0",
+    "rimraf": "^3.0.2"
+  },
+  "dependencies": {}
+}
