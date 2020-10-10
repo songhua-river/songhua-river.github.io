@@ -1,5 +1,5 @@
 ---
-title: 不同路径
+title: 62.不同路径
 mathjax: true
 tags:
   - 算法
