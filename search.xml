@@ -412,6 +412,30 @@
       </tags>
   </entry>
   <entry>
+    <title>二进制处理</title>
+    <url>/posts/bf22892f/</url>
+    <content><![CDATA[<h1 id=""><a href="#" class="headerlink" title=""></a></h1><p>输入一个整数，输出该数二进制表示中的1的个数，其中负数用补码表示</p>
+<p><strong>分析：</strong></p>
+<ul>
+<li><p>可以让目标数字和一个数字做与运算</p>
+</li>
+<li><p>这个比较的数字必须只有一位是1其他是0，这样就可以知道目标数字的这一位是否为0</p>
+</li>
+<li><p>所以用于比较的这个数字初始值为1，比较完成后左移一位，这样就可以依次比较所有位是否为1</p>
+</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> countNum = <span class="function"><span class="keyword">function</span> (<span class="params">n</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> count = <span class="number">0</span>,</span><br><span class="line">        flag = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span> (flag) &#123;</span><br><span class="line">        <span class="keyword">if</span> (flag &amp; n) &#123;</span><br><span class="line">            count++;</span><br><span class="line">        &#125;</span><br><span class="line">        flag = flag &lt;&lt; <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> count;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>每日一题</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>JavaScript</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>142.形链表2</title>
     <url>/posts/4b975e45/</url>
     <content><![CDATA[<h5 id="LeetCode"><a href="#LeetCode" class="headerlink" title="LeetCode"></a><a href="https://leetcode-cn.com/problems/linked-list-cycle-ii/">LeetCode</a></h5><h3 id="暴力解法-哈希表"><a href="#暴力解法-哈希表" class="headerlink" title="暴力解法 哈希表"></a>暴力解法 哈希表</h3><p>保存每一个节点判断</p>
