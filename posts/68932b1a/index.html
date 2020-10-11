@@ -112,7 +112,7 @@ var _hmt = _hmt || [];
   
     <div class="article-entry" itemprop="articleBody">
        
-  <h3 id="什么样的问题可以使用动态规划"><a href="#什么样的问题可以使用动态规划" class="headerlink" title="什么样的问题可以使用动态规划"></a>什么样的问题可以使用动态规划</h3><ul>
+  <h4 id="什么样的问题可以使用动态规划"><a href="#什么样的问题可以使用动态规划" class="headerlink" title="什么样的问题可以使用动态规划"></a>什么样的问题可以使用动态规划</h4><ul>
 <li><p>计数</p>
 <ul>
 <li>到达一个位置有多少中走法</li>
@@ -132,7 +132,7 @@ var _hmt = _hmt || [];
 </ul>
 </li>
 </ul>
-<h3 id="硬币问题"><a href="#硬币问题" class="headerlink" title="硬币问题"></a>硬币问题</h3><p>一起提动态规划，可能最先想到的就是硬币问题，这也是动态规划的最常见问题。</p>
+<h4 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h4><p>一起提动态规划，可能最先想到的就是硬币问题，这也是动态规划的最常见问题。</p>
 <p>你有三种硬币，面值分别为 2元，5元，7元，每种硬币数量足够多。买一本书须要27元，如何使用最少的硬币组合正好可以付清27元</p>
 <p>从直觉上我们可能会这样尝试：</p>
 <ul>
@@ -252,7 +252,7 @@ var _hmt = _hmt || [];
 
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params">x</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (x === <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">var</span> stack = [<span class="number">0</span>],</span><br><span class="line">        i = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> (; i &lt;= x; ++i) &#123;</span><br><span class="line">        <span class="comment">// 如果硬币面额数量不确定，其实就是循环两两比较</span></span><br><span class="line">        stack[i] = <span class="built_in">Math</span>.min(</span><br><span class="line">            stack[i - <span class="number">2</span>] === <span class="literal">undefined</span> ? <span class="literal">Infinity</span> : stack[i - <span class="number">2</span>] + <span class="number">1</span>,</span><br><span class="line">            stack[i] === <span class="literal">undefined</span> ? <span class="literal">Infinity</span> : stack[i],</span><br><span class="line">        );</span><br><span class="line">        stack[i] = <span class="built_in">Math</span>.min(</span><br><span class="line">            stack[i - <span class="number">5</span>] === <span class="literal">undefined</span> ? <span class="literal">Infinity</span> : stack[i - <span class="number">5</span>] + <span class="number">1</span>,</span><br><span class="line">            stack[i] === <span class="literal">undefined</span> ? <span class="literal">Infinity</span> : stack[i],</span><br><span class="line">        );</span><br><span class="line">        stack[i] = <span class="built_in">Math</span>.min(</span><br><span class="line">            stack[i - <span class="number">7</span>] === <span class="literal">undefined</span> ? <span class="literal">Infinity</span> : stack[i - <span class="number">7</span>] + <span class="number">1</span>,</span><br><span class="line">            stack[i] === <span class="literal">undefined</span> ? <span class="literal">Infinity</span> : stack[i],</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (stack[i - <span class="number">1</span>] === <span class="literal">Infinity</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> stack[i - <span class="number">1</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h4 id="相关题目"><a href="#相关题目" class="headerlink" title="相关题目"></a>相关题目</h4><p><a href="/posts/8a3cb899">零钱兑换</a></p>
+<h4 id="相关题目详解"><a href="#相关题目详解" class="headerlink" title="相关题目详解"></a>相关题目详解</h4><p><a href="/posts/8a3cb899">零钱兑换</a></p>
 <p><a href="/posts/a42081a0">不同路径</a></p>
  
       <!-- reward -->
