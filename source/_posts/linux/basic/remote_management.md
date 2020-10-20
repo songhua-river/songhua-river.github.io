@@ -247,3 +247,16 @@ scp -r user@remote:Desktop demo
 
   使用 私钥 加密的数据，需要使用 公钥 解密
 
+#### 配置别名
+
+每次都输入 `ssh -p port user@remote`，时间久了会觉得很麻烦，特别是当 user , remote 和 port 都得输入
+
+在 ~/.ssh/config 里面追加以下内容：
+
+```bash
+Host 别名
+  HostName ip地址
+  User 用户名
+  Port 22
+```
+保存之后，即可用 ssh mac 实现远程登录了， scp 同样可以使用
