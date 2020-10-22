@@ -1,5 +1,5 @@
 ---
-title: Object
+title: Object新特性
 mathjax: true
 abbrlink: af01aeda
 date: 2020-10-18 14:23:49
@@ -277,3 +277,4 @@ ES2020 引入了一个新的 Null 判断运算符??。它的行为类似||，但
 ```javascript
 const animationDuration = response.settings?.animationDuration ?? 300;
 ```
+
