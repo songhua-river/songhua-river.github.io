@@ -1,14 +1,14 @@
 ---
 title: Reflect
 mathjax: true
-date: 2020-10-23 21:58:38
 categories:
-- JavaScript
-- 基础
+  - JavaScript
+  - 基础
 tags:
-- JavaScript
-- ES6基础
-abbrlink:
+  - JavaScript
+  - ES6基础
+abbrlink: 4139f7d5
+date: 2020-10-23 21:58:38
 ---
 
 #### 概念

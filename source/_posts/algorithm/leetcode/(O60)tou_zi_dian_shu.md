@@ -130,3 +130,54 @@ function twoSum(n) {
 
 #### 动态规划
 
+```javascript
+function twoSum(n) {
+    var arr = [];
+    var mount = Math.pow(6, n)
+
+    function recursion(loop, sum) {
+        if (loop > n) {
+            if (arr[sum] === undefined) arr[sum] = 0;
+            arr[sum]++;
+            return arr;
+        }
+        for (var i = 1; i <= 6; i++) {
+            recursion(loop + 1, sum + i);
+        }
+    }
+    recursion(1, 0);
+    var res = [];
+    for (var i = 0; i < arr.length; i++) {
+        if (arr[i] !== undefined) {
+            res.push(Number((arr[i] / mount).toFixed(5)))
+        }
+    }
+    return res;
+}
+```
+
+```javascript
+function twoSum(n) {
+    var sum = Math.pow(6, n);
+    var f = [];
+    f.push([], new Array(6 + 1).fill(1, 1));
+    for (var i = 2; i <= n; i++) {
+        if (f[i] === undefined) f[i] = [];
+        for (var j = i; j <= 6 * i; j++) {
+            if (f[i][j] === undefined) f[i][j] = 0
+            for (var k = 1; k <= 6; k++) {
+                f[i][j] += f[i - 1][j - k] || 0
+            }
+        }
+    }
+    var res = []
+    var arr = f[n];
+    var len = f[n].length
+    for (var i = 0; i < len; i++) {
+        if (arr[i] == undefined) continue;
+        res.push(Number((arr[i] / sum).toFixed(5)));
+    }
+    return res;
+}
+```
+
