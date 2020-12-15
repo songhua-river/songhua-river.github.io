@@ -1,13 +1,14 @@
 ---
 layout: post
 title: underscore框架设计
-date: 2020-12-02 13:44:27
 categories:
   - JavaScript
   - 函数式编程
 tags:
   - 函数式编程
   - underscore
+abbrlink: db3582e2
+date: 2020-12-02 13:44:27
 ---
 
 #### 立即执行函数

@@ -30,6 +30,7 @@
     "hexo-server": "^2.0.0"
   },
   "devDependencies": {
-    "karma-phantomjs-launcher": "^1.0.4"
+    "karma-phantomjs-launcher": "^1.0.4",
+    "webpack-cli": "^4.2.0"
   }
 }
