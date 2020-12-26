@@ -328,3 +328,49 @@ const reg = /foo/g
 let reg2 = cloneRegExp(reg) // /foo/g
 console.log(reg2);
 ```
+
+##### 反柯理化
+
+从字面讲，意义和用法跟函数柯里化相比正好相反，扩大适用范围，创建一个应用范围更广的函数。使本来只有特定对象才适用的方法，扩展到更多的对象。或者说让一个对象去借用一个原本不属于他的方法。
+
+```javascript
+//简单实现
+var uncurrying = (fn) => (context,...rest)=>fn.apply(context,rest);
+
+//使用call.apply省略context参数
+//调用fn的call方法，和Funcion的call方法是同理的，省略了一步原型链查找的过程
+//call方法需要执行call执行时候的上下文即fn函数，并把其他参数分别传入
+//加上apply方法，重指定call执行时候的上下文，并且call方法的参数可以用数组的形式传入 也就是rest包含[context,...rest]
+var uncurrying = fn => (...rest)=> fn.call.apply(fn,rest)
+
+var uncurrying = fn => (...rest)=> Function.prototype.call.apply(fn,rest)
+
+//也可以直接挂载在Function上面
+Function.prototype.uncurrying = function (){
+    return this.call.bind(this)
+}
+```
+
+使用场景
+
+```javascript
+//借用自己
+var un = Function.prototype.uncurrying.uncurrying();
+var a = un(Array.prototype.map)([1,2],function(i){console.log(i)});
+
+//改变函数的执行上下文
+function sayHi () {
+    return "Hello " + this.value +" "+[].slice.call(arguments);
+}
+var sayHiuncurrying=sayHi.uncurrying();
+console.log(sayHiuncurrying({value:'world'},"hahaha"));
+
+//借用方法
+var obj = {
+    push:function(v){
+          return  Array.prototype.push.uncurrying()(this,v)
+    } 
+}
+obj.push('first');
+```
+

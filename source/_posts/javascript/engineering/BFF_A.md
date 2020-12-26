@@ -1,5 +1,5 @@
 ---
-title: BFF 实践 (1)
+title: BFF 实践
 mathjax: true
 categories:
   - JavaScript
@@ -201,6 +201,207 @@ process.env.NODE_ENV
 
 安装 [webpack-merge](https://github.com/survivejs/webpack-merge) 合并公共配置和定制配置
 
-##### swig
+##### art-template
 
-使用swig作为后端模板，用于服务端渲染html
+使用art-template作为后端模板，用于服务端渲染html
+配置和swig 模板类似
+
+```bash
+yarn add art-template koa-art-template
+```
+
+##### 打包思路
+
+通过webpack打包前端代码
+
+html-webpack-plugin 处理前端模板,放到指定位置
+
+因为模板中插入js代码所以需要通过编写插件处理
+
+后端模板通过 gulp 处理
+
+处理模块化规范,删除无用的代码
+
+webpack.js
+
+```javascript
+const glob = require('glob')
+const { argv } = require('yargs')
+const path = require('path')
+const files = glob.sync("./src/web/views/**/*.js")
+const htmls = glob.sync("./src/web/views/**/*.art")
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+
+const CustomInjectPlugin = require('./src/service/config/CustomInjectPlugin');
+const mode = argv.mode;
+if (!files.length) return;
+
+const entry = files.reduce((entry, path) => {
+  const match = path.match(/(\w+)\/(\w+)\.js$/);
+  entry[match[1]] = match.input;
+  return entry;
+}, {});
+
+const htmlPlugin = htmls.map(path => {
+  const match = path.match(/(\w+)\/(\w+)\.art$/);
+  return new HtmlWebpackPlugin({
+    filename: `${match[1]}.art`,
+    template: match.input,
+    hash: true,
+    chunks: ['runtime', match[1]],
+    inject: false
+  })
+})
+module.exports = {
+  entry,
+  mode,
+  output: {
+    filename: '[name]_[contentHash].js',
+    path: __dirname + '/dist'
+  }
+  plugins: [
+    new CleanWebpackPlugin(),
+    ...htmlPlugin,
+    new CustomInjectPlugin()
+  ],
+  optimization: {
+    runtimeChunk: {
+      name: 'runtime'
+    }
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /(node_modules|bower_components)/,
+        use: {
+          loader: 'babel-loader',
+        }
+      }
+    ]
+  },
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, 'src/web')
+    }
+  }
+}
+```
+
+CustomInjectPlugin.js
+
+```javascript
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const pluginName = 'CustomInjectPlugin';
+
+class CustomInjectPlugin {
+  js = ''
+  apply(compiler) {
+    compiler.hooks.compilation.tap('pluginName', (compilation) => {
+      HtmlWebpackPlugin.getHooks(compilation).beforeAssetTagGeneration.tapAsync(
+        pluginName,
+        (data, cb) => {
+          const { assets: { js } } = data;
+          this.js = js.map(src => src.replace('@', './')).join('');
+          cb(null, data)
+        }
+      )
+      // Static Plugin interface |compilation |HOOK NAME | register listener 
+      HtmlWebpackPlugin.getHooks(compilation).beforeEmit.tapAsync(
+        pluginName, // <-- Set a meaningful name here for stacktraces
+        (data, cb) => {
+          const { html } = data;
+          data.html = html.replace(/!script!/, this.js);
+          this.js = ''
+          cb(null, data)
+        }
+      )
+    })
+  }
+}
+
+module.exports = CustomInjectPlugin;
+```
+
+gulpfile.js
+
+```javascript
+const { series, src, dest } = require('gulp');
+var plugins = require('gulp-load-plugins')();
+const replace = require('@rollup/plugin-replace');
+
+const jspath = './src/service/**/*.js';
+
+// 开发环境 监听文件变化, 处理模块化规范
+function es6(cb) {
+  plugins.watch(jspath, { ignoreInitial: false },
+    function () {
+      return src(jspath)
+        .pipe(plugins.babel({
+          plugins: [
+            "@babel/plugin-transform-modules-commonjs",
+            "@babel/plugin-transform-runtime"
+          ]
+        }))
+        .pipe(dest('dist'))
+    }
+  )
+    .pipe(dest('build'));
+  return cb()
+}
+
+function es6dev() {
+  return src(jspath)
+    .pipe(plugins.babel({
+      ignore: ['./src/service/config/index.js'],
+      plugins: [
+        //处理模块化规范
+        "@babel/plugin-transform-modules-commonjs",
+        "@babel/plugin-transform-runtime"
+      ]
+    }))
+    .pipe(dest('dist'))
+}
+
+function codeClean(cb) {
+  return src(jspath)
+    // transform the files here.
+    .pipe(plugins.rollup({
+      // any option supported by Rollup can be set here.
+      input: './src/service/config/index.js',
+      output: {
+        format: 'cjs'
+      },
+      plugins: [
+        replace({
+          'process.env.NODE_ENV': JSON.stringify('production')
+        })
+      ]
+    }))
+    .pipe(dest('dist'))
+}
+
+exports.dev = series(es6);
+exports.default = series(es6dev, codeClean);
+```
+
+
+##### chunk
+
+生成chunk的几种方式
+
++ 多页面entry生成多个chunk
++ 异步组件生成chunk
++ code split 
+
+##### hash 
+
++ hash 如果都使用hash的话，即每次修改任何一个文件，所有文件名的hash至都将改变。所以一旦修改了任何一个文件，整个项目的文件缓存都将失效.
+
++ chunkhash chunkhash根据不同的入口文件(Entry)进行依赖文件解析、构建对应的chunk，生成对应的哈希值。在生产环境里把一些公共库和程序入口文件区分开，单独打包构建，接着我们采用chunkhash的方式生成哈希值，那么只要我们不改动公共库的代码，就可以保证其哈希值不会受影响。动态import也受chunkhash的影响.
+
+因为我们是将样式作为模块import到JavaScript文件中的，所以它们的chunkhash是一致的,这样就会有个问题，只要对应css或则js改变，与其关联的文件hash值也会改变，但其内容并没有改变呢，所以没有达到缓存意义。固contenthash的用途随之而来。
+
++ contenthash是针对文件内容级别的，只有你自己模块的内容变了，那么hash值才改变
+
