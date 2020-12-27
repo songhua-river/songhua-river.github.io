@@ -329,6 +329,55 @@ let reg2 = cloneRegExp(reg) // /foo/g
 console.log(reg2);
 ```
 
+##### 柯理化
+
+实现 before after
+
+```javascript
+function test(a, b, c) {
+  console.log('test', a, b, c);
+  return 'test';
+}
+
+Function.prototype.after = function (cb) {
+  const _this = this;
+  return function _after() {
+    if (_this.name !== '_before') {
+      cb();
+      const res = _this.apply(_this, arguments);
+      return res;
+    }
+    const res = _this.apply(_this, arguments);
+    cb(res);
+  }
+}
+
+Function.prototype.before = function (cb) {
+  const _this = this;
+  function _before() {
+    if (_this.name === '_after') {
+      const res = _this.apply(_this, arguments);
+      cb(res);
+      return
+    }
+    const res = cb();
+    _this.apply(_this, arguments);
+    return res;
+  }
+  return _before
+}
+
+test
+  .before(function () {
+    console.log('before');
+    return 10;
+  })
+  .after(function (res) {
+    console.log('after');
+  })
+  (1, 2, 3)
+```
+
 ##### 反柯理化
 
 从字面讲，意义和用法跟函数柯里化相比正好相反，扩大适用范围，创建一个应用范围更广的函数。使本来只有特定对象才适用的方法，扩展到更多的对象。或者说让一个对象去借用一个原本不属于他的方法。
