@@ -29,3 +29,180 @@ tags:
 测速
 
 `nrm test taobao`
+
+#### 常用工具
+
+##### clean-webpack-plugin
+
+https://www.npmjs.com/package/clean-webpack-plugin
+
+##### 
+
+
+#### source-map
+
+cheap-module-source-map 用于生产环境，不能暴露源码
+
+eval-cheap-module-source-map 开发环境中使用
+
+```javascript
+{
+  devtool:'cheap-module-source-map'
+}
+```
+
+#### devServer 和热模块更新
+
+安装devServer
+
+```bash
+yarn add -D webpack-dev-server
+```
+
+webpack.config.js 中添加配置项  
+
+contentBase 只有需要在访问静态文件时候使用，默认下面三个配置项都可以不写
+
+```javascript
+devServer: {
+  contentBase: path.join(__dirname, 'dist'),
+  compress: true,
+  port: 9000
+}
+```
+
+package.json 中添加启动命令
+
+```json
+{
+  "scripts":{
+    "server": "webpack-dev-server --open"
+  }
+}
+```
+
+开启hmr
+
+1.配置webpack-dev-server
+2.devServer配置hot:true
+3.plugins hotModuleeReplaceMentPlugin
+4.js 文件中添加hmr代码
+
+webpack.config.js 中添加
+
+
+
+```javascript
+const webpack = require('webpack')
+
+module.exports = {
+  devServer: {
+  ...
+  hot:true
+  },
+  plugins: [
+    ...
+    new webpack.NamedModulesPlugin(),
+    new webpack.HotModuleReplacementPlugin()
+  ]
+}
+```
+
+index.js 增加代码
+
+```javascript
+if (module.hot) {
+  module.hot.accept('./print.js', function() {
+    console.log('Accepting the updated printMe module!');
+   printMe();
+  })
+}
+```
+
+
+#### output 和 devserver 中的 publicpath 作用
+
+[output 中的 publicpath](https://webpack.js.org/configuration/output/#outputpublicpath)
+
+这是一个在使用按需加载和引入外部资源（图片,文件等）非常重要的属性，如果设置了一个错误的值，当加载这些资源时会报404错误
+
+这个配置项指定了输出目录在浏览器中引用时的公共路径（publicpath）,一个相对路径被解析为相对于HTML页面或[‵<base>`标签](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base)
+
+> <base> 标签为页面上的所有链接规定默认地址或默认目标。
+
+相对服务器的路径，相对与协议的路径，或绝对路径都是有可能的甚至有时是必须的，换句话说，在CMD 托管静态资源
+
+在运行时或loader处理时，每一个URL的前缀都会被色设置未配置项中的值，这就是为什么在很多例子中这个配置项被设置为 `/` 的原因
+
+webpack-dev-server 也需要从publicPath获取信息，使用它来确定从何处提供输出文件。
+
+```javascript
+module.exports = {
+  //...
+  output: {
+    // One of the below
+    publicPath: 'https://cdn.example.com/assets/', // CDN (always HTTPS)
+    publicPath: '//cdn.example.com/assets/', // CDN (same protocol)
+    publicPath: '/assets/', // server-relative
+    publicPath: 'assets/', // relative to HTML page
+    publicPath: '../assets/', // relative to HTML page
+    publicPath: '', // relative to HTML page (same directory)
+  }
+};
+```
+
+[devServer 中的 publicpath](https://webpack.js.org/configuration/dev-server/#devserverpublicpath-)
+
+打包的文件可以在浏览器的这个目录下面得到
+
+如果服务跑在 http://localhost:8080，打包的文件为bundle.js，publicPath为 `/`, 可以在 `http://localhost:8080/bundle.js`访问到打包文件
+
+如果 publicPath 改为 `/assets/`, 那么可以在 `http://localhost:8080/assets/bundle.js`访问，也可以把 publicPath 改为 `http://localhost:8080/assets/`
+
+这说明了 devServer.publicPath 与 output.publicPath 是一致的
+
+
+
+##### @babel/polyfill  @babel/plugin-transform-runtime @babel/runtime-corejs2
+
+@babel/preset-env 只会转换新语法，但是不会转换新的api,比如 `Array.from`
+
+需要 @babel/polyfill 转换新的api,但是 @babel/polyfill 会全量引入，不能按需引入
+
+可以通过 `babel.rc` 配置文件来实现
+
+```json
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "useBuiltIns": "entry"
+      }
+    ]
+  ]
+}
+```
+
+但是@babel/preset-env也存在问题，虽然会按需引入但是每个文件如果有重复的方法，都会被编译成相同的代码引入，文件多的时候会让冗余的代码越来越多
+
+@babel/runtime-corejs2 是一个随着 [@babel/plugin-transform-runtime](https://babeljs.io/docs/en/babel-plugin-transform-runtime) 一起时使用的运行时依赖，会把重复的函数覆盖为 @babel/runtime-corejs2 中的引用
+
+@babel/runtime-corejs2 仅仅是一个包含着函数的包，把函数以模块化的形式引入
+
+.babelrc
+
+```json
+{
+  "plugins": [
+    [
+      "@babel/plugin-transform-runtime",
+      {
+        "corejs": 3
+      }
+    ]
+  ]
+}
+```
+
+
