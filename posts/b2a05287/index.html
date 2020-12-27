@@ -88,7 +88,7 @@ var _hmt = _hmt || [];
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> 字数统计:</span>
-            <span class="post-count">737</span>
+            <span class="post-count">1.9k</span>
         </span>
     </span>
 
@@ -97,7 +97,7 @@ var _hmt = _hmt || [];
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> 阅读时长≈</span>
-            <span class="post-count">2 分钟</span>
+            <span class="post-count">7 分钟</span>
         </span>
     </span>
 </div>
@@ -238,6 +238,173 @@ var _hmt = _hmt || [];
 <blockquote>
 <p>提示:在 Linux 中,想要终止一个终端程序的执行,绝大多数都可以使用 <code>CTRL + C</code></p>
 </blockquote>
+<h4 id="远程登录和复制文件"><a href="#远程登录和复制文件" class="headerlink" title="远程登录和复制文件"></a>远程登录和复制文件</h4><table>
+<thead>
+<tr>
+<th>序号</th>
+<th>命令</th>
+<th>对应英文</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>01</td>
+<td>ssh 用户名@ip</td>
+<td>secure shell</td>
+<td>关机／重新启动</td>
+</tr>
+<tr>
+<td>02</td>
+<td>scp 用户名@ip:文件名或路径 用户名@ip:文件名或路径</td>
+<td>secure copy</td>
+<td>远程复制文件</td>
+</tr>
+</tbody></table>
+<h5 id="ssh-基础"><a href="#ssh-基础" class="headerlink" title="ssh 基础"></a>ssh 基础</h5><p>在 Linux 中 SSH 是 非常常用 的工具，通过 SSH 客户端 我们可以连接到运行了 SSH 服务器 的远程机器上</p>
+<p><img src="/posts/b2a05287/0002.jpg"></p>
+<ul>
+<li><p>SSH 客户端是一种使用 Secure Shell（SSH） 协议连接到远程计算机的软件程序</p>
+</li>
+<li><p>SSH 是目前较可靠，专为远程登录会话和其他网络服务 提供安全性的协议</p>
+<ul>
+<li><p>利用 SSH 协议 可以有效防止远程管理过程中的信息泄露</p>
+</li>
+<li><p>通过 SSH 协议 可以对所有传输的数据进行加密，也能够防止 DNS 欺骗和 IP 欺骗</p>
+</li>
+</ul>
+</li>
+<li><p>SSH 的另一项优点是传输的数据可以是经过压缩的，所以可以加快传输的速度</p>
+</li>
+</ul>
+<h5 id="域名-和-端口号"><a href="#域名-和-端口号" class="headerlink" title="域名 和 端口号"></a>域名 和 端口号</h5><p><strong>域名</strong></p>
+<ul>
+<li>由一串 用点分隔 的名字组成，例如：<a target="_blank" rel="noopener" href="http://www.iftrue.club/">www.iftrue.club</a></li>
+<li>是 IP 地址 的别名，方便用户记忆</li>
+</ul>
+<p><strong>端口号</strong></p>
+<ul>
+<li><p>IP 地址：通过 IP 地址 找到网络上的 计算机</p>
+</li>
+<li><p>端口号：通过 端口号 可以找到 计算机上运行的应用程序</p>
+<ul>
+<li>SSH 服务器 的默认端口号是 22，如果是默认端口号，在连接的时候，可以省略常</li>
+</ul>
+</li>
+<li><p>常见服务端口号列表：</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>服务</th>
+<th>端口号</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>01</td>
+<td>SSH 服务器</td>
+<td>22</td>
+</tr>
+<tr>
+<td>02</td>
+<td>Web 服务器</td>
+<td>80</td>
+</tr>
+<tr>
+<td>03</td>
+<td>HTTPS</td>
+<td>443</td>
+</tr>
+<tr>
+<td>04</td>
+<td>FTP 服务器</td>
+<td>21</td>
+</tr>
+</tbody></table>
+<h5 id="SSH-客户端的简单使用"><a href="#SSH-客户端的简单使用" class="headerlink" title="SSH 客户端的简单使用"></a>SSH 客户端的简单使用</h5><p>如果没有安装先通过<code>sudo apt install openssh-server</code>安装ssh</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh [-p port] user@remote</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>user 是在远程机器上的用户名，如果不指定的话默认为当前用户</li>
+<li>remote 是远程机器的地址，可以是 IP／域名，或者是 后面会提到的别名</li>
+<li>port 是 SSH Server 监听的端口，如果不指定，就为默认值 22</li>
+</ul>
+<blockquote>
+<ul>
+<li>使用 exit 退出当前用户的登录</li>
+</ul>
+</blockquote>
+<ul>
+<li><p>ssh 这个终端命令只能在 Linux 或者 UNIX 系统下使用,如果在 Windows 系统中，可以安装 PuTTY 或XShell 客户端软件即可</p>
+</li>
+<li><p>在工作中，SSH 服务器的端口号很有可能不是 22，如果遇到这种情况就需要使用 -p 选项，指定正确的端口号，否则无法正常连接到服务器</p>
+</li>
+</ul>
+<h5 id="scp"><a href="#scp" class="headerlink" title="scp"></a>scp</h5><ul>
+<li>scp 就是 secure copy，是一个在 Linux 下用来进行 远程拷贝文件 的命令</li>
+<li><strong>它的地址格式与 ssh 基本相同，需要注意的是</strong>，在指定端口时用的是大写的 -P 而不是小写的</li>
+</ul>
+<p><strong>常见操作</strong></p>
+<ul>
+<li>把本地当前目录下的 01.py 文件 复制到 远程 家目录下的 Desktop/01.py<br>注意：: 后面的路径如果不是绝对路径，则以用户的家目录作为参照路径</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp -P port 01.py user@remote:Desktop/01.py</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>加上 -r 选项可以传送文件夹,把当前目录下的 demo 文件夹 复制到 远程 家目录下的 Desktop</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp -r demo user@remote:Desktop</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>把远程 家目录下的 Desktop 复制到 当前目录下的 demo 文件夹</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp -r user@remote:Desktop demo</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><a target="_blank" rel="noopener" href="https://medium.com/@bharatdwarkani/copying-a-file-from-windows-to-linux-through-ssh-17f4f4c2eca8">复制windows下面的文件到远程服务器</a></li>
+</ul>
+<p><img src="/posts/b2a05287/0003.jpg"></p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-r</td>
+<td>若给出的源文件是目录文件，则 scp 将递归复制该目录下的所有子目录和文件，目标文件必须为一个目录名</td>
+</tr>
+<tr>
+<td>-P</td>
+<td>若远程 SSH服务器的端口不是 22，需要使用大写字母 -P 选项指定端口</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>注意：<br>  scp 这个终端命令只能在 Linux 或者 UNIX 系统下使用<br>  如果在 Windows 系统中，可以安装 PuTTY，使用 pscp 命令行工具或者安装 FileZilla 使用 FTP 进行文件传输</p>
+</blockquote>
+<h4 id="免密码登录"><a href="#免密码登录" class="headerlink" title="免密码登录"></a>免密码登录</h4><blockquote>
+<p>提示：有关 SSH 配置信息都保存在用户家目录下的 .ssh 目录下</p>
+</blockquote>
+<ul>
+<li><p>配置公钥</p>
+<p>执行 <code>ssh-keygen</code> 即可生成 SSH 钥匙，一路回车即可</p>
+</li>
+<li><p>上传公钥到服务器</p>
+<p>执行 <code>ssh-copy-id -p port user@remote</code>，可以让远程服务器记住我们的公钥</p>
+</li>
+</ul>
+<p><img src="/posts/b2a05287/0004.jpg"></p>
+<blockquote>
+<p>非对称加密算法</p>
+</blockquote>
+<p>  使用 公钥 加密的数据，需要使用 私钥 解密</p>
+<p>  使用 私钥 加密的数据，需要使用 公钥 解密</p>
+<h4 id="配置别名"><a href="#配置别名" class="headerlink" title="配置别名"></a>配置别名</h4><p>每次都输入 <code>ssh -p port user@remote</code>，时间久了会觉得很麻烦，特别是当 user , remote 和 port 都得输入</p>
+<p>在 ~/.ssh/config 里面追加以下内容：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Host 别名</span><br><span class="line">  HostName ip地址</span><br><span class="line">  User 用户名</span><br><span class="line">  Port 22</span><br></pre></td></tr></table></figure>
+<p>保存之后，即可用 ssh mac 实现远程登录了， scp 同样可以使用</p>
  
       <!-- reward -->
       
@@ -318,6 +485,15 @@ var _hmt = _hmt || [];
 
    
   <nav class="article-nav">
+    
+      <a href="/posts/d94019be/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            55.跳跃游戏
+          
+        </div>
+      </a>
     
     
       <a href="/posts/2447a85e/" class="article-nav-link">

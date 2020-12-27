@@ -88,7 +88,7 @@ var _hmt = _hmt || [];
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> 字数统计:</span>
-            <span class="post-count">357</span>
+            <span class="post-count">849</span>
         </span>
     </span>
 
@@ -97,7 +97,7 @@ var _hmt = _hmt || [];
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> 阅读时长≈</span>
-            <span class="post-count">1 分钟</span>
+            <span class="post-count">3 分钟</span>
         </span>
     </span>
 </div>
@@ -222,7 +222,7 @@ var _hmt = _hmt || [];
 <td>忽略大小写</td>
 </tr>
 </tbody></table>
-<p><img src="/0003.png"></p>
+<p><img src="/posts/65d7f240/0003.png"></p>
 <table>
 <thead>
 <tr>
@@ -239,6 +239,66 @@ var _hmt = _hmt || [];
 <td>行尾,搜寻以 ke 结束的行</td>
 </tr>
 </tbody></table>
+<h4 id="vim使用方法"><a href="#vim使用方法" class="headerlink" title="vim使用方法"></a>vim使用方法</h4><p><img src="/posts/65d7f240/0001.gif"></p>
+<p>安装</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install vim</span><br></pre></td></tr></table></figure>
+
+<p>基本上 vi/vim 共分为三种模式，分别是命令模式（Command mode），输入模式（Insert mode）和底线命令模式（Last line mode）。 这三种模式的作用分别是：</p>
+<ul>
+<li>命令模式</li>
+</ul>
+<p>用户刚刚启动 vi/vim，便进入了命令模式。</p>
+<p>此状态下敲击键盘动作会被Vim识别为命令，而非输入字符。比如我们此时按下i，并不会输入一个字符，i被当作了一个命令。</p>
+<p>以下是常用的几个命令：</p>
+<ul>
+<li><p>i 切换到输入模式，以输入字符。</p>
+</li>
+<li><p>x 删除当前光标所在处的字符。</p>
+</li>
+<li><p>: 切换到底线命令模式，以在最底一行输入命令。</p>
+</li>
+</ul>
+<p>若想要编辑文本：启动Vim，进入了命令模式，按下i，切换到输入模式。</p>
+<p>命令模式只有一些最基本的命令，因此仍要依靠底线命令模式输入更多命令。</p>
+<ul>
+<li>输入模式</li>
+</ul>
+<p>在命令模式下按下i就进入了输入模式。</p>
+<p>在输入模式中，可以使用以下按键：</p>
+<ul>
+<li><p>字符按键以及Shift组合，输入字符</p>
+</li>
+<li><p>ENTER，回车键，换行</p>
+</li>
+<li><p>BACK SPACE，退格键，删除光标前一个字符</p>
+</li>
+<li><p>DEL，删除键，删除光标后一个字符</p>
+</li>
+<li><p>方向键，在文本中移动光标</p>
+</li>
+<li><p>HOME/END，移动光标到行首/行尾</p>
+</li>
+<li><p>Page Up/Page Down，上/下翻页</p>
+</li>
+<li><p><strong>Insert</strong>，切换光标为输入/替换模式，光标将变成竖线/下划线</p>
+</li>
+<li><p>ESC，退出输入模式，切换到命令模式</p>
+</li>
+</ul>
+<ul>
+<li>底线命令模式</li>
+</ul>
+<p>在命令模式下按下:（英文冒号）就进入了底线命令模式。</p>
+<p>底线命令模式可以输入单个或多个字符的命令，可用的命令非常多。</p>
+<p>在底线命令模式中，基本的命令有（已经省略了冒号）：</p>
+<ul>
+<li><p>q 退出程序</p>
+</li>
+<li><p>w 保存文件</p>
+</li>
+</ul>
+<p>按ESC键可随时退出底线命令模式。</p>
+<p><img src="/posts/65d7f240/0002.png"></p>
  
       <!-- reward -->
       
