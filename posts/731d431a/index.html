@@ -88,7 +88,7 @@ var _hmt = _hmt || [];
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> 字数统计:</span>
-            <span class="post-count">960</span>
+            <span class="post-count">1.2k</span>
         </span>
     </span>
 
@@ -97,7 +97,7 @@ var _hmt = _hmt || [];
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> 阅读时长≈</span>
-            <span class="post-count">4 分钟</span>
+            <span class="post-count">5 分钟</span>
         </span>
     </span>
 </div>
@@ -172,6 +172,33 @@ var _hmt = _hmt || [];
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;plugins&quot;</span>: [</span><br><span class="line">    [</span><br><span class="line">      <span class="string">&quot;@babel/plugin-transform-runtime&quot;</span>,</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="attr">&quot;corejs&quot;</span>: <span class="number">3</span></span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
+<h4 id="treeshaking"><a href="#treeshaking" class="headerlink" title="treeshaking"></a>treeshaking</h4><p>webpack4 production 默认开启，需要引入的库使用commonjs 模块化规范</p>
+<p>如 loadsh-es</p>
+<h4 id="全局引入"><a href="#全局引入" class="headerlink" title="全局引入"></a>全局引入</h4><p><a target="_blank" rel="noopener" href="https://webpack.js.org/plugins/provide-plugin/#root">provide-plugin</a></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">plugins: [</span><br><span class="line">  <span class="keyword">new</span> webpack.ProvidePlugin(&#123;</span><br><span class="line">    $: <span class="string">&#x27;jquery&#x27;</span>,</span><br><span class="line">  &#125;)</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<p>多入口文件的每一个都会被引入jquery，所以需要提取公共代码</p>
+<h4 id="动态加载"><a href="#动态加载" class="headerlink" title="动态加载"></a>动态加载</h4><p><a target="_blank" rel="noopener" href="https://babeljs.io/docs/en/babel-plugin-syntax-dynamic-import">@babel/plugin-syntax-dynamic-import</a></p>
+<p><a target="_blank" rel="noopener" href="https://webpack.js.org/guides/code-splitting/#dynamic-imports">Dynamic Imports</a></p>
+<p><strong>需要指明webpackChunkName才能被单独打包</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span>(</span><br><span class="line">   <span class="comment">/* webpackChunkName: &quot;my-jquery&quot; */</span></span><br><span class="line">   <span class="string">&#x27;jquery&#x27;</span></span><br><span class="line"> )</span><br><span class="line">   .then(<span class="function">(<span class="params">&#123; <span class="keyword">default</span>: $ &#125;</span>) =&gt;</span> &#123;</span><br><span class="line">     <span class="built_in">console</span>.log($)</span><br><span class="line">     <span class="keyword">return</span> $(<span class="string">&#x27;body&#x27;</span>);</span><br><span class="line">   &#125;)</span><br></pre></td></tr></table></figure>
+
+<h4 id="代码分割"><a href="#代码分割" class="headerlink" title="代码分割"></a>代码分割</h4><p><a target="_blank" rel="noopener" href="https://webpack.js.org/plugins/split-chunks-plugin/#root">SplitChunksPlugin</a> 代替原来的 commonChunksPlugin</p>
+<ul>
+<li>splitChunks.chunks</li>
+</ul>
+<p>async表示只从异步加载得模块（动态加载import()）里面进行拆分<br>initial表示只从入口模块进行拆分<br>all表示以上两者都包括</p>
+<ul>
+<li>splitChunks.maxInitialRequests</li>
+</ul>
+<p>每个入口的并发请求数, 如果拆出的包的个数大于maxInitialRequests，则不会把较小的包单独拆出</p>
+<ul>
+<li>splitChunks.maxInitialRequests</li>
+</ul>
+<p>动态引入的模块，最多拆分的数量</p>
+<h4 id="css分割"><a href="#css分割" class="headerlink" title="css分割"></a>css分割</h4><p><a target="_blank" rel="noopener" href="https://webpack.js.org/plugins/css-minimizer-webpack-plugin/">css-minimizer-webpack-plugin</a></p>
+<h4 id="压缩css代码"><a href="#压缩css代码" class="headerlink" title="压缩css代码"></a>压缩css代码</h4><p><a target="_blank" rel="noopener" href="https://webpack.js.org/plugins/mini-css-extract-plugin/#getting-started">MiniCssExtractPlugin</a></p>
+<h4 id="可视化分析"><a href="#可视化分析" class="headerlink" title="可视化分析"></a>可视化分析</h4><p><a target="_blank" rel="noopener" href="https://www.npmjs.com/package/webpack-bundle-analyzer">webpack-bundle-analyzer</a></p>
  
       <!-- reward -->
       
@@ -253,6 +280,15 @@ var _hmt = _hmt || [];
    
   <nav class="article-nav">
     
+      <a href="/posts/5527b4f7/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            性能优化基础
+          
+        </div>
+      </a>
+    
     
       <a href="/posts/e3b6331f/" class="article-nav-link">
         <strong class="article-nav-caption">下一篇</strong>
@@ -319,7 +355,7 @@ var _hmt = _hmt || [];
     <ul>
       <li>
         Copyrights &copy;
-        2015-2020
+        2015-2021
         <i class="ri-heart-fill heart_icon"></i> SunZhiqi
       </li>
     </ul>
