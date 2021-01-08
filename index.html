@@ -113,6 +113,272 @@ var _hmt = _hmt || [];
     
     
     <article
+  id="post-node/stream模块"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/posts/4a21a07/"
+    >stream模块</a> 
+</h2>
+ 
+
+    </header>
+     
+    <div class="article-meta">
+      <a href="/posts/4a21a07/" class="article-date">
+  <time datetime="2021-01-07T10:53:23.000Z" itemprop="datePublished">2021-01-07</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Node/">Node</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h4 id="相关概念"><a href="#相关概念" class="headerlink" title="相关概念"></a>相关概念</h4><p>流有起点和终点，逐端读取文件,大文件</p>
+<p>为什么要使用？</p>
+<p>可以逐渐读取，内存效率</p>
+<p>把大的文件拆分成一块一块，时间效率</p>
+<p>一个简单的读写留的例子：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//文件模块</span></span><br><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">&#x27;fs&#x27;</span>);</span><br><span class="line"><span class="comment">//创建读取数据流 </span></span><br><span class="line"><span class="keyword">const</span> rs = fs.createReadStream(<span class="string">&#x27;./yarn.lock&#x27;</span>)</span><br><span class="line"><span class="comment">//创建写入数据流 </span></span><br><span class="line"><span class="keyword">const</span> ws = fs.createWriteStream(<span class="string">&#x27;./yarn.copy.lock&#x27;</span>)</span><br><span class="line"></span><br><span class="line">rs.on(<span class="string">&#x27;data&#x27;</span>, <span class="function"><span class="params">chunk</span> =&gt;</span> &#123;</span><br><span class="line">  ws.write(chunk)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">rs.on(<span class="string">&#x27;end&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  ws.end()</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>使用这种方法不能保证读写一直，所以需要使用pipe</p>
+<p>注意只有可读流才有pipe方法</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//文件模块</span></span><br><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">&#x27;fs&#x27;</span>);</span><br><span class="line"><span class="comment">//创建读取数据流 </span></span><br><span class="line"><span class="keyword">const</span> rs = fs.createReadStream(<span class="string">&#x27;./yarn.lock&#x27;</span>)</span><br><span class="line"><span class="comment">//创建写入数据流 </span></span><br><span class="line"><span class="keyword">const</span> ws = fs.createWriteStream(<span class="string">&#x27;./yarn.copy.lock&#x27;</span>)</span><br><span class="line">rs.pipe(ws)</span><br></pre></td></tr></table></figure>
+
+<h4 id="流的类型"><a href="#流的类型" class="headerlink" title="流的类型"></a>流的类型</h4><ul>
+<li>可读流</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> rs = fs.createReadStream(<span class="string">&#x27;./yarn.lock&#x27;</span>, &#123;</span><br><span class="line">  <span class="comment">//设置编码方式</span></span><br><span class="line">  encoding: <span class="string">&#x27;utf8&#x27;</span>,</span><br><span class="line">  <span class="comment">//设置缓冲区大小,六个字节</span></span><br><span class="line">  highWaterMark: <span class="number">6</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">rs.on(<span class="string">&#x27;data&#x27;</span>, <span class="function">(<span class="params">chunk</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(chunk)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>两种调用方式，自动调用(flowing)还是手动调用(pause)</p>
+<p>使用<code>stream.on(&quot;data&quot;,()=&gt;&#123;&#125;)</code> 为自动模式，读取的时候会不断触发 <code>data</code> 方法,resume pipe 都是自动模式</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">rs.on(<span class="string">&#x27;readable&#x27;</span>, <span class="function">(<span class="params">chunk</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(chunk)</span><br><span class="line">&#125;)</span><br><span class="line"><span class="comment">//手动读取数据</span></span><br><span class="line">rs.read()</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>可写流</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">&#x27;fs&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> ws = fs.createWriteStream(<span class="string">&#x27;a.txt&#x27;</span>)</span><br><span class="line">ws.write(<span class="string">&#x27;xxx&#x27;</span>);</span><br><span class="line"></span><br><span class="line">ws.on(<span class="string">&#x27;finish&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  ws.end()</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>Duplex: 双工流  net.socket</p>
+</li>
+<li><p>transform: 转换流 文件压缩</p>
+</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//文件模块</span></span><br><span class="line"><span class="keyword">const</span> stream = <span class="built_in">require</span>(<span class="string">&#x27;stream&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> transform = stream.Transform(&#123;</span><br><span class="line">  <span class="comment">//自定义转换方法</span></span><br><span class="line">  <span class="function"><span class="title">transform</span>(<span class="params">chunk, encoding, cb</span>)</span> &#123;</span><br><span class="line">    <span class="comment">//大小写转换，放到缓冲区</span></span><br><span class="line">    <span class="built_in">this</span>.push(chunk.toString().toLowerCase())</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line">transform.write(<span class="string">&#x27;D&#x27;</span>);</span><br><span class="line"><span class="built_in">console</span>.log(transform.read().toString());</span><br></pre></td></tr></table></figure>
+
+<p>stream对象都是EventEmitter的实例，所以可以发布事件</p>
+<ul>
+<li>流的链式操作</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">&#x27;fs&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> zlib = <span class="built_in">require</span>(<span class="string">&#x27;zlib&#x27;</span>);</span><br><span class="line"></span><br><span class="line">fs.createReadStream(<span class="string">&#x27;a.txt&#x27;</span>)</span><br><span class="line">  .pipe(zlib.createGunzip)</span><br><span class="line">  .pipe(fs.createWriteStream(<span class="string">&#x27;a.zip&#x27;</span>))</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>使用readline逐行读取</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">&#x27;fs&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> readline = <span class="built_in">require</span>(<span class="string">&#x27;readline&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">&#x27;path&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> filePath = path.resolve(__dirname,<span class="string">&#x27;./yarn.lock&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> rs = fs.createReadStream(filePath);</span><br><span class="line"><span class="keyword">const</span> rl = readline.createInterface(&#123;</span><br><span class="line">  input:rs</span><br><span class="line">&#125;)</span><br><span class="line">rl.on(<span class="string">&#x27;line&#x27;</span>,<span class="function">(<span class="params">l</span>)=&gt;</span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(l)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Node/" rel="tag">Node</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+   
+</article>
+
+    
+    <article
+  id="post-node/事件驱动"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/posts/639e9d87/"
+    >事件驱动</a> 
+</h2>
+ 
+
+    </header>
+     
+    <div class="article-meta">
+      <a href="/posts/639e9d87/" class="article-date">
+  <time datetime="2021-01-06T12:25:34.000Z" itemprop="datePublished">2021-01-06</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Node/">Node</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h4 id="event简单使用"><a href="#event简单使用" class="headerlink" title="event简单使用"></a>event简单使用</h4><p>引入event模块，并创建事件对象</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> events = <span class="built_in">require</span>(<span class="string">&#x27;events&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> eventEmitter = <span class="keyword">new</span> events.eventEmitter();</span><br></pre></td></tr></table></figure>
+
+<p>绑定事件处理函数</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> connctHandler = <span class="function"><span class="keyword">function</span> <span class="title">connected</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;connected&#x27;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">eventEmitter.on(<span class="string">&#x27;connection&#x27;</span>,connctHandler)</span><br></pre></td></tr></table></figure>
+
+<p>触发事件</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">eventEmitter.emit(<span class="string">&#x27;connection&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<h4 id="EventEmitter-与-发布-订阅模式的关系"><a href="#EventEmitter-与-发布-订阅模式的关系" class="headerlink" title="EventEmitter 与 发布/订阅模式的关系"></a>EventEmitter 与 发布/订阅模式的关系</h4><p>Node.js 中的 EventEmitter 模块就是用了发布/订阅这种设计模式，发布/订阅 模式在主体与观察者之间引入消息调度中心，主体和观察者之间完全透明，所  有的消息传递过程都通过消息调度中心完成，也就是说具体的业务逻辑代码将会是在消息调度中心内完成。</p>
+<ul>
+<li>once 方法的实现</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">EventEmitter.prototype.once = <span class="function"><span class="keyword">function</span> (<span class="params">type, listener</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> _this = <span class="built_in">this</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//中间函数，在调用完之后立即删除订阅</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">only</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        listener();</span><br><span class="line">        _this.removeListener(type, only);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//origin保存原回调的引用，用于remove时的判断</span></span><br><span class="line">    only.origin = listener;</span><br><span class="line">    <span class="built_in">this</span>.on(type, only);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>事件循环中的事件是什么情况下产生的？什么情况下触发的？</li>
+</ul>
+<p>Node.js 中所有所有异步 I/O 操作在完成时都会发送一个事件到事件队列</p>
+<p>Node.js 中许多对象都会分发事件： 一个net.Server 对象会在每次有新连接时触发一个事件，fs.readStream对象会在文件被打开的时候触发一个事件，所有这些产生事件的对象都是events.EventEmitter的实例</p>
+<p>！<a href="0001.png"></a></p>
+<p>关于事件你看图中第三部分，事件循环那里。Node.js 所有的异步 I/O 操作(net.Server， fs.readStream 等)在完成后都会添加一个事件到事件循环的事件队列中。</p>
+<p>事件的触发，我们只需要关注图中第三部分，事件循环会在事件队列中取出事件处理。fs.open产生事件的对象都是 events.EventEmitter 的实例，继承了EventEmitter，从事件循环取出事件的时候，触发这个事件和回调函数。</p>
+<ul>
+<li>事件类型为error的问题</li>
+</ul>
+<p>当 error 被触发时，EventEmitter 规定如果没有响 应的监听器，Node.js 会把它当作异常，退出程序并输出错误信息。</p>
+<p>我们一般要为会触发 error 事件的对象设置监听器，避免遇到错误后整个程序崩溃。</p>
+<ul>
+<li><p>可以通过process.on(‘warning’)来获得更具体的信息（emitter、event、eventCount）</p>
+</li>
+<li><p>打印warn详细内容</p>
+</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">process.on(<span class="string">&#x27;warning&#x27;</span>, <span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(e);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h4 id="EventEmitter的应用场景"><a href="#EventEmitter的应用场景" class="headerlink" title="EventEmitter的应用场景"></a>EventEmitter的应用场景</h4><p>不能try/catch的错误异常抛出可以使用它</p>
+<p>好多常用模块继承自EventEmitter 比如fs模块 net模块</p>
+<h4 id="发布-订阅模式与观察者模式"><a href="#发布-订阅模式与观察者模式" class="headerlink" title="发布/订阅模式与观察者模式"></a>发布/订阅模式与观察者模式</h4><p><img src="/posts/639e9d87/0002.png"></p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Node/" rel="tag">Node</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+   
+</article>
+
+    
+    <article
+  id="post-node/node环境和npm"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/posts/1128db1b/"
+    >node和npm</a> 
+</h2>
+ 
+
+    </header>
+     
+    <div class="article-meta">
+      <a href="/posts/1128db1b/" class="article-date">
+  <time datetime="2021-01-06T12:05:53.000Z" itemprop="datePublished">2021-01-06</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Node/">Node</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h4 id="REPL-交互式显示"><a href="#REPL-交互式显示" class="headerlink" title="REPL 交互式显示"></a>REPL 交互式显示</h4><p>在命令行工具中输入node,进入交互式环境</p>
+<ul>
+<li>linux ctrl+d 退出</li>
+<li>tab 键补全</li>
+<li>.help 查看帮助</li>
+</ul>
+<h4 id="npm"><a href="#npm" class="headerlink" title="npm"></a>npm</h4><p>升级npm <code>npm install -g npm</code></p>
+<p>查询可安装的包 <code>npm serch xxx</code> </p>
+<h4 id="node模块化"><a href="#node模块化" class="headerlink" title="node模块化"></a>node模块化</h4><p>文件和模块是一一对应的，一个node文件就是一个模块</p>
+<p>这个文件可能是JavaScript代码，JSON或者编译过的c/c++ 扩展</p>
+<p>Node.js 中存在4类模块（原生模块和3种文件模块）</p>
+<p><strong>builtin module</strong>: Node中以c++形式提供的模块，如tcp_wrap、contextify等</p>
+<p><strong>constants module</strong>: Node中定义常量的模块，用来导出如signal, openssl库、文件访问权限等常量的定义。如文件访问权限中的O_RDONLY，O_CREAT、signal中的SIGHUP，SIGINT等。</p>
+<p><strong>native module</strong>: Node中以JavaScript形式提供的模块，如http,https,fs等。有些native module需要借助于builtin module实现背后的功能。如对于native模块buffer ,还是需要借助builtin node_buffer.cc中提供的功能来实现大容量内存申请和管理，目的是能够脱离V8内存大小使用限制。</p>
+<p><strong>3rd-party module</strong>: 以上模块可以统称Node内建模块，除此之外为第三方模块，典型的如express模块。</p>
+<ul>
+<li>module.exports和exports的区别</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> circle = <span class="built_in">require</span>(<span class="string">&#x27;./circle.js&#x27;</span>);  </span><br><span class="line"><span class="built_in">console</span>.log( <span class="string">&#x27;The area of a circle of radius 4 is &#x27;</span> + circle.area(<span class="number">4</span>)); </span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> PI = <span class="built_in">Math</span>.PI;  </span><br><span class="line"><span class="built_in">exports</span>.area = <span class="function"><span class="keyword">function</span> (<span class="params">r</span>) </span>&#123;  </span><br><span class="line">  <span class="keyword">return</span> PI * r * r;  </span><br><span class="line">&#125;;  </span><br></pre></td></tr></table></figure>
+
+<p>如果你的模块属于“模块实例（module instances）”，就像官方文档中给出的示例那样，那么exports足以满足要求。</p>
+<p>但是事实上，require()返回的是module.exports，exports只是module.exports的一个引用，exports的作用只在module.exports没有指定的时候，收集属性并附加到module.exports。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = <span class="string">&#x27;孙悟空&#x27;</span>;  </span><br><span class="line"><span class="built_in">exports</span>.name = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;  </span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;我是白骨精&#x27;</span>);  </span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>这个模块会完全忽略exports.name，因为module.exports被指定了另一个对象。你的模块不一定是模块实例（module instances），你的模块可以是任意的，你设置成module.exports的Javascript对象。如果你不显示的指定module.exports，那么返回的将是exports和exports附加的值。</p>
+<p>也可以这样认为，一个模块刚开始的时候，module.exports和exports是一样的，exports只是module.exports的一个别名，两者都是{}。</p>
+<p>当你给module.exports指定一个对象的时候，两者就不再一样的，而模块导出的一定是module.exports。</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Node/" rel="tag">Node</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+   
+</article>
+
+    
+    <article
   id="post-javascript/used/性能优化基础"
   class="article article-type-post"
   itemscope
@@ -489,7 +755,7 @@ var _hmt = _hmt || [];
 
     
     <article
-  id="post-javascript/used/聊天平台优化方案"
+  id="post-javascript/used/性能优化"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -501,7 +767,7 @@ var _hmt = _hmt || [];
        
 <h2 itemprop="name">
   <a class="article-title" href="/posts/98feee78/"
-    >聊天平台优化方案</a> 
+    >性能优化</a> 
 </h2>
  
 
@@ -519,7 +785,21 @@ var _hmt = _hmt || [];
       
     <div class="article-entry" itemprop="articleBody">
        
-   
+  <h4 id="性能优化开篇"><a href="#性能优化开篇" class="headerlink" title="性能优化开篇"></a>性能优化开篇</h4><p>Html 数量控制 -&gt; 压缩合并（30k为标准，请求变少） -&gt; 开启CDN， gzip,brotli压缩方式 -&gt; 服务端开启keep-alive http2 -&gt; 测速 -&gt; 缓存</p>
+<p>离线缓存</p>
+<p>localStorage 5M 低端机型，不能占用过高</p>
+<p>script 放在底部，不会影响dom的解析，但是会影响dom的渲染</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">h1</span>&gt;</span>标题<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line">    alert(0)</span><br><span class="line">  <span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>同样css不会影响dom的解析，但是影响dom的渲染</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;viewport&quot;</span> <span class="attr">content</span>=<span class="string">&quot;width=device-width, initial-scale=1.0&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;./css&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">h1</span>&gt;</span>标题<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>css 加载会阻塞js的执行，因为不知道js中是否使用了css, 但是不会影响dom的解析</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;viewport&quot;</span> <span class="attr">content</span>=<span class="string">&quot;width=device-width, initial-scale=1.0&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;./css&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">h1</span>&gt;</span>标题<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line">    alert(0)</span><br><span class="line">  <span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>css的加载不会影响dom ready,但是如果css,下面有js脚本，则不会执行dom ready，因为不知道是否使用了css样式</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;viewport&quot;</span> <span class="attr">content</span>=<span class="string">&quot;width=device-width, initial-scale=1.0&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="javascript">    <span class="built_in">document</span>.addEventlister(<span class="string">&#x27;DomContentloaded&#x27;</span>,<span class="function">()=&gt;</span>&#123;<span class="built_in">console</span>.log(<span class="string">&#x27;ready&#x27;</span>)&#125;)</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;./css&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">h1</span>&gt;</span>标题<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- &lt;script&gt;</span></span><br><span class="line"><span class="comment">    alert(0)</span></span><br><span class="line"><span class="comment">  &lt;/script&gt; --&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="渲染中的性能优化"><a href="#渲染中的性能优化" class="headerlink" title="渲染中的性能优化"></a>渲染中的性能优化</h4> 
       <!-- reward -->
       
     </div>
@@ -723,331 +1003,6 @@ $ vue init username/repo my-project</code></pre>
     <footer class="article-footer">
        
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LeetCode/" rel="tag">LeetCode</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-   
-</article>
-
-    
-    <article
-  id="post-javascript/engineering/BFF_A"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/posts/25f7c524/"
-    >BFF 实践</a> 
-</h2>
- 
-
-    </header>
-     
-    <div class="article-meta">
-      <a href="/posts/25f7c524/" class="article-date">
-  <time datetime="2020-12-10T06:56:09.000Z" itemprop="datePublished">2020-12-10</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/JavaScript/">JavaScript</a> / <a class="article-category-link" href="/categories/JavaScript/%E5%B7%A5%E7%A8%8B%E5%8C%96/">工程化</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h4 id="BFF"><a href="#BFF" class="headerlink" title="BFF"></a>BFF</h4><p>BFF，即 Backend For Frontend（服务于前端的后端），也就是服务器设计 API 时会考虑前端的使用，并在服务端直接进行业务逻辑的处理，又称为用户体验适配器。BFF 只是一种逻辑分层，而非一种技术，虽然 BFF 是一个新名词，但它的理念由来已久。</p>
-<p><img src="/posts/25f7c524/0001.webp"></p>
-<p>通常一个页面的请求包含了多个不同的请求，用于页面组件的渲染</p>
-<p>同时为了保障 Android，iOS，以及 Web 端的不同需求，需要为不同的平台写不同的 API 接口，而每当值发生一些变化时，需要 Android，iOS，Web 做出修改。</p>
-<p><img src="/posts/25f7c524/0002.webp"></p>
-<p>有了 BFF 这一层时，我们就不需要考虑系统后端的迁移。后端发生的变化都可以在 BFF 层做一些响应的修改</p>
-<p><img src="/posts/25f7c524/0003.webp"></p>
-<h5 id="BFF-场景"><a href="#BFF-场景" class="headerlink" title="BFF 场景"></a>BFF 场景</h5><p><strong>多端应用</strong></p>
-<p>我们在设计 API 时会考虑到不同设备的需求，也就是为不同的设备提供不同的 API，虽然它们可能是实现相同的功能，但因为不同设备的特殊性，它们对服务端的 API 访问也各有其特点，需要区别处理。</p>
-<p><strong>服务聚合</strong></p>
-<p>随着微服务的兴起，原本在同一个进程内运行的业务流程被拆分到了不同的服务中。这在增加业务灵活性的同时，也让前端的调用变得更复杂。BFF 的出现为前端应用提供了一个对业务服务调用的聚合点，它屏蔽了复杂的服务调用链，让前端可以聚焦在所需要的数据上，而不用关注底层提供这些数据的服务。</p>
-<h5 id="实战中的玩法"><a href="#实战中的玩法" class="headerlink" title="实战中的玩法"></a>实战中的玩法</h5><p><strong>访问控制</strong></p>
-<p>例如，服务中的权限控制，将所有服务中的权限控制集中在 BFF 层，使下层服务更加纯粹和独立。</p>
-<p><strong>应用缓存</strong></p>
-<p>项目中时常存在一些需要缓存的临时数据，此时 BFF 作为业务的汇聚点，距离用户请求最近，遂将该缓存操作放在 BFF 层。</p>
-<p><strong>第三方入口</strong></p>
-<p>在业务中需要与第三交互时，将该交互放在 BFF 层，这样可以只暴露必要信息给第三方，从而便于控制第三方的访问。</p>
-<h4 id="初始化项目"><a href="#初始化项目" class="headerlink" title="初始化项目"></a>初始化项目</h4><h5 id="项目目录结构划分"><a href="#项目目录结构划分" class="headerlink" title="项目目录结构划分"></a>项目目录结构划分</h5><p><img src="/posts/25f7c524/0001.png"></p>
-<h5 id="package-json-生命周期-并行执行"><a href="#package-json-生命周期-并行执行" class="headerlink" title="package.json 生命周期 并行执行"></a>package.json 生命周期 并行执行</h5><p>安装webpack</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add -D webpack-cli webpack</span><br></pre></td></tr></table></figure>
-
-<p>package.json 文件添加</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&quot;scripts&quot;: &#123;</span><br><span class="line">  &quot;test&quot;: &quot;echo test&quot;,</span><br><span class="line">  &quot;pretest&quot;: &quot;echo pretest&quot;</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
-
-<p>执行 <code>yarn test</code></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">yarn run v1.22.10</span><br><span class="line">$ <span class="built_in">echo</span> pretest</span><br><span class="line">pretest</span><br><span class="line">$ <span class="built_in">echo</span> <span class="built_in">test</span></span><br><span class="line"><span class="built_in">test</span></span><br><span class="line">Done <span class="keyword">in</span> 0.05s.</span><br></pre></td></tr></table></figure>
-
-<p>并行执行，不能保证顺序</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&quot;scripts&quot;: &#123;</span><br><span class="line">  &quot;test1&quot;: &quot;echo test1&quot;,</span><br><span class="line">  &quot;test2&quot;: &quot;echo test2&quot;,</span><br><span class="line">  &quot;test&quot;: &quot;yarn test1 &amp; yarn test2&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">yarn <span class="built_in">test</span></span><br><span class="line">yarn run v1.22.10</span><br><span class="line">$ yarn test1 &amp; yarn test2</span><br><span class="line">$ <span class="built_in">echo</span> test2</span><br><span class="line">$ <span class="built_in">echo</span> test1</span><br><span class="line">test2</span><br><span class="line">test1</span><br><span class="line">Done <span class="keyword">in</span> 0.25s.</span><br></pre></td></tr></table></figure>
-
-
-<h5 id="scripy"><a href="#scripy" class="headerlink" title="scripy"></a>scripy</h5><p>使用scripty拆分复杂命令</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add -D scripty</span><br></pre></td></tr></table></figure>
-
-<p>package.json</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&quot;scripts&quot;: &#123;</span><br><span class="line">  &quot;test:one&quot;: &quot;scripty&quot;,</span><br><span class="line">  &quot;test:two&quot;: &quot;scripty&quot;,</span><br><span class="line">  &quot;test&quot;: &quot;scripty&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>按照命令建立文件夹</p>
-<p><img src="/posts/25f7c524/0002.png"></p>
-<p>执行 <code>yarn test</code> test文件夹下面的所有命令</p>
-<h5 id="package-json-定义公共参数"><a href="#package-json-定义公共参数" class="headerlink" title="package.json 定义公共参数"></a>package.json 定义公共参数</h5><p>package.json</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&quot;config&quot;:&#123;</span><br><span class="line">  &quot;port&quot;:9999</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>通过变量在命令配置中使用  </p>
-<p>script/test/one.sh</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="variable">$npm_package_config_port</span></span><br></pre></td></tr></table></figure>
-
-<p>执行 <code>yarn test</code> 打印端口</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">yarn run v1.22.10</span><br><span class="line">$ scripty</span><br><span class="line">scripty &gt; Executing <span class="string">&quot;/home/supreme/Workspace/mvc/scripts/test/one.sh&quot;</span>:</span><br><span class="line"></span><br><span class="line">9999</span><br><span class="line">scripty &gt; Executing <span class="string">&quot;/home/supreme/Workspace/mvc/scripts/test/two.sh&quot;</span>:</span><br><span class="line"></span><br><span class="line">2</span><br><span class="line">Done <span class="keyword">in</span> 0.13s.</span><br></pre></td></tr></table></figure>
-
-<h5 id="jscpd-代码重复率检查"><a href="#jscpd-代码重复率检查" class="headerlink" title="jscpd 代码重复率检查"></a>jscpd 代码重复率检查</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add -D jscpd</span><br></pre></td></tr></table></figure>
-
-<p>添加配置文件.jscpd.json</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;threshold&quot;</span>: <span class="number">0</span>,</span><br><span class="line">  <span class="attr">&quot;reporters&quot;</span>: [<span class="string">&quot;html&quot;</span>, <span class="string">&quot;console&quot;</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>scripts</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jscpd --min-lines 1 --output ./doc/jscpd --pattern <span class="string">&quot;src/**/*.js&quot;</span></span><br></pre></td></tr></table></figure>
-
-<h5 id="webpack配置"><a href="#webpack配置" class="headerlink" title="webpack配置"></a>webpack配置</h5><p>建立配置文件夹 config,通过内置方法拿到配置参数</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">process.env.NODE_ENV</span><br></pre></td></tr></table></figure>
-
-<p>安装 <a target="_blank" rel="noopener" href="https://github.com/yargs/yargs">yargs</a>,以对象的形式更方便的获取命令参数</p>
-<p>安装 <a target="_blank" rel="noopener" href="https://github.com/survivejs/webpack-merge">webpack-merge</a> 合并公共配置和定制配置</p>
-<h5 id="art-template"><a href="#art-template" class="headerlink" title="art-template"></a>art-template</h5><p>使用art-template作为后端模板，用于服务端渲染html<br>配置和swig 模板类似</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add art-template koa-art-template</span><br></pre></td></tr></table></figure>
-
-<h5 id="打包思路"><a href="#打包思路" class="headerlink" title="打包思路"></a>打包思路</h5><p>通过webpack打包前端代码</p>
-<p>html-webpack-plugin 处理前端模板,放到指定位置</p>
-<p>因为模板中插入js代码所以需要通过编写插件处理</p>
-<p>后端模板通过 gulp 处理</p>
-<p>处理模块化规范,删除无用的代码</p>
-<p>webpack.js</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> glob = <span class="built_in">require</span>(<span class="string">&#x27;glob&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> &#123; argv &#125; = <span class="built_in">require</span>(<span class="string">&#x27;yargs&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">&#x27;path&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> files = glob.sync(<span class="string">&quot;./src/web/views/**/*.js&quot;</span>)</span><br><span class="line"><span class="keyword">const</span> htmls = glob.sync(<span class="string">&quot;./src/web/views/**/*.art&quot;</span>)</span><br><span class="line"><span class="keyword">const</span> HtmlWebpackPlugin = <span class="built_in">require</span>(<span class="string">&#x27;html-webpack-plugin&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> &#123; CleanWebpackPlugin &#125; = <span class="built_in">require</span>(<span class="string">&#x27;clean-webpack-plugin&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> CustomInjectPlugin = <span class="built_in">require</span>(<span class="string">&#x27;./src/service/config/CustomInjectPlugin&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> mode = argv.mode;</span><br><span class="line"><span class="keyword">if</span> (!files.length) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> entry = files.reduce(<span class="function">(<span class="params">entry, path</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> match = path.match(<span class="regexp">/(\w+)\/(\w+)\.js$/</span>);</span><br><span class="line">  entry[match[<span class="number">1</span>]] = match.input;</span><br><span class="line">  <span class="keyword">return</span> entry;</span><br><span class="line">&#125;, &#123;&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> htmlPlugin = htmls.map(<span class="function"><span class="params">path</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> match = path.match(<span class="regexp">/(\w+)\/(\w+)\.art$/</span>);</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> HtmlWebpackPlugin(&#123;</span><br><span class="line">    filename: <span class="string">`<span class="subst">$&#123;match[<span class="number">1</span>]&#125;</span>.art`</span>,</span><br><span class="line">    template: match.input,</span><br><span class="line">    hash: <span class="literal">true</span>,</span><br><span class="line">    chunks: [<span class="string">&#x27;runtime&#x27;</span>, match[<span class="number">1</span>]],</span><br><span class="line">    inject: <span class="literal">false</span></span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  entry,</span><br><span class="line">  mode,</span><br><span class="line">  output: &#123;</span><br><span class="line">    filename: <span class="string">&#x27;[name]_[contentHash].js&#x27;</span>,</span><br><span class="line">    path: __dirname + <span class="string">&#x27;/dist&#x27;</span></span><br><span class="line">  &#125;</span><br><span class="line">  plugins: [</span><br><span class="line">    <span class="keyword">new</span> CleanWebpackPlugin(),</span><br><span class="line">    ...htmlPlugin,</span><br><span class="line">    <span class="keyword">new</span> CustomInjectPlugin()</span><br><span class="line">  ],</span><br><span class="line">  optimization: &#123;</span><br><span class="line">    runtimeChunk: &#123;</span><br><span class="line">      name: <span class="string">&#x27;runtime&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="built_in">module</span>: &#123;</span><br><span class="line">    rules: [</span><br><span class="line">      &#123;</span><br><span class="line">        test: <span class="regexp">/\.js$/</span>,</span><br><span class="line">        exclude: <span class="regexp">/(node_modules|bower_components)/</span>,</span><br><span class="line">        use: &#123;</span><br><span class="line">          loader: <span class="string">&#x27;babel-loader&#x27;</span>,</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;,</span><br><span class="line">  resolve: &#123;</span><br><span class="line">    alias: &#123;</span><br><span class="line">      <span class="string">&quot;@&quot;</span>: path.resolve(__dirname, <span class="string">&#x27;src/web&#x27;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>CustomInjectPlugin.js</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> HtmlWebpackPlugin = <span class="built_in">require</span>(<span class="string">&#x27;html-webpack-plugin&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> pluginName = <span class="string">&#x27;CustomInjectPlugin&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CustomInjectPlugin</span> </span>&#123;</span><br><span class="line">  js = <span class="string">&#x27;&#x27;</span></span><br><span class="line">  <span class="function"><span class="title">apply</span>(<span class="params">compiler</span>)</span> &#123;</span><br><span class="line">    compiler.hooks.compilation.tap(<span class="string">&#x27;pluginName&#x27;</span>, <span class="function">(<span class="params">compilation</span>) =&gt;</span> &#123;</span><br><span class="line">      HtmlWebpackPlugin.getHooks(compilation).beforeAssetTagGeneration.tapAsync(</span><br><span class="line">        pluginName,</span><br><span class="line">        (data, cb) =&gt; &#123;</span><br><span class="line">          <span class="keyword">const</span> &#123; <span class="attr">assets</span>: &#123; js &#125; &#125; = data;</span><br><span class="line">          <span class="built_in">this</span>.js = js.map(<span class="function"><span class="params">src</span> =&gt;</span> src.replace(<span class="string">&#x27;@&#x27;</span>, <span class="string">&#x27;./&#x27;</span>)).join(<span class="string">&#x27;&#x27;</span>);</span><br><span class="line">          cb(<span class="literal">null</span>, data)</span><br><span class="line">        &#125;</span><br><span class="line">      )</span><br><span class="line">      <span class="comment">// Static Plugin interface |compilation |HOOK NAME | register listener </span></span><br><span class="line">      HtmlWebpackPlugin.getHooks(compilation).beforeEmit.tapAsync(</span><br><span class="line">        pluginName, <span class="comment">// &lt;-- Set a meaningful name here for stacktraces</span></span><br><span class="line">        (data, cb) =&gt; &#123;</span><br><span class="line">          <span class="keyword">const</span> &#123; html &#125; = data;</span><br><span class="line">          data.html = html.replace(<span class="regexp">/!script!/</span>, <span class="built_in">this</span>.js);</span><br><span class="line">          <span class="built_in">this</span>.js = <span class="string">&#x27;&#x27;</span></span><br><span class="line">          cb(<span class="literal">null</span>, data)</span><br><span class="line">        &#125;</span><br><span class="line">      )</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = CustomInjectPlugin;</span><br></pre></td></tr></table></figure>
-
-<p>gulpfile.js</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123; series, src, dest &#125; = <span class="built_in">require</span>(<span class="string">&#x27;gulp&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> plugins = <span class="built_in">require</span>(<span class="string">&#x27;gulp-load-plugins&#x27;</span>)();</span><br><span class="line"><span class="keyword">const</span> replace = <span class="built_in">require</span>(<span class="string">&#x27;@rollup/plugin-replace&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> jspath = <span class="string">&#x27;./src/service/**/*.js&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 开发环境 监听文件变化, 处理模块化规范</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">es6</span>(<span class="params">cb</span>) </span>&#123;</span><br><span class="line">  plugins.watch(jspath, &#123; <span class="attr">ignoreInitial</span>: <span class="literal">false</span> &#125;,</span><br><span class="line">    <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> src(jspath)</span><br><span class="line">        .pipe(plugins.babel(&#123;</span><br><span class="line">          plugins: [</span><br><span class="line">            <span class="string">&quot;@babel/plugin-transform-modules-commonjs&quot;</span>,</span><br><span class="line">            <span class="string">&quot;@babel/plugin-transform-runtime&quot;</span></span><br><span class="line">          ]</span><br><span class="line">        &#125;))</span><br><span class="line">        .pipe(dest(<span class="string">&#x27;dist&#x27;</span>))</span><br><span class="line">    &#125;</span><br><span class="line">  )</span><br><span class="line">    .pipe(dest(<span class="string">&#x27;build&#x27;</span>));</span><br><span class="line">  <span class="keyword">return</span> cb()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">es6dev</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> src(jspath)</span><br><span class="line">    .pipe(plugins.babel(&#123;</span><br><span class="line">      ignore: [<span class="string">&#x27;./src/service/config/index.js&#x27;</span>],</span><br><span class="line">      plugins: [</span><br><span class="line">        <span class="comment">//处理模块化规范</span></span><br><span class="line">        <span class="string">&quot;@babel/plugin-transform-modules-commonjs&quot;</span>,</span><br><span class="line">        <span class="string">&quot;@babel/plugin-transform-runtime&quot;</span></span><br><span class="line">      ]</span><br><span class="line">    &#125;))</span><br><span class="line">    .pipe(dest(<span class="string">&#x27;dist&#x27;</span>))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">codeClean</span>(<span class="params">cb</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> src(jspath)</span><br><span class="line">    <span class="comment">// transform the files here.</span></span><br><span class="line">    .pipe(plugins.rollup(&#123;</span><br><span class="line">      <span class="comment">// any option supported by Rollup can be set here.</span></span><br><span class="line">      input: <span class="string">&#x27;./src/service/config/index.js&#x27;</span>,</span><br><span class="line">      output: &#123;</span><br><span class="line">        format: <span class="string">&#x27;cjs&#x27;</span></span><br><span class="line">      &#125;,</span><br><span class="line">      plugins: [</span><br><span class="line">        replace(&#123;</span><br><span class="line">          <span class="string">&#x27;process.env.NODE_ENV&#x27;</span>: <span class="built_in">JSON</span>.stringify(<span class="string">&#x27;production&#x27;</span>)</span><br><span class="line">        &#125;)</span><br><span class="line">      ]</span><br><span class="line">    &#125;))</span><br><span class="line">    .pipe(dest(<span class="string">&#x27;dist&#x27;</span>))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">exports</span>.dev = series(es6);</span><br><span class="line"><span class="built_in">exports</span>.default = series(es6dev, codeClean);</span><br></pre></td></tr></table></figure>
-
-
-<h5 id="chunk"><a href="#chunk" class="headerlink" title="chunk"></a>chunk</h5><p>生成chunk的几种方式</p>
-<ul>
-<li>多页面entry生成多个chunk</li>
-<li>异步组件生成chunk</li>
-<li>code split </li>
-</ul>
-<h5 id="hash"><a href="#hash" class="headerlink" title="hash"></a>hash</h5><ul>
-<li><p>hash 如果都使用hash的话，即每次修改任何一个文件，所有文件名的hash至都将改变。所以一旦修改了任何一个文件，整个项目的文件缓存都将失效.</p>
-</li>
-<li><p>chunkhash chunkhash根据不同的入口文件(Entry)进行依赖文件解析、构建对应的chunk，生成对应的哈希值。在生产环境里把一些公共库和程序入口文件区分开，单独打包构建，接着我们采用chunkhash的方式生成哈希值，那么只要我们不改动公共库的代码，就可以保证其哈希值不会受影响。动态import也受chunkhash的影响.</p>
-</li>
-</ul>
-<p>因为我们是将样式作为模块import到JavaScript文件中的，所以它们的chunkhash是一致的,这样就会有个问题，只要对应css或则js改变，与其关联的文件hash值也会改变，但其内容并没有改变呢，所以没有达到缓存意义。固contenthash的用途随之而来。</p>
-<ul>
-<li>contenthash是针对文件内容级别的，只有你自己模块的内容变了，那么hash值才改变</li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/BFF/" rel="tag">BFF</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" rel="tag">工程化</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-   
-</article>
-
-    
-    <article
-  id="post-javascript/engineering/sonarQube"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/posts/f6475fcf/"
-    >sonarQube</a> 
-</h2>
- 
-
-    </header>
-     
-    <div class="article-meta">
-      <a href="/posts/f6475fcf/" class="article-date">
-  <time datetime="2020-12-04T08:40:25.000Z" itemprop="datePublished">2020-12-04</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/JavaScript/">JavaScript</a> / <a class="article-category-link" href="/categories/JavaScript/%E5%B7%A5%E7%A8%8B%E5%8C%96/">工程化</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h4 id="Java-环境"><a href="#Java-环境" class="headerlink" title="Java 环境"></a>Java 环境</h4><p>ubuntu 版本</p>
-<p><img src="/posts/f6475fcf/0002.png"></p>
-<p><img src="/posts/f6475fcf/0003.png"></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo dpkg -i jdk-11.0.9_linux-x64_bin.deb</span><br></pre></td></tr></table></figure>
-
-<p>查看安装路径</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dpkg -L jdk-11.0.9</span><br></pre></td></tr></table></figure>
-
-<p>配置环境变量 ~/.bashrc</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> JAVA_HOME=/usr/lib/jvm/jdk-11.0.9</span><br><span class="line"><span class="built_in">export</span> CLASSPATH=.:<span class="variable">$JAVA_HOME</span>/lib/dt.jar:<span class="variable">$JAVA_HOME</span>/lib/tools.jar</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:<span class="variable">$JAVA_HOME</span>/bin</span><br></pre></td></tr></table></figure>
-
-
-
-<p>服务端： 规则放在服务端，提供一些web hook 和 Jenkins 集成</p>
-<p>客户端：在客户端执行，首先去服务端拉取规则 ☝ ，根据规则扫描代码，在本地生成报表， 把报表上传到服务器 ☝ 。</p>
-<h4 id="下载-sonarQube"><a href="#下载-sonarQube" class="headerlink" title="下载 sonarQube"></a>下载 sonarQube</h4><p><img src="/posts/f6475fcf/0001.png"></p>
-<p>把下在好的安装包放到opt文件夹下</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo mv sonarqube-8.5.1.38104.zip  /opt/</span><br></pre></td></tr></table></figure>
-
-<p>进入文件夹 解压</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo unzip sonarqube-8.5.1.38104.zip</span><br></pre></td></tr></table></figure>
-
-<p>按照<a target="_blank" rel="noopener" href="https://docs.sonarqube.org/latest/setup/install-server/">官方文档</a>配置wrapper.conf </p>
-<p>启动服务，前提是安装好下面的java环境<br>首先进入bin文件夹</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /opt/sonarqube-8.5.1.38104/bin</span><br></pre></td></tr></table></figure>
-
-<p>进入对应的命令版本文件夹</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> linux-x86-64</span><br></pre></td></tr></table></figure>
-
-<p>执行 sonar.sh 查看自命令， 第一次运行使用 cnosole 自命令，便于查看报错</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> linux-x86-64 </span><br><span class="line"></span><br><span class="line">sudo ./sonar.sh start</span><br></pre></td></tr></table></figure>
-
-<p><strong>报错1</strong></p>
-<p>如果启动时候 遇到 Unable to start JVM: No such file or directory (2)</p>
-<p>以root身份设置 /opt/sonarqube-8.5.1.38104/conf/wrapper.conf</p>
-<p>wrapper.java.command=/path/to/my/jdk/bin/java 设置未java安装环境</p>
-<p><strong>报错2</strong></p>
-<p>sonarqube can not run elasticsearch as root</p>
-<p>1.使用 useradd 添加用户<br>2.sudo chown -R 新建的用户 sonarqube安装目录  （给安装目录修改所有者）<br>3.su 新建的用户  （切换用户）<br>4.切换到命令执行文件夹  ./sonar.sh start</p>
-<p><strong>报错3</strong></p>
-<p>Elastic search max virtual memory areas vm.max_map_count [65530] is too low</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo sysctl -w vm.max_map_count=262144</span><br></pre></td></tr></table></figure>
-
-<p><strong>报错4</strong></p>
-<p>404 错误</p>
-<p>访问的时候需要访问 sonar.proptyies 中 sonar.web.context=/sonarqube 定义的文件夹</p>
-<h5 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h5><p>使用 admin/admin 默认密码登陆</p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" rel="tag">工程化</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-   
-</article>
-
-    
-    <article
-  id="post-javascript/engineering/CI-CD"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/posts/adc51d9c/"
-    >CI CD</a> 
-</h2>
- 
-
-    </header>
-     
-    <div class="article-meta">
-      <a href="/posts/adc51d9c/" class="article-date">
-  <time datetime="2020-12-04T06:18:09.000Z" itemprop="datePublished">2020-12-04</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/JavaScript/">JavaScript</a> / <a class="article-category-link" href="/categories/JavaScript/%E5%B7%A5%E7%A8%8B%E5%8C%96/">工程化</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p><img src="/posts/adc51d9c/0001.png"></p>
-<p>代码 -&gt; 构建 -&gt; 集成 -&gt; 测试 -&gt; 发布 -&gt; 部署</p>
-<p>|———持续集成——| CI</p>
-<p>|———–持续发布————| CD</p>
-<p>|—————持续部署—————| CD</p>
-<h4 id="CI-CD"><a href="#CI-CD" class="headerlink" title="CI CD"></a>CI CD</h4><p><img src="/posts/adc51d9c/0002.png"></p>
-<ul>
-<li><p>持续集成(CI)</p>
-</li>
-<li><p>持续交付和持续部署(CD)</p>
-</li>
-<li><p>现代软件开发的需求加上部署到不同基础设施的复杂性使得创建应用程序成为一个繁琐的过程。当应用程序出现规模性增长,开发团队人员变得更分散时,快速且不断地生产和发布软件的流程将会变得更加困难。</p>
-</li>
-<li><p>为了解决这些问题,开发团队开始探索新的策略来使他们的构建、测试和发布流程自动化,以帮助其更快地部署新的生产。这就是持续交付和持续集成发展的由来。</p>
-</li>
-</ul>
-<p>流程</p>
-<p><img src="/posts/adc51d9c/0003.png"></p>
-<h4 id="自动构建"><a href="#自动构建" class="headerlink" title="自动构建"></a>自动构建</h4><p>在软件开发过程中,构建流程会将开发人员生成的代码转换为可执行的可用软件。</p>
-<p>对于Go或者C语言等编译语言,此阶段需要通过编译器运行源代码以生成独立的二进制文件。</p>
-<p>对于JavaScript或PHP等解释性语言,没有编译的步骤,但是代码依旧需要在特定的时间内冻结、绑定依赖项、打包以便于分发。这些过程通常称为“构建”或“发布”的工件。</p>
-<p>虽然开发人员可以手动构建,但这样操作有诸多不利。首先,从主动开发到创建构建的转变中引入了上下文转换,使得开发人员不得不停止生产效率更高的工作来专注于构建过程。其次,每个开发人员都在制作自己的工件,这可能导致构建过程不一致。</p>
-<p>为了解决这些顾虑,许多开发团队配置了自动构建流水线。这些系统监视源代码存储库,并在检测到更改时自动启动预配置的构建过程。这一配置无需牵涉过多的人力在其中并且确保了每个构建过程一致。</p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" rel="tag">工程化</a></li></ul>
 
     </footer>
   </div>

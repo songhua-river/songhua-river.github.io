@@ -113,6 +113,270 @@ var _hmt = _hmt || [];
     
     
     <article
+  id="post-css/relearn/qualified-rule"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/posts/c82bde21/"
+    >普通规则</a> 
+</h2>
+ 
+
+    </header>
+     
+    <div class="article-meta">
+      <a href="/posts/c82bde21/" class="article-date">
+  <time datetime="2020-09-21T05:57:28.000Z" itemprop="datePublished">2020-09-21</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/CSS/">CSS</a> / <a class="article-category-link" href="/categories/CSS/CSS%E6%80%BB%E8%A7%88/">CSS总览</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h3 id="规则组成"><a href="#规则组成" class="headerlink" title="规则组成"></a>规则组成</h3><p>qualified rule 主要是由选择器和声明区块构成。声明区块又由属性和值构成。</p>
+<blockquote class="pullquote mindmap mindmap-md"><ul>
+<li>普通规则<ul>
+<li><a href="ttps://www.w3.org/TR/selectors-3/">选择器</a></li>
+<li>声明列表<ul>
+<li>属性<ul>
+<li>普通属性</li>
+<li><a target="_blank" rel="noopener" href="https://www.w3.org/TR/css-variables/">变量属性</a></li>
+</ul>
+</li>
+<li>值<ul>
+<li><a target="_blank" rel="noopener" href="https://www.w3.org/TR/css-values-4/#numeric-types">值的类型</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.w3.org/TR/css-values-4/#functional-notations">函数</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+
+<h4 id="选择器语法结构"><a href="#选择器语法结构" class="headerlink" title="选择器语法结构"></a><a target="_blank" rel="noopener" href="https://www.w3.org/TR/selectors-3/#w3cselgrammar">选择器语法结构</a></h4><p><a target="_blank" rel="noopener" href="https://www.w3.org/TR/selectors-3/">https://www.w3.org/TR/selectors-3/</a><br><a target="_blank" rel="noopener" href="https://www.w3.org/TR/selectors-4/">https://www.w3.org/TR/selectors-4/</a></p>
+<ul>
+<li><p>根结构由逗号（COMMA）分隔的 selector选择器组成</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">selectors_group</span></span><br><span class="line">  : <span class="selector-tag">selector</span> <span class="selector-attr">[ COMMA S* selector ]</span>*</span><br><span class="line">  ;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>选择器（selector）由简单选择器(simple_selector_sequence)与组合符(combinator)链接的</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">selector</span></span><br><span class="line">  : <span class="selector-tag">simple_selector_sequence</span> <span class="selector-attr">[ combinator simple_selector_sequence ]</span>*</span><br><span class="line">  ;</span><br></pre></td></tr></table></figure></li>
+<li><p>组合符有 + （PLUS）&gt; (GREATER) ~(TILDE) 空格（S+）</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">combinator</span></span><br><span class="line">  <span class="comment">/* combinators can be surrounded by whitespace */</span></span><br><span class="line">  : PLUS S* | GREATER S* | TILDE S* | S+</span><br><span class="line">  ;</span><br></pre></td></tr></table></figure></li>
+<li><p>简单选择器有 类型选择器（type_selector）通配符选择器（universal）# （HASH）. (CLASS) [type=’’] (attrib) : (pseudo) :not (negation)</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">simple_selector_sequence</span></span><br><span class="line">  : <span class="selector-attr">[ type_selector | universal ]</span></span><br><span class="line">    <span class="selector-attr">[ HASH | class | attrib | pseudo | negation ]</span>*</span><br><span class="line">  | [ HASH | class | attrib | pseudo | negation ]+</span><br><span class="line">  ;</span><br></pre></td></tr></table></figure></li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CSS/" rel="tag">CSS</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+   
+</article>
+
+    
+    <article
+  id="post-css/relearn/at-rules"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/posts/56ec7aea/"
+    >@规则</a> 
+</h2>
+ 
+
+    </header>
+     
+    <div class="article-meta">
+      <a href="/posts/56ec7aea/" class="article-date">
+  <time datetime="2020-09-20T10:41:38.000Z" itemprop="datePublished">2020-09-20</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/CSS/">CSS</a> / <a class="article-category-link" href="/categories/CSS/CSS%E6%80%BB%E8%A7%88/">CSS总览</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h3 id="at-规则"><a href="#at-规则" class="headerlink" title="at 规则"></a>at 规则</h3><p>@ 关键字和后续的一个区块组成，如果没有区块，则以分号结束。</p>
+<h4 id="charset"><a href="#charset" class="headerlink" title="@charset"></a>@charset</h4><p><a target="_blank" rel="noopener" href="https://www.w3.org/TR/css-syntax-3/#charset-rule">https://www.w3.org/TR/css-syntax-3/#charset-rule</a></p>
+<p>@charset 用于提示 CSS 文件使用的字符编码方式，它如果被使用，必须出现在最前面。这个规则只在给出语法解析阶段前使用，并不影响页面上的展示效果。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@charset</span> <span class="string">&quot;utf-8&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<h4 id="import"><a href="#import" class="headerlink" title="@import"></a>@import</h4><p><a target="_blank" rel="noopener" href="https://www.w3.org/TR/css-cascade-4/#at-import">https://www.w3.org/TR/css-cascade-4/#at-import</a><br><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/@import">https://developer.mozilla.org/zh-CN/docs/Web/CSS/@import</a></p>
+<p>@import 用于引入一个 CSS 文件，除了 @charset 规则不会被引入，@import 可以引入另一个文件的全部内容。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@import</span> <span class="string">&quot;mystyle.css&quot;</span>;</span><br><span class="line"><span class="keyword">@import</span> url(<span class="string">&quot;mystyle.css&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>import 还支持 supports 和 media query 形式。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@import</span> [ &lt;url&gt; | &lt;string&gt; ]</span><br><span class="line">        [ supports( [ &lt;supports-condition&gt; | &lt;declaration&gt; ] ) ]?</span><br><span class="line">        &lt;media-query-list&gt;? ;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@import</span> <span class="string">&quot;common.css&quot;</span> screen, projection;</span><br><span class="line"><span class="keyword">@import</span> url(<span class="string">&#x27;landscape.css&#x27;</span>) screen <span class="keyword">and</span> (<span class="attribute">orientation:</span>landscape);</span><br></pre></td></tr></table></figure>
+
+<h4 id="media"><a href="#media" class="headerlink" title="@media"></a>@media</h4><p><a target="_blank" rel="noopener" href="https://www.w3.org/TR/css3-conditional/#at-media">https://www.w3.org/TR/css3-conditional/#at-media</a><br><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/@media">https://developer.mozilla.org/zh-CN/docs/Web/CSS/@media</a></p>
+<p>media query使用的规则，也是最常用的规则，它能够对设备的类型进行一些判断。在 media 的区块内，是普通规则列表。</p>
+<h4 id="page"><a href="#page" class="headerlink" title="@page"></a>@page</h4><p><a target="_blank" rel="noopener" href="https://www.w3.org/TR/css-page-3/#syntax-page-selector">https://www.w3.org/TR/css-page-3/#syntax-page-selector</a><br><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/@page">https://developer.mozilla.org/zh-CN/docs/Web/CSS/@page</a></p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@page</span> &#123;</span><br><span class="line">  <span class="attribute">size</span>: <span class="number">8.5in</span> <span class="number">11in</span>;</span><br><span class="line">  <span class="attribute">margin</span>: <span class="number">10%</span>;</span><br><span class="line"></span><br><span class="line">  @top-left &#123;</span><br><span class="line">    <span class="selector-tag">content</span>: &quot;<span class="selector-tag">Hamlet</span>&quot;;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">@top-right</span> &#123;</span><br><span class="line">    <span class="selector-tag">content</span>: &quot;<span class="selector-tag">Page</span> &quot; <span class="selector-tag">counter</span>(<span class="selector-tag">page</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="counter-style"><a href="#counter-style" class="headerlink" title="@counter-style"></a>@counter-style</h4><p><a target="_blank" rel="noopener" href="https://www.w3.org/TR/css-counter-styles-3/#the-counter-style-rule">https://www.w3.org/TR/css-counter-styles-3/#the-counter-style-rule</a><br><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/@counter-style">https://developer.mozilla.org/zh-CN/docs/Web/CSS/@counter-style</a></p>
+<p>counter-style 产生一种数据，用于定义列表项的表现。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@counter-style</span> triangle &#123;</span><br><span class="line">  <span class="selector-tag">system</span>: <span class="selector-tag">cyclic</span>;</span><br><span class="line">  <span class="selector-tag">symbols</span>: ‣;</span><br><span class="line">  <span class="selector-tag">suffix</span>: &quot; &quot;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="key-frames"><a href="#key-frames" class="headerlink" title="@key-frames"></a>@key-frames</h4><p><a target="_blank" rel="noopener" href="https://www.w3.org/TR/css-animations-1/#csskeyframesrule">https://www.w3.org/TR/css-animations-1/#csskeyframesrule</a><br><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/@keyframes">https://developer.mozilla.org/zh-CN/docs/Web/CSS/@keyframes</a></p>
+<p>keyframes 产生一种数据，用于定义动画关键帧。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@keyframes</span> diagonal-slide &#123;</span><br><span class="line"></span><br><span class="line">  <span class="selector-tag">from</span> &#123;</span><br><span class="line">    <span class="attribute">left</span>: <span class="number">0</span>;</span><br><span class="line">    <span class="attribute">top</span>: <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="selector-tag">to</span> &#123;</span><br><span class="line">    <span class="attribute">left</span>: <span class="number">100px</span>;</span><br><span class="line">    <span class="attribute">top</span>: <span class="number">100px</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="fontface"><a href="#fontface" class="headerlink" title="@fontface"></a>@fontface</h4><p><a target="_blank" rel="noopener" href="https://www.w3.org/TR/css-fonts-3/#om-fontface">https://www.w3.org/TR/css-fonts-3/#om-fontface</a><br><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/@font-face">https://developer.mozilla.org/zh-CN/docs/Web/CSS/@font-face</a></p>
+<p>fontface 用于定义一种字体，icon font 技术就是利用这个特性来实现的。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">@font-face</span> &#123;</span><br><span class="line">  <span class="attribute">font-family</span>: Gentium;</span><br><span class="line">  <span class="attribute">src</span>: <span class="built_in">url</span>(http://example.com/fonts/Gentium.woff);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">p</span> &#123; <span class="attribute">font-family</span>: Gentium, serif; &#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="support"><a href="#support" class="headerlink" title="@support"></a>@support</h4><p><a target="_blank" rel="noopener" href="https://www.w3.org/TR/css3-conditional/#at-supports">https://www.w3.org/TR/css3-conditional/#at-supports</a><br><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/@supports">https://developer.mozilla.org/zh-CN/docs/Web/CSS/@supports</a></p>
+<p>support 检查环境的特性，它与 media 比较类似。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@supports</span> (<span class="attribute">display:</span> grid) &#123;</span><br><span class="line">  <span class="selector-tag">div</span> &#123;</span><br><span class="line">    <span class="attribute">display</span>: grid;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="namespace"><a href="#namespace" class="headerlink" title="@namespace"></a>@namespace</h4><p><a target="_blank" rel="noopener" href="https://www.w3.org/TR/css-namespaces-3/#declaration">https://www.w3.org/TR/css-namespaces-3/#declaration</a><br><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/@namespace">https://developer.mozilla.org/zh-CN/docs/Web/CSS/@namespace</a></p>
+<p>用于跟 XML 命名空间配合的一个规则，表示内部的 CSS 选择器全都带上特定命名空间</p>
+<h4 id="viewport"><a href="#viewport" class="headerlink" title="@viewport"></a>@viewport</h4><p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/@viewport">https://developer.mozilla.org/zh-CN/docs/Web/CSS/@viewport</a></p>
+<p>已删除，使用meta标签代替</p>
+<h4 id="document"><a href="#document" class="headerlink" title="@document"></a>@document</h4><p>CSS4</p>
+<h4 id="font-feature-values"><a href="#font-feature-values" class="headerlink" title="@font-feature-values"></a>@font-feature-values</h4> 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CSS/" rel="tag">CSS</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+   
+</article>
+
+    
+    <article
+  id="post-algorithm/leetcode/(28)实现strStr()"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/posts/69b4046c/"
+    >28. 实现 strStr()</a> 
+</h2>
+ 
+
+    </header>
+     
+    <div class="article-meta">
+      <a href="/posts/69b4046c/" class="article-date">
+  <time datetime="2020-09-20T05:59:58.000Z" itemprop="datePublished">2020-09-20</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a> / <a class="article-category-link" href="/categories/%E7%AE%97%E6%B3%95/LeetCode/">LeetCode</a> / <a class="article-category-link" href="/categories/%E7%AE%97%E6%B3%95/LeetCode/Easy/">Easy</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h5 id="LeetCode"><a href="#LeetCode" class="headerlink" title="LeetCode"></a><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/implement-strstr/">LeetCode</a></h5><p><strong>描述</strong>：</p>
+<p>给定一个 haystack 字符串和一个 needle 字符串，在 haystack 字符串中找出 needle 字符串出现的第一个位置 (从0开始)。如果不存在，则返回  -1。</p>
+<p><strong>说明</strong>：</p>
+<ul>
+<li>  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: haystack = <span class="string">&quot;hello&quot;</span>, needle = <span class="string">&quot;ll&quot;</span></span><br><span class="line">输出: <span class="number">2</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: haystack = <span class="string">&quot;aaaaa&quot;</span>, needle = <span class="string">&quot;bba&quot;</span></span><br><span class="line">输出: <span class="number">-1</span></span><br></pre></td></tr></table></figure></li>
+<li><p>当 needle 是空字符串时我们应当返回 0，这与C语言的 strstr() 以及 Java，javascript的 indexOf() 定义相符。</p>
+</li>
+</ul>
+<h3 id="1-双指针"><a href="#1-双指针" class="headerlink" title="1.双指针"></a>1.双指针</h3><ul>
+<li>首先，只有子串的第一个字符跟 needle 字符串第一个字符相同的时候才需要比较。</li>
+</ul>
+<p><img src="/posts/69b4046c/0001.png"></p>
+<ul>
+<li>其次，可以一个字符一个字符比较，一旦不匹配了就立刻终止。</li>
+</ul>
+<p><img src="/posts/69b4046c/0002.png"></p>
+<ul>
+<li>注意在遇到不匹配位时，重置指针的位置</li>
+</ul>
+<p><img src="/posts/69b4046c/0003.png"></p>
+<ul>
+<li>返回字串的开始位置</li>
+</ul>
+<p><img src="/posts/69b4046c/0004.png"></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">    <span class="keyword">var</span> strStr = <span class="function"><span class="keyword">function</span> (<span class="params">haystack, needle</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (needle == <span class="string">&#x27;&#x27;</span>) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">var</span> i = <span class="number">0</span>,</span><br><span class="line">        j = <span class="number">0</span>,</span><br><span class="line">        haystackLength = haystack.length,</span><br><span class="line">        needleLength = needle.length;</span><br><span class="line">    <span class="keyword">while</span> (i !== haystack.length) &#123;</span><br><span class="line">        <span class="comment">// 剩余长度不足字串长度跳出</span></span><br><span class="line">        <span class="keyword">if</span> (haystackLength - i &lt; needleLength) <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">while</span> (haystack[j + i] === needle[j]) &#123;</span><br><span class="line">            j++</span><br><span class="line">            <span class="keyword">if</span> (j === needleLength) &#123;</span><br><span class="line">                <span class="keyword">return</span> i;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//不满足时重置索引</span></span><br><span class="line">        j = <span class="number">0</span>;</span><br><span class="line">        i++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">-1</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>复杂度分析</strong></p>
+<ul>
+<li><p>时间复杂度：最坏时间复杂度 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.566ex" xmlns="http://www.w3.org/2000/svg" width="13.103ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 5791.4 1000" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><path id="MJX-9-TEX-I-1D442" d="M740 435Q740 320 676 213T511 42T304 -22Q207 -22 138 35T51 201Q50 209 50 244Q50 346 98 438T227 601Q351 704 476 704Q514 704 524 703Q621 689 680 617T740 435ZM637 476Q637 565 591 615T476 665Q396 665 322 605Q242 542 200 428T157 216Q157 126 200 73T314 19Q404 19 485 98T608 313Q637 408 637 476Z"></path><path id="MJX-9-TEX-N-28" d="M94 250Q94 319 104 381T127 488T164 576T202 643T244 695T277 729T302 750H315H319Q333 750 333 741Q333 738 316 720T275 667T226 581T184 443T167 250T184 58T225 -81T274 -167T316 -220T333 -241Q333 -250 318 -250H315H302L274 -226Q180 -141 137 -14T94 250Z"></path><path id="MJX-9-TEX-I-1D441" d="M234 637Q231 637 226 637Q201 637 196 638T191 649Q191 676 202 682Q204 683 299 683Q376 683 387 683T401 677Q612 181 616 168L670 381Q723 592 723 606Q723 633 659 637Q635 637 635 648Q635 650 637 660Q641 676 643 679T653 683Q656 683 684 682T767 680Q817 680 843 681T873 682Q888 682 888 672Q888 650 880 642Q878 637 858 637Q787 633 769 597L620 7Q618 0 599 0Q585 0 582 2Q579 5 453 305L326 604L261 344Q196 88 196 79Q201 46 268 46H278Q284 41 284 38T282 19Q278 6 272 0H259Q228 2 151 2Q123 2 100 2T63 2T46 1Q31 1 31 10Q31 14 34 26T39 40Q41 46 62 46Q130 49 150 85Q154 91 221 362L289 634Q287 635 234 637Z"></path><path id="MJX-9-TEX-N-2212" d="M84 237T84 250T98 270H679Q694 262 694 250T679 230H98Q84 237 84 250Z"></path><path id="MJX-9-TEX-I-1D43F" d="M228 637Q194 637 192 641Q191 643 191 649Q191 673 202 682Q204 683 217 683Q271 680 344 680Q485 680 506 683H518Q524 677 524 674T522 656Q517 641 513 637H475Q406 636 394 628Q387 624 380 600T313 336Q297 271 279 198T252 88L243 52Q243 48 252 48T311 46H328Q360 46 379 47T428 54T478 72T522 106T564 161Q580 191 594 228T611 270Q616 273 628 273H641Q647 264 647 262T627 203T583 83T557 9Q555 4 553 3T537 0T494 -1Q483 -1 418 -1T294 0H116Q32 0 32 10Q32 17 34 24Q39 43 44 45Q48 46 59 46H65Q92 46 125 49Q139 52 144 61Q147 65 216 339T285 628Q285 635 228 637Z"></path><path id="MJX-9-TEX-N-29" d="M60 749L64 750Q69 750 74 750H86L114 726Q208 641 251 514T294 250Q294 182 284 119T261 12T224 -76T186 -143T145 -194T113 -227T90 -246Q87 -249 86 -250H74Q66 -250 63 -250T58 -247T55 -238Q56 -237 66 -225Q221 -64 221 250T66 725Q56 737 55 738Q55 746 60 749Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="matrix(1 0 0 -1 0 0)"><g data-mml-node="math"><g data-mml-node="mi"><use xlink:href="#MJX-9-TEX-I-1D442"></use></g><g data-mml-node="mo" transform="translate(763, 0)"><use xlink:href="#MJX-9-TEX-N-28"></use></g><g data-mml-node="mo" transform="translate(1152, 0)"><use xlink:href="#MJX-9-TEX-N-28"></use></g><g data-mml-node="mi" transform="translate(1541, 0)"><use xlink:href="#MJX-9-TEX-I-1D441"></use></g><g data-mml-node="mo" transform="translate(2651.2, 0)"><use xlink:href="#MJX-9-TEX-N-2212"></use></g><g data-mml-node="mi" transform="translate(3651.4, 0)"><use xlink:href="#MJX-9-TEX-I-1D43F"></use></g><g data-mml-node="mo" transform="translate(4332.4, 0)"><use xlink:href="#MJX-9-TEX-N-29"></use></g><g data-mml-node="mi" transform="translate(4721.4, 0)"><use xlink:href="#MJX-9-TEX-I-1D43F"></use></g><g data-mml-node="mo" transform="translate(5402.4, 0)"><use xlink:href="#MJX-9-TEX-N-29"></use></g></g></g></svg></mjx-container>，最好  <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.566ex" xmlns="http://www.w3.org/2000/svg" width="5.495ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 2429 1000" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><path id="MJX-8-TEX-I-1D442" d="M740 435Q740 320 676 213T511 42T304 -22Q207 -22 138 35T51 201Q50 209 50 244Q50 346 98 438T227 601Q351 704 476 704Q514 704 524 703Q621 689 680 617T740 435ZM637 476Q637 565 591 615T476 665Q396 665 322 605Q242 542 200 428T157 216Q157 126 200 73T314 19Q404 19 485 98T608 313Q637 408 637 476Z"></path><path id="MJX-8-TEX-N-28" d="M94 250Q94 319 104 381T127 488T164 576T202 643T244 695T277 729T302 750H315H319Q333 750 333 741Q333 738 316 720T275 667T226 581T184 443T167 250T184 58T225 -81T274 -167T316 -220T333 -241Q333 -250 318 -250H315H302L274 -226Q180 -141 137 -14T94 250Z"></path><path id="MJX-8-TEX-I-1D441" d="M234 637Q231 637 226 637Q201 637 196 638T191 649Q191 676 202 682Q204 683 299 683Q376 683 387 683T401 677Q612 181 616 168L670 381Q723 592 723 606Q723 633 659 637Q635 637 635 648Q635 650 637 660Q641 676 643 679T653 683Q656 683 684 682T767 680Q817 680 843 681T873 682Q888 682 888 672Q888 650 880 642Q878 637 858 637Q787 633 769 597L620 7Q618 0 599 0Q585 0 582 2Q579 5 453 305L326 604L261 344Q196 88 196 79Q201 46 268 46H278Q284 41 284 38T282 19Q278 6 272 0H259Q228 2 151 2Q123 2 100 2T63 2T46 1Q31 1 31 10Q31 14 34 26T39 40Q41 46 62 46Q130 49 150 85Q154 91 221 362L289 634Q287 635 234 637Z"></path><path id="MJX-8-TEX-N-29" d="M60 749L64 750Q69 750 74 750H86L114 726Q208 641 251 514T294 250Q294 182 284 119T261 12T224 -76T186 -143T145 -194T113 -227T90 -246Q87 -249 86 -250H74Q66 -250 63 -250T58 -247T55 -238Q56 -237 66 -225Q221 -64 221 250T66 725Q56 737 55 738Q55 746 60 749Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="matrix(1 0 0 -1 0 0)"><g data-mml-node="math"><g data-mml-node="mi"><use xlink:href="#MJX-8-TEX-I-1D442"></use></g><g data-mml-node="mo" transform="translate(763, 0)"><use xlink:href="#MJX-8-TEX-N-28"></use></g><g data-mml-node="mi" transform="translate(1152, 0)"><use xlink:href="#MJX-8-TEX-I-1D441"></use></g><g data-mml-node="mo" transform="translate(2040, 0)"><use xlink:href="#MJX-8-TEX-N-29"></use></g></g></g></svg></mjx-container></p>
+</li>
+<li><p>空间复杂度：<mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.566ex" xmlns="http://www.w3.org/2000/svg" width="4.618ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 2041 1000" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><path id="MJX-8-TEX-I-1D442" d="M740 435Q740 320 676 213T511 42T304 -22Q207 -22 138 35T51 201Q50 209 50 244Q50 346 98 438T227 601Q351 704 476 704Q514 704 524 703Q621 689 680 617T740 435ZM637 476Q637 565 591 615T476 665Q396 665 322 605Q242 542 200 428T157 216Q157 126 200 73T314 19Q404 19 485 98T608 313Q637 408 637 476Z"></path><path id="MJX-8-TEX-N-28" d="M94 250Q94 319 104 381T127 488T164 576T202 643T244 695T277 729T302 750H315H319Q333 750 333 741Q333 738 316 720T275 667T226 581T184 443T167 250T184 58T225 -81T274 -167T316 -220T333 -241Q333 -250 318 -250H315H302L274 -226Q180 -141 137 -14T94 250Z"></path><path id="MJX-8-TEX-N-31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path><path id="MJX-8-TEX-N-29" d="M60 749L64 750Q69 750 74 750H86L114 726Q208 641 251 514T294 250Q294 182 284 119T261 12T224 -76T186 -143T145 -194T113 -227T90 -246Q87 -249 86 -250H74Q66 -250 63 -250T58 -247T55 -238Q56 -237 66 -225Q221 -64 221 250T66 725Q56 737 55 738Q55 746 60 749Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="matrix(1 0 0 -1 0 0)"><g data-mml-node="math"><g data-mml-node="mi"><use xlink:href="#MJX-8-TEX-I-1D442"></use></g><g data-mml-node="mo" transform="translate(763, 0)"><use xlink:href="#MJX-8-TEX-N-28"></use></g><g data-mml-node="mn" transform="translate(1152, 0)"><use xlink:href="#MJX-8-TEX-N-31"></use></g><g data-mml-node="mo" transform="translate(1652, 0)"><use xlink:href="#MJX-8-TEX-N-29"></use></g></g></g></svg></mjx-container></p>
+</li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LeetCode/" rel="tag">LeetCode</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+   
+</article>
+
+    
+    <article
   id="post-algorithm/leetcode/(27)移除元素"
   class="article article-type-post"
   itemscope
@@ -877,193 +1141,6 @@ var _hmt = _hmt || [];
     <footer class="article-footer">
        
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E4%BD%9C%E7%94%A8%E5%9F%9F/" rel="tag">作用域</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-   
-</article>
-
-    
-    <article
-  id="post-daily/javascript/1599708871220"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/posts/3d9432c4/"
-    >请写出下面代码打印结果</a> 
-</h2>
- 
-
-    </header>
-     
-    <div class="article-meta">
-      <a href="/posts/3d9432c4/" class="article-date">
-  <time datetime="2020-09-10T03:35:14.000Z" itemprop="datePublished">2020-09-10</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/">每日一题</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> obj = &#123;&#125;;</span><br><span class="line"><span class="keyword">var</span> x  = +obj.animal?.name??<span class="string">&#x27;熊猫&#x27;</span>;</span><br><span class="line"><span class="built_in">console</span>.log(x)</span><br></pre></td></tr></table></figure>
-
-<h4 id="答案"><a href="#答案" class="headerlink" title="答案"></a>答案</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> obj = &#123;&#125;;</span><br><span class="line"><span class="keyword">var</span> x  = +obj.animal?.name??<span class="string">&#x27;熊猫&#x27;</span>;</span><br><span class="line"><span class="built_in">console</span>.log(x) <span class="comment">//NaN</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="解析"><a href="#解析" class="headerlink" title="解析"></a>解析</h4><ul>
-<li><p>?省去了对取值对象的判断，在不存在时返回undefined<br>  等价于：</p>
-  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(obj.animal||&#123;&#125;).name</span><br></pre></td></tr></table></figure></li>
-<li><p>+undefined 强制转化为Number类型，返回NaN</p>
-</li>
-<li><p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing_operator">??控制合并操作符</a><br>  逻辑运算符，当左侧的表达式结果为null或undefined时，返回右侧表达式的结果，否则返回左侧表达式的结果。</p>
-</li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%BF%90%E7%AE%97%E7%AC%A6/" rel="tag">运算符</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-   
-</article>
-
-    
-    <article
-  id="post-daily/history"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/posts/3c279ba3/"
-    >历史每日一题</a> 
-</h2>
- 
-
-    </header>
-     
-    <div class="article-meta">
-      <a href="/posts/3c279ba3/" class="article-date">
-  <time datetime="2020-09-10T01:34:37.000Z" itemprop="datePublished">2020-09-10</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/">每日一题</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <ol>
-<li><a href="/posts/d8942393/">隐式类型转换，下面代码的执行结果是什么？</a></li>
-<li><a href="/posts/3d9432c4/">请写出下面代码打印结果？</a></li>
-<li><a href="/posts/6e7ebcc1/">对于length下面的代码输出什么</a></li>
-</ol>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-    </footer>
-  </div>
-
-    
- 
-   
-</article>
-
-    
-    <article
-  id="post-daily/javascript/1599701546486"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/posts/d8942393/"
-    >隐式类型转换，下面代码的执行结果是什么？</a> 
-</h2>
- 
-
-    </header>
-     
-    <div class="article-meta">
-      <a href="/posts/d8942393/" class="article-date">
-  <time datetime="2020-09-10T01:32:42.000Z" itemprop="datePublished">2020-09-10</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/">每日一题</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> a = [];</span><br><span class="line"><span class="keyword">let</span> b = <span class="string">&quot;0&quot;</span>;</span><br><span class="line"><span class="built_in">console</span>.log(a == <span class="number">0</span>);</span><br><span class="line"><span class="built_in">console</span>.log(a == !a);</span><br><span class="line"><span class="built_in">console</span>.log(b == <span class="number">0</span>);</span><br><span class="line"><span class="built_in">console</span>.log(a == b);</span><br></pre></td></tr></table></figure>
-
-<h4 id="答案"><a href="#答案" class="headerlink" title="答案"></a>答案</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> a = [];</span><br><span class="line"><span class="keyword">let</span> b = <span class="string">&quot;0&quot;</span>;</span><br><span class="line"><span class="built_in">console</span>.log(a == <span class="number">0</span>); <span class="comment">//true</span></span><br><span class="line"><span class="built_in">console</span>.log(a == !a);<span class="comment">//true</span></span><br><span class="line"><span class="built_in">console</span>.log(b == <span class="number">0</span>);<span class="comment">//true</span></span><br><span class="line"><span class="built_in">console</span>.log(a == b);<span class="comment">//false</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="解析"><a href="#解析" class="headerlink" title="解析"></a>解析</h4><h6 id="0-gt-true"><a href="#0-gt-true" class="headerlink" title="[] == 0 =&gt; true"></a>[] == 0 =&gt; true</h6><p>引用类型和原始类型比较，按照ToPromitive规则，对象类型会尝试转换成原始类型的值，在进行比较</p>
-<p>① []==0 =&gt; [].valueOf().toString() == 0 =&gt; “” == 0</p>
-<p>数组是引用类型，所以会进行ToPrimitive操作，即调用valueOf尝试转为原始值，因为[].valueOf() 返回<strong>数组引用</strong>并不是一个原始类型值，所以再次调用toString()方法，数字被转为空字符串 “”</p>
-<p>② “” == 0 =&gt; Number(“”) == 0 =&gt; true</p>
-<p>空字符串和数字的比较是原始类型值的比较，原始类型值会转为数字在比较，结果为true</p>
-<h6 id="gt-true"><a href="#gt-true" class="headerlink" title="[] == ![] =&gt; true"></a>[] == ![] =&gt; true</h6><p>!运算的优先级高于==运算，所以先执行!运算把[]转为false</p>
-<blockquote>
-<p>null undefined NaN 空字符串 1 false,取反都为true</p>
-</blockquote>
-<p>[] == false 如果有一个操作数是Boolean类型，在比较之前先将其转为数字，[]==0 结果同第一问为 true</p>
-<h6 id="“0”-0-gt-true"><a href="#“0”-0-gt-true" class="headerlink" title="“0” == 0 =&gt; true"></a>“0” == 0 =&gt; true</h6><p>原始类型值的比较会转为数值在比较 Number(“0“) == 0 =&gt; true</p>
-<h6 id="“0“-gt-false"><a href="#“0“-gt-false" class="headerlink" title="[] == “0“ =&gt; false"></a>[] == “0“ =&gt; false</h6><p>由第一问可知，[]转为原始类型， 所以比较 “” == “0“，结果为flase</p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/" rel="tag">类型转换</a></li></ul>
 
     </footer>
   </div>
