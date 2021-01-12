@@ -113,6 +113,80 @@ var _hmt = _hmt || [];
     
     
     <article
+  id="post-javascript/engineering/单元测试"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/posts/f1e8832f/"
+    >单元测试理论</a> 
+</h2>
+ 
+
+    </header>
+     
+    <div class="article-meta">
+      <a href="/posts/f1e8832f/" class="article-date">
+  <time datetime="2020-11-23T05:43:23.000Z" itemprop="datePublished">2020-11-23</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/JavaScript/">JavaScript</a> / <a class="article-category-link" href="/categories/JavaScript/%E5%B7%A5%E7%A8%8B%E5%8C%96/">工程化</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h4 id="TDD-测试驱动开发"><a href="#TDD-测试驱动开发" class="headerlink" title="TDD 测试驱动开发"></a>TDD 测试驱动开发</h4><ul>
+<li>首先，开发者在码业务前写一些测试用例</li>
+<li>运行这些测试用例。结果肯定是运行失败，因为测试用例中的业务逻辑还没实现嘛</li>
+<li>开发者实现测试用例中的业务逻辑</li>
+<li>再运行测试用例， 如果开发者代码能力不错，这些测试用例应该可以跑通了(pass)</li>
+<li>对业务代码及时重构，包括增加注释，清理重复等。因为没人比开发者自己更了解哪些代码会对哪些部分造成影响从而导致测试失败(fail)</li>
+</ul>
+<p><img src="/0001.png"></p>
+<p>我们通过举例来了解一下如何实践TDD。例子中的代码可以从github上获取tdd-vs-bdd。将代码clone下来，执行命令npm install &amp;&amp; grunt</p>
+<p>假设我们想写一个计算阶乘的函数(这是一个很刻意的例子，但是这个例子对我们指出TDD和BDD的区别很有帮助)。TDD的常用方式是运行某函数，然后断言结果满足某个值。</p>
+<p>在阶乘的例子中，我们使用的javascript测试框架是Mocha。废话不说，上代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> assert = <span class="built_in">require</span>(<span class="string">&#x27;assert&#x27;</span>),</span><br><span class="line">    factorial = <span class="built_in">require</span>(<span class="string">&#x27;../index&#x27;</span>);</span><br><span class="line"> </span><br><span class="line">suite(<span class="string">&#x27;Test&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>)</span>&#123;</span><br><span class="line">    setup(<span class="function"><span class="keyword">function</span> (<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="comment">// Create any objects that we might need</span></span><br><span class="line">    &#125;);</span><br><span class="line"> </span><br><span class="line">    suite(<span class="string">&#x27;#factorial()&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>)</span>&#123;</span><br><span class="line">        test(<span class="string">&#x27;equals 1 for sets of zero length&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>)</span>&#123;</span><br><span class="line">            assert.equal(<span class="number">1</span>, factorial(<span class="number">0</span>));</span><br><span class="line">        &#125;);</span><br><span class="line"> </span><br><span class="line">        test(<span class="string">&#x27;equals 1 for sets of length one&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>)</span>&#123;</span><br><span class="line">            assert.equal(<span class="number">1</span>, factorial(<span class="number">1</span>));</span><br><span class="line">        &#125;);</span><br><span class="line"> </span><br><span class="line">        test(<span class="string">&#x27;equals 2 for sets of length two&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>)</span>&#123;</span><br><span class="line">            assert.equal(<span class="number">2</span>, factorial(<span class="number">2</span>));</span><br><span class="line">        &#125;);</span><br><span class="line"> </span><br><span class="line">        test(<span class="string">&#x27;equals 6 for sets of length three&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>)</span>&#123;</span><br><span class="line">            assert.equal(<span class="number">6</span>, factorial(<span class="number">3</span>));</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>显然上述测试会失败，因为我们尚未实现函数功能。所以接下来我们需要实现满足上述测试用例的阶乘函数。代码如下</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span> (<span class="params">n</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (n &lt; <span class="number">0</span>) <span class="keyword">return</span> <span class="literal">NaN</span>;</span><br><span class="line">    <span class="keyword">if</span> (n === <span class="number">0</span>) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">return</span> n * factorial(n - <span class="number">1</span>);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>现在我们再次运行测试用例，所有的case都跑通了! 这就是TDD的使用方式。</p>
+<h4 id="BDD-行为驱动开发"><a href="#BDD-行为驱动开发" class="headerlink" title="BDD 行为驱动开发"></a>BDD 行为驱动开发</h4><p>BDD旨在消除TDD过程中可能造成的问题。</p>
+<p>与TDD相比，BDD是通过编写行为和规范来驱动软件开发。 行为和规范可能看起来与测试非常相似，但是它们之间却有着微妙但重要的区别。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> assert = <span class="built_in">require</span>(<span class="string">&#x27;assert&#x27;</span>),</span><br><span class="line">    factorial = <span class="built_in">require</span>(<span class="string">&#x27;../index&#x27;</span>);</span><br><span class="line"> </span><br><span class="line">describe(<span class="string">&#x27;Test&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>)</span>&#123;</span><br><span class="line">    before(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="comment">// Stuff to do before the tests, like imports, what not</span></span><br><span class="line">    &#125;);</span><br><span class="line"> </span><br><span class="line">    describe(<span class="string">&#x27;#factorial()&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>)</span>&#123;</span><br><span class="line">        it(<span class="string">&#x27;should return 1 when given 0&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>)</span>&#123;</span><br><span class="line">            factorial(<span class="number">0</span>).should.equal(<span class="number">1</span>);</span><br><span class="line">        &#125;);</span><br><span class="line"> </span><br><span class="line">        it(<span class="string">&#x27;should return 1 when given 1&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>)</span>&#123;</span><br><span class="line">            factorial(<span class="number">1</span>).should.equal(<span class="number">1</span>);</span><br><span class="line">        &#125;);</span><br><span class="line"> </span><br><span class="line">        it(<span class="string">&#x27;should return 2 when given 2&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>)</span>&#123;</span><br><span class="line">            factorial(<span class="number">2</span>).should.equal(<span class="number">2</span>);</span><br><span class="line">        &#125;);</span><br><span class="line"> </span><br><span class="line">        it(<span class="string">&#x27;should return 6 when given 3&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>)</span>&#123;</span><br><span class="line">            factorial(<span class="number">3</span>).should.equal(<span class="number">6</span>);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line"> </span><br><span class="line">    after(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="comment">// Anything after the tests have finished</span></span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h4 id="敏捷开发"><a href="#敏捷开发" class="headerlink" title="敏捷开发"></a>敏捷开发</h4><p>敏捷开发以用户的需求进化为核心，采用迭代、循序渐进的方法进行软件开发。在敏捷开发中，软件项目在构建初期被切分成多个子项目，各个子项目的成果都经过测试，具备可视、可集成和可运行使用的特征。换言之，就是把一个大项目分为多个相互联系，但也可独立运行的小项目，并分别完成，在此过程中软件一直处于可使用状态。</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/" rel="tag">单元测试</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" rel="tag">工程化</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+   
+</article>
+
+    
+    <article
   id="post-javascript/fp/偏函数和函数柯里化"
   class="article article-type-post"
   itemscope
@@ -957,143 +1031,6 @@ var _hmt = _hmt || [];
     <footer class="article-footer">
        
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LeetCode/" rel="tag">LeetCode</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-   
-</article>
-
-    
-    <article
-  id="post-javascript/fp/(4)模块化且可重用的代码"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/posts/119b719a/"
-    >4.模块化且可重用的代码</a> 
-</h2>
- 
-
-    </header>
-     
-    <div class="article-meta">
-      <a href="/posts/119b719a/" class="article-date">
-  <time datetime="2020-11-03T00:56:22.000Z" itemprop="datePublished">2020-11-03</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/JavaScript/">JavaScript</a> / <a class="article-category-link" href="/categories/JavaScript/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/">函数式编程</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p>函数链与函数管道的比较<br>Ramda.js 函数库<br>柯里化、部分应用（partial application）和函数绑定<br>通过函数式组合构建模块化程序<br>利用函数组合子增强程序的控制流</p>
-<p>先将问题分解成较小的部分，再重建这些部分以形成整体的解决方案。</p>
-<h4 id="方法链与函数管道的比较"><a href="#方法链与函数管道的比较" class="headerlink" title="方法链与函数管道的比较"></a>方法链与函数管道的比较</h4><p>Haskell中定义函数的符号。该符号先给出了函数的名称，随后用一个操作符来设置函数的输入和输出类型</p>
-<p><img src="/posts/119b719a/0001.jpg"></p>
-<h4 id="方法链接（紧耦合，有限的表现力）"><a href="#方法链接（紧耦合，有限的表现力）" class="headerlink" title="方法链接（紧耦合，有限的表现力）"></a>方法链接（紧耦合，有限的表现力）</h4><p>它与方法所属的对象紧紧地耦合在一起，限制链中可以使用的方法数量，也就限制了代码的表现力。这样就只能够使用由Lodash提供的操作，而无法轻松地将不同函数库的（或自定义的）函数连接在一起。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">_.chain(names)</span><br><span class="line">.filter(isValid) <span class="comment">//每一个“点”后只能调用 Lodash 提供的方法</span></span><br><span class="line">.map(<span class="function"><span class="params">s</span> =&gt;</span> s.replace(<span class="regexp">/_/</span>, <span class="string">&#x27; &#x27;</span>))</span><br><span class="line">.uniq()</span><br><span class="line">.map(_.startCase)</span><br><span class="line">.sort()</span><br><span class="line">.value();</span><br></pre></td></tr></table></figure>
-
-<p><img src="/posts/119b719a/0002.jpg"></p>
-<p><strong>函数的管道化（松耦合，灵活）</strong></p>
-<p><img src="/posts/119b719a/0003.jpg"></p>
-<p>方法链接通过对象的方法紧密连接；而管道以函数作为组件，将函数的输入和输出松散地连接在一起。但是，为了实现管道，被连接的函数必须在元数（arity）和类型上相互兼容。</p>
-<p>函数式编程将管道视为构建程序的唯一方法.</p>
-<p>对于不同的任务，问题的定义与解决方案间总是存在很大的差异。因此，特定的计算必须在特定的阶段进行。这些阶段由不同的函数表征，而所选函数的输入和输出需要满足以下两个兼容条件。</p>
-<p><strong>类型=&gt;函数的返回类型必须与接收函数的参数类型相匹配。</strong></p>
-<p><strong>元数=&gt;接收函数必须声明至少一个参数才能处理上一个函数的返回值。</strong></p>
-<p><strong>元组</strong></p>
-<p>对传入的参数进行参数类型，和个数的校验，可以用TS替代</p>
-<ul>
-<li>不可变的——一旦创建，就无法改变一个元组的内部内容。</li>
-<li>避免创建临时类型——元组可以将可能毫不相关的数据相关联。而定义和实例化一些仅用于数据分组的新类型使得模型复杂并令人费解。</li>
-<li>避免创建异构数组——包含不同类型元素的数组使用起来颇为困难，因为会导致代码中充满大量的防御性类型检查。传统上，数组意在存储相同类型的对象。</li>
-</ul>
-<h4 id="柯里化"><a href="#柯里化" class="headerlink" title="柯里化"></a>柯里化</h4><p>要求所有参数都被明确地定义，因此当使用部分参数调用时，它会返回一个新的函数，在真正运行之前等待外部提供其余的参数。</p>
-<p>R._curry1</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">curry1</span>(<span class="params">fn</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">f1</span>(<span class="params">a</span>) </span>&#123;</span><br><span class="line">        <span class="comment">// 判断a是否为占位符</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">arguments</span>.length === <span class="number">0</span> || _isPlaceholder(a)) &#123;</span><br><span class="line">            <span class="keyword">return</span> f1</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 多余的参数也可以传入</span></span><br><span class="line">            <span class="keyword">return</span> fn.apply(<span class="built_in">this</span>, <span class="built_in">arguments</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="部分应用和函数绑定"><a href="#部分应用和函数绑定" class="headerlink" title="部分应用和函数绑定"></a>部分应用和函数绑定</h4><ul>
-<li><p>柯里化在每次分步调用时都会生成嵌套的一元函数。在底层，函数的最终结果是由这些一元函数的逐步组合产生的。同时，curry的变体允许同时传递一部分参数。因此，可以完全控制函数求值的时间与方式。</p>
-</li>
-<li><p>部分应用将函数的参数与一些预设值绑定（赋值），从而产生一个拥有更少参数的新函数。该函数的闭包中包含了这些已赋值的参数，在之后的调用中被完全求值。</p>
-</li>
-</ul>
-<h4 id="延迟函数绑定"><a href="#延迟函数绑定" class="headerlink" title="延迟函数绑定"></a>延迟函数绑定</h4><p>当期望目标函数使用某个所属对象来执行时，使用函数绑定来设置上下文对象就变得尤为重要。例如，浏览器中的setTimeout和setInterval等函数，如果不将this的引用设为全局上下文，即window对象，是不能正常工作的。传递undefined在运行时正确设置它们的上下文。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> Scheduler = (<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> delayedFn = _.bind(<span class="built_in">setTimeout</span>, <span class="literal">undefined</span>, _, _);</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    delay5: _.partial(delayedFn, _, <span class="number">5000</span>),</span><br><span class="line">    delay10: _.partial(delayedFn, _, <span class="number">10000</span>),</span><br><span class="line">    delay: _.partial(delayedFn, _, _)</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;)();</span><br><span class="line">Scheduler.delay5(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  consoleLog(<span class="string">&#x27;Executing After 5 seconds!&#x27;</span>)</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<h4 id="函数组合"><a href="#函数组合" class="headerlink" title="函数组合"></a>函数组合</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Function</span>.prototype.compose = R.compose;</span><br><span class="line"><span class="keyword">const</span> cleanInput = checkLengthSsn.compose(normalize).compose(trim);</span><br></pre></td></tr></table></figure>
-
-<p><strong>对副作用的处理是，拆分副作用的函数，并且固定副作用函数的参数</strong></p>
-<h4 id="point-free编程"><a href="#point-free编程" class="headerlink" title="point-free编程"></a>point-free编程</h4><p>使用compose（或者pipe）就意味着永远不必再声明参数了（称为函数的points），这无疑会使代码更加声明式、更加简洁，或更加point-free。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">R.compose(first, getName, reverse, sortByGrade, combine);</span><br></pre></td></tr></table></figure>
-
-<p>point-free编程使JavaScript的函数式代码更接近于Haskell和UNIX的理念。它可以用来提高抽象度，促使开发者关注高级组件的组合，而不是低级的函数求值的细节。柯里化在这里也起着很重要的作用，因为它能够灵活地部分定义一个只差最后一个参数的内联函数。这种编码风格也被称为Tacit编程。</p>
-<p><strong>在将组合改为这种编码风格时，要记住，过度的使用会使得程序晦涩且令人费解。</strong></p>
-<h4 id="组合子"><a href="#组合子" class="headerlink" title="组合子"></a>组合子</h4><p>组合器是一些可以组合其他函数（或其他组合子），并作为控制逻辑运行的高阶函数。组合子通常不声明任何变量，也不包含任何业务逻辑，它们旨在管理函数式程序的流程。除了compose和pipe，还有无数的组合子，一些最常见的组合子如下。</p>
-<ul>
-<li>identity（I-combinator）</li>
-</ul>
-<p>为以函数为参数的更高阶函数提供数据，如之前清单4.12中的point-free代码。<br>在单元测试的函数组合器控制流中作为简单的函数结果来进行断言。例如，可以使用identity函数来编写compose的单元测试。<br>函数式地从封装类型中提取数据</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//identity :: (a) -&gt; a</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>tap（K-组合子）</li>
-</ul>
-<p>该函数接收一个输入对象a和一个对a执行指定操作的函数。它使用提供的对象调用给定的函数，然后再返回该对象</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">tap</span>(<span class="params">fn, x</span>) </span>&#123;</span><br><span class="line">  fn(x);</span><br><span class="line">  <span class="keyword">return</span> x;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>alt （OR-组合子） alternation</li>
-</ul>
-<p>alt组合子能够在提供函数响应的默认行为时执行简单的条件逻辑。该组合器以两个函数为参数，如<br>果第一个函数返回值已定义（即，不是false、null或undefined)</p>
-<p>用于处理if else 逻辑</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> alt = <span class="function"><span class="keyword">function</span> (<span class="params">func1, func2</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">val</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> func1(val) || func2(val);</span><br><span class="line">&#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>seq（S-组合子） sequence</li>
-</ul>
-<p>seq组合子用于遍历函数序列。它以两个或更多的函数作为参数并返回一个新的函数，<strong>会用相同的值顺序调用所有这些函数</strong></p>
-<p>seq组合子不会返回任何值，只会一个一个地执行一系列操作。如果要将其嵌入函数组合之间，可以使用R.tap将它与其余部分进行桥接。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> seq = <span class="function"><span class="keyword">function</span>(<span class="params"><span class="regexp">/*funcs*/</span></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> funcs = <span class="built_in">Array</span>.prototype.slice.call(<span class="built_in">arguments</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">val</span>) </span>&#123;</span><br><span class="line">      funcs.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">fn</span>) </span>&#123;</span><br><span class="line">      fn(val);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>fork（join）组合子</li>
-</ul>
-<p><img src="/posts/119b719a/0004.jpg"></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> fork = <span class="function"><span class="keyword">function</span>(<span class="params">join, func1, func2</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">val</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> join(func1(val), func2(val));</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> eqMedianAverage = fork(R.equals, R.median, R.mean);</span><br><span class="line">eqMedianAverage([<span class="number">80</span>, <span class="number">90</span>, <span class="number">100</span>])); <span class="comment">//-&gt; True</span></span><br><span class="line">eqMedianAverage([<span class="number">81</span>, <span class="number">90</span>, <span class="number">100</span>])); <span class="comment">//-&gt; False</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><ul>
-<li>用于连接可重用的、模块化的、组件化程序的函数链与管道。</li>
-<li>Ramda.js是一个功能强大的函数库，适用于函数的柯里化与组合。</li>
-<li>可以通过部分求值和柯里化来减少函数元数，利用对参数子集的部分求值将函数转化为一元函数。</li>
-<li>可以将任务分解为多个简单的函数，再通过组合来获得整个解决方案。</li>
-<li>以point-free的风格编写，并用函数组合子来组织的程序控制流，可解决现实问题。</li>
-</ul>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" rel="tag">函数式编程</a></li></ul>
 
     </footer>
   </div>

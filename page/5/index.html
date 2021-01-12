@@ -113,6 +113,200 @@ var _hmt = _hmt || [];
     
     
     <article
+  id="post-linux/basic/other"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/posts/7375f30c/"
+    >其他命令</a> 
+</h2>
+ 
+
+    </header>
+     
+    <div class="article-meta">
+      <a href="/posts/7375f30c/" class="article-date">
+  <time datetime="2020-10-26T13:07:30.000Z" itemprop="datePublished">2020-10-26</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Linux/">Linux</a> / <a class="article-category-link" href="/categories/Linux/%E5%9F%BA%E7%A1%80%E5%91%BD%E4%BB%A4/">基础命令</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h4 id="查找文件"><a href="#查找文件" class="headerlink" title="查找文件"></a>查找文件</h4><p>find 命令功能非常强大,通常用来在 特定的目录下 搜索 符合条件的文件</p>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>命令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>01</td>
+<td>find [ 路径 ] -name “*.py”</td>
+<td>查找指定路径下扩展名是 .py 的文件,包括子目录</td>
+</tr>
+</tbody></table>
+<p>如果省略路径,表示在当前文件夹下查找</p>
+<p>之前学习的通配符,在使用 find 命令时同时可用</p>
+<h4 id="软链接"><a href="#软链接" class="headerlink" title="软链接"></a>软链接</h4><table>
+<thead>
+<tr>
+<th>序号</th>
+<th>命令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>01</td>
+<td>ln -s 被链接的源文件 链接文件(名称)</td>
+<td>建立文件的软链接,用通俗的方式讲类似于 Windows 下的快捷方式</td>
+</tr>
+</tbody></table>
+<p>注意:</p>
+<ol>
+<li>没有 -s 选项建立的是一个 硬链接文件</li>
+<li>两个文件占用相同大小的硬盘空间,工作中几乎不会建立文件的硬链接</li>
+<li>源文件要使用绝对路径 ,不能使用相对路径,这样可以方便移动链接文件后,仍然能够正常使用</li>
+</ol>
+<p><img src="/posts/7375f30c/0001.png"></p>
+<h4 id="打包"><a href="#打包" class="headerlink" title="打包"></a>打包</h4><p>tar 是 Linux 中最常用的 备份 工具,此命令可以 把一系列文件 打包到 一个大文件中 ,也可以把一个 打包的大文件恢复成一系列文件</p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>c</td>
+<td>生成档案文件,创建打包文件</td>
+</tr>
+<tr>
+<td>x</td>
+<td>解开档案文件</td>
+</tr>
+<tr>
+<td>v</td>
+<td>列出归档解档的详细过程,显示进度</td>
+</tr>
+<tr>
+<td>f</td>
+<td>指定档案文件名称, f 后面一定是 .tar 文件,所以必须放选项最后</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>注意:f 选项必须放在最后,其他选项顺序可以随意</p>
+</blockquote>
+<p>打包</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -cvf 打包名称.tar 被打包的文件/路径 ...</span><br></pre></td></tr></table></figure>
+
+<p>解包</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -xvf 打包文件.tar</span><br></pre></td></tr></table></figure>
+
+<h4 id="压缩"><a href="#压缩" class="headerlink" title="压缩"></a>压缩</h4><ul>
+<li><p>tar 与 gzip 命令结合可以使用实现文件 打包和压缩</p>
+</li>
+<li><p>tar 只负责打包文件,但不压缩</p>
+</li>
+<li><p>用 gzip 压缩 tar 打包后的文件,其扩展名一般用 xxx.tar.gz</p>
+</li>
+</ul>
+<blockquote>
+<p>在 Linux 中,最常见的压缩文件格式就是 xxx.tar.gz</p>
+</blockquote>
+<ul>
+<li>在 tar 命令中有一个选项 -z 可以调用 gzip ,从而可以方便的实现压缩和解压缩的功能</li>
+</ul>
+<p>压缩文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zcvf 打包文件.tar.gz 被压缩的文件/路径 ...</span><br></pre></td></tr></table></figure>
+
+<p>解压文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf 打包文件.tar.gz</span><br></pre></td></tr></table></figure>
+
+<p>解压缩到指定路径</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf 打包文件.tar.gz -C 目标路径 </span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-C</td>
+<td>解压缩到指定目录,注意:要解压缩的目录必须存在</td>
+</tr>
+</tbody></table>
+<p>bzip2(two)</p>
+<ul>
+<li><p>tar 与 bzip2 命令结合可以使用实现文件 打包和压缩 (用法和 gzip 一样)</p>
+</li>
+<li><p>tar 只负责打包文件,但不压缩,</p>
+</li>
+<li><p>用 bzip2 压缩 tar 打包后的文件,其扩展名一般用 xxx.tar.bz2</p>
+</li>
+<li><p>在 tar 命令中有一个选项 -j 可以调用 bzip2 ,从而可以方便的实现压缩和解压缩的功能</p>
+</li>
+</ul>
+<p>压缩</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -jcvf 打包文件.tar.bz2 被压缩的文件/路径 ...</span><br></pre></td></tr></table></figure>
+
+<p>解压</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -jxvf 打包文件.tar.bz2</span><br></pre></td></tr></table></figure>
+
+<h4 id="软件安装"><a href="#软件安装" class="headerlink" title="软件安装"></a>软件安装</h4><ul>
+<li><p>apt 是 Advanced Packaging Tool ,是 Linux 下的一款安装包管理工具</p>
+</li>
+<li><p>可以在终端中方便的 安装 /卸载 / 更新软件包</p>
+</li>
+</ul>
+<p>安装软件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install 软件包</span><br></pre></td></tr></table></figure>
+
+<p>卸载软件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt remove 软件名</span><br></pre></td></tr></table></figure>
+
+<p>升级软件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt upgrade</span><br></pre></td></tr></table></figure>
+
+<p>如果希望在 ubuntu 中安装软件,更加快速 ,可以通过设置镜像源 ,选择一个访问网速更快的服务器,来提供软件下载/安装服务<br>提示:更换服务器之后,需要一个相对比较长时间的更新过程,需要耐心等待。更新完成后,再安装软件都会从新设置的服务器下载软件了</p>
+<p><img src="/posts/7375f30c/0002.png"></p>
+<p>下载</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget 下载地址</span><br></pre></td></tr></table></figure> 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+   
+</article>
+
+    
+    <article
   id="post-javascript/basic/reflect"
   class="article article-type-post"
   itemscope
@@ -1054,143 +1248,6 @@ var _hmt = _hmt || [];
     <footer class="article-footer">
        
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%A0%88/" rel="tag">栈</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-   
-</article>
-
-    
-    <article
-  id="post-javascript/basic/object_feature"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/posts/af01aeda/"
-    >Object新特性</a> 
-</h2>
- 
-
-    </header>
-     
-    <div class="article-meta">
-      <a href="/posts/af01aeda/" class="article-date">
-  <time datetime="2020-10-18T06:23:49.000Z" itemprop="datePublished">2020-10-18</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/JavaScript/">JavaScript</a> / <a class="article-category-link" href="/categories/JavaScript/%E5%9F%BA%E7%A1%80/">基础</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h4 id="属性的简洁表示法"><a href="#属性的简洁表示法" class="headerlink" title="属性的简洁表示法"></a>属性的简洁表示法</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> foo = <span class="string">&#x27;bar&#x27;</span>;</span><br><span class="line"><span class="keyword">const</span> baz = &#123;foo&#125;;</span><br></pre></td></tr></table></figure>
-
-<h4 id="属性名表达式"><a href="#属性名表达式" class="headerlink" title="属性名表达式"></a>属性名表达式</h4><p>性名表达式如果是一个对象，默认情况下会自动将对象转为字符串<code>[object Object]</code></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> propKey = <span class="string">&#x27;foo&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> obj = &#123;</span><br><span class="line">  [propKey]: <span class="literal">true</span>,</span><br><span class="line">  [<span class="string">&#x27;a&#x27;</span> + <span class="string">&#x27;bc&#x27;</span>]: <span class="number">123</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<h4 id="方法的-name-属性"><a href="#方法的-name-属性" class="headerlink" title="方法的 name 属性"></a>方法的 name 属性</h4><p>函数的name属性，返回函数名。对象方法也是函数，因此也有name属性。</p>
-<p>如果对象的方法使用了取值函数（getter）和存值函数（setter），则name属性不是在该方法上面，而是该方法的属性的描述对象的get和set属性上面，返回值是方法名前加上get和set。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">  <span class="keyword">get</span> <span class="title">foo</span>() &#123;&#125;,</span><br><span class="line">  <span class="keyword">set</span> <span class="title">foo</span>(<span class="params">x</span>) &#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">obj.foo.name</span><br><span class="line"><span class="comment">// TypeError: Cannot read property &#x27;name&#x27; of undefined</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> descriptor = <span class="built_in">Object</span>.getOwnPropertyDescriptor(obj, <span class="string">&#x27;foo&#x27;</span>);</span><br><span class="line"></span><br><span class="line">descriptor.get.name <span class="comment">// &quot;get foo&quot;</span></span><br><span class="line">descriptor.set.name <span class="comment">// &quot;set foo&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>有两种特殊情况：bind方法创造的函数，name属性返回bound加上原函数的名字；Function构造函数创造的函数，name属性返回anonymous。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="keyword">new</span> <span class="built_in">Function</span>()).name <span class="comment">// &quot;anonymous&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> doSomething = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;;</span><br><span class="line">doSomething.bind().name <span class="comment">// &quot;bound doSomething&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>如果对象的方法是一个 Symbol 值，那么name属性返回的是这个 Symbol 值的描述。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> key1 = <span class="built_in">Symbol</span>(<span class="string">&#x27;description&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> key2 = <span class="built_in">Symbol</span>();</span><br><span class="line"><span class="keyword">let</span> obj = &#123;</span><br><span class="line">  [key1]() &#123;&#125;,</span><br><span class="line">  [key2]() &#123;&#125;,</span><br><span class="line">&#125;;</span><br><span class="line">obj[key1].name <span class="comment">// &quot;[description]&quot;</span></span><br><span class="line">obj[key2].name <span class="comment">// &quot;&quot;</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="属性的可枚举性和遍历"><a href="#属性的可枚举性和遍历" class="headerlink" title="属性的可枚举性和遍历"></a>属性的可枚举性和遍历</h4><h5 id="可枚举性"><a href="#可枚举性" class="headerlink" title="可枚举性"></a>可枚举性</h5><p>对象的每个属性都有一个描述对象（Descriptor），用来控制该属性的行为。Object.getOwnPropertyDescriptor方法可以获取该属性的描述对象。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> obj = &#123; <span class="attr">foo</span>: <span class="number">123</span> &#125;;</span><br><span class="line"><span class="built_in">Object</span>.getOwnPropertyDescriptor(obj, <span class="string">&#x27;foo&#x27;</span>)</span><br><span class="line"><span class="comment">//  &#123;</span></span><br><span class="line"><span class="comment">//    value: 123,</span></span><br><span class="line"><span class="comment">//    writable: true,</span></span><br><span class="line"><span class="comment">//    enumerable: true,</span></span><br><span class="line"><span class="comment">//    configurable: true</span></span><br><span class="line"><span class="comment">//  &#125;</span></span><br></pre></td></tr></table></figure>
-
-
-<p>有四个操作会忽略enumerable为false的属性。</p>
-<ul>
-<li><p><code>for...in</code>循环：只遍历对象自身的和继承的可枚举的属性。</p>
-</li>
-<li><p><code>Object.keys()</code>：返回对象自身的所有可枚举的属性的键名。</p>
-</li>
-<li><p><code>JSON.stringify()</code>：只串行化对象自身的可枚举的属性。</p>
-</li>
-<li><p><code>Object.assign()</code>： 忽略<code>enumerable</code>为<code>false</code>的属性，只拷贝对象自身的可枚举的属性。</p>
-</li>
-</ul>
-<p><code>Class</code> 的原型的方法都是不可枚举的。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Object</span>.getOwnPropertyDescriptor(<span class="class"><span class="keyword">class</span> </span>&#123;foo() &#123;&#125;&#125;.prototype, <span class="string">&#x27;foo&#x27;</span>).enumerable</span><br><span class="line"><span class="comment">// false</span></span><br></pre></td></tr></table></figure>
-
-<p>操作中引入继承的属性会让问题复杂化，大多数时候，我们只关心对象自身的属性。所以，尽量不要用<code>for...in</code>循环，而用<code>Object.keys()</code>代替。</p>
-<h5 id="属性的遍历"><a href="#属性的遍历" class="headerlink" title="属性的遍历"></a>属性的遍历</h5><ul>
-<li><p><code>for...in</code>循环遍历对象自身的和继承的可枚举属性（不含 Symbol 属性）。</p>
-</li>
-<li><p><code>Object.keys</code>返回一个数组，包括对象自身的（不含继承的）所有可枚举属性（不含 Symbol 属性）的键名。</p>
-</li>
-<li><p><code>Object.getOwnPropertyName</code>s返回一个数组，包含对象自身的所有属性（不含 Symbol 属性，<strong>但是包括不可枚举属性</strong>）的键名。</p>
-</li>
-<li><p><code>Object.getOwnPropertySymbols</code>返回一个数组，包含对象自身的所有 Symbol 属性的键名。</p>
-</li>
-<li><p><code>Reflect.ownKeys</code>返回一个数组，包含对象自身的（不含继承的）所有键名，不管键名是 Symbol 或字符串，也不管是否可枚举。</p>
-</li>
-</ul>
-<p>以上的 5 种方法遍历对象的键名，都遵守同样的属性遍历的次序规则。</p>
-<ul>
-<li><p>首先遍历所有数值键，按照数值升序排列。</p>
-</li>
-<li><p>其次遍历所有字符串键，按照加入时间升序排列。</p>
-</li>
-<li><p>最后遍历所有 Symbol 键，按照加入时间升序排列。</p>
-</li>
-</ul>
-<h4 id="super-关键字"><a href="#super-关键字" class="headerlink" title="super 关键字"></a>super 关键字</h4><p><code>super</code> 指向当前对象的原型对象。</p>
-<p><code>super</code>关键字表示原型对象时，只能用在对象的方法之中，用在其他地方都会报错。</p>
-<p>也不可以直接调用<code>super</code>对象，只能调用<code>super</code>下面的方法</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 报错</span></span><br><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">  foo: <span class="built_in">super</span>.foo</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 报错</span></span><br><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">  foo: <span class="function">() =&gt;</span> <span class="built_in">super</span>.foo</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 报错</span></span><br><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">  foo: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">super</span>.foo</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//报错</span></span><br><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">    fn()&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">super</span> === obj.__proto__</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> obj = &#123;</span><br><span class="line">    fn() &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">super</span>.a === <span class="built_in">this</span>.__proto__.a</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">obj.__proto__.a = <span class="number">1</span>;</span><br><span class="line"><span class="built_in">console</span>.log(obj.fn()) <span class="comment">//true</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="解构赋值"><a href="#解构赋值" class="headerlink" title="解构赋值"></a>解构赋值</h4><p>扩展运算符的解构赋值，不能复制继承自原型对象的属性。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> o = <span class="built_in">Object</span>.create(&#123; <span class="attr">x</span>: <span class="number">1</span>, <span class="attr">y</span>: <span class="number">2</span> &#125;);</span><br><span class="line">o.z = <span class="number">3</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> &#123; x, ...newObj &#125; = o;</span><br><span class="line"><span class="keyword">let</span> &#123; y, z &#125; = newObj;</span><br><span class="line">x <span class="comment">// 1</span></span><br><span class="line">y <span class="comment">// undefined</span></span><br><span class="line">z <span class="comment">// 3</span></span><br></pre></td></tr></table></figure>
-
-<p>ES6 规定，变量声明语句之中，如果使用解构赋值，扩展运算符后面必须是一个变量名，而不能是一个解构赋值表达式</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> &#123; x, ...&#123; y, z &#125; &#125; = o;</span><br><span class="line"><span class="comment">// SyntaxError: ... must be followed by an identifier in declaration contexts</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="对象的扩展运算符"><a href="#对象的扩展运算符" class="headerlink" title="对象的扩展运算符"></a>对象的扩展运算符</h4><p>如果扩展运算符后面不是对象，则会自动将其转为对象。</p>
-<p>扩展运算符后面是整数1，会自动转为数值的包装对象Number{1}。由于该对象没有自身属性，所以返回一个空对象。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 等同于 &#123;...Object(1)&#125;</span></span><br><span class="line">&#123;..<span class="number">.1</span>&#125; <span class="comment">// &#123;&#125;</span></span><br></pre></td></tr></table></figure>
-
-<p>对象的扩展运算符等同于使用Object.assign()方法。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 写法一</span></span><br><span class="line"><span class="keyword">const</span> clone1 = &#123;</span><br><span class="line">  __proto__: <span class="built_in">Object</span>.getPrototypeOf(obj),</span><br><span class="line">  ...obj</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 写法二</span></span><br><span class="line"><span class="keyword">const</span> clone2 = <span class="built_in">Object</span>.assign(</span><br><span class="line">  <span class="built_in">Object</span>.create(<span class="built_in">Object</span>.getPrototypeOf(obj)),</span><br><span class="line">  obj</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 写法三</span></span><br><span class="line"><span class="keyword">const</span> clone3 = <span class="built_in">Object</span>.create(</span><br><span class="line">  <span class="built_in">Object</span>.getPrototypeOf(obj),</span><br><span class="line">  <span class="built_in">Object</span>.getOwnPropertyDescriptors(obj)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-
-<p><strong>取值函数get在扩展a对象时会自动执行，导致报错。</strong></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> a = &#123;</span><br><span class="line">  <span class="keyword">get</span> <span class="title">x</span>() &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">&#x27;not throw yet&#x27;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> aWithXGetter = &#123; ...a &#125;; <span class="comment">// 报错</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="链判断运算符"><a href="#链判断运算符" class="headerlink" title="链判断运算符"></a>链判断运算符</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">a?.b</span><br><span class="line"><span class="comment">// 等同于</span></span><br><span class="line">a == <span class="literal">null</span> ? <span class="literal">undefined</span> : a.b</span><br><span class="line"></span><br><span class="line">a?.[x]</span><br><span class="line"><span class="comment">// 等同于</span></span><br><span class="line">a == <span class="literal">null</span> ? <span class="literal">undefined</span> : a[x]</span><br><span class="line"></span><br><span class="line">a?.b()</span><br><span class="line"><span class="comment">// 等同于</span></span><br><span class="line">a == <span class="literal">null</span> ? <span class="literal">undefined</span> : a.b()</span><br><span class="line"></span><br><span class="line">a?.()</span><br><span class="line"><span class="comment">// 等同于</span></span><br><span class="line">a == <span class="literal">null</span> ? <span class="literal">undefined</span> : a()</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> firstName = message?.body?.user?.firstName || <span class="string">&#x27;default&#x27;</span>;</span><br><span class="line"><span class="keyword">const</span> fooValue = myForm.querySelector(<span class="string">&#x27;input[name=foo]&#x27;</span>)?.value</span><br></pre></td></tr></table></figure>
-
-<h4 id="Null-判断运算符"><a href="#Null-判断运算符" class="headerlink" title="Null 判断运算符"></a>Null 判断运算符</h4><p>ES2020 引入了一个新的 Null 判断运算符??。它的行为类似||，但是只有运算符左侧的值为null或undefined时，才会返回右侧的值。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> animationDuration = response.settings?.animationDuration ?? <span class="number">300</span>;</span><br></pre></td></tr></table></figure>
-
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ES6%E5%9F%BA%E7%A1%80/" rel="tag">ES6基础</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li></ul>
 
     </footer>
   </div>
