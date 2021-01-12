@@ -206,3 +206,74 @@ module.exports = {
 ```
 
 
+#### treeshaking
+
+webpack4 production 默认开启，需要引入的库使用commonjs 模块化规范
+
+如 loadsh-es
+
+#### 全局引入
+
+[provide-plugin](https://webpack.js.org/plugins/provide-plugin/#root)
+
+```javascript
+plugins: [
+  new webpack.ProvidePlugin({
+    $: 'jquery',
+  })
+]
+```
+
+多入口文件的每一个都会被引入jquery，所以需要提取公共代码
+
+#### 动态加载
+
+[@babel/plugin-syntax-dynamic-import](https://babeljs.io/docs/en/babel-plugin-syntax-dynamic-import)
+
+[Dynamic Imports](https://webpack.js.org/guides/code-splitting/#dynamic-imports)
+
+**需要指明webpackChunkName才能被单独打包**
+```javascript
+ import(
+    /* webpackChunkName: "my-jquery" */
+    'jquery'
+  )
+    .then(({ default: $ }) => {
+      console.log($)
+      return $('body');
+    })
+```
+
+#### 代码分割
+
+[SplitChunksPlugin](https://webpack.js.org/plugins/split-chunks-plugin/#root) 代替原来的 commonChunksPlugin
+
++ splitChunks.chunks
+
+async表示只从异步加载得模块（动态加载import()）里面进行拆分
+initial表示只从入口模块进行拆分
+all表示以上两者都包括
+
++ splitChunks.maxInitialRequests
+
+每个入口的并发请求数, 如果拆出的包的个数大于maxInitialRequests，则不会把较小的包单独拆出
+
++ splitChunks.maxInitialRequests
+
+动态引入的模块，最多拆分的数量
+
+#### css分割
+
+[css-minimizer-webpack-plugin](https://webpack.js.org/plugins/css-minimizer-webpack-plugin/)
+
+
+#### 压缩css代码
+
+[MiniCssExtractPlugin](https://webpack.js.org/plugins/mini-css-extract-plugin/#getting-started)
+
+#### 可视化分析
+
+
+[webpack-bundle-analyzer](https://www.npmjs.com/package/webpack-bundle-analyzer)
+
+
