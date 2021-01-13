@@ -88,7 +88,7 @@ var _hmt = _hmt || [];
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> 字数统计:</span>
-            <span class="post-count">0</span>
+            <span class="post-count">194</span>
         </span>
     </span>
 
@@ -104,13 +104,43 @@ var _hmt = _hmt || [];
  
     </div>
       
+    <div class="tocbot"></div>
+
 
 
 
   
     <div class="article-entry" itemprop="articleBody">
        
-   
+  <h4 id="安装ndoe"><a href="#安装ndoe" class="headerlink" title="安装ndoe"></a>安装ndoe</h4><p><a target="_blank" rel="noopener" href="https://github.com/nodesource/distributions">NodeSource</a>是一家致力于提供企业级Node支持的公司。它维护一个包含多个Node.js版本的APT存储库。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># As root</span></span><br><span class="line">curl -sL https://rpm.nodesource.com/setup_14.x | bash -</span><br><span class="line"></span><br><span class="line"><span class="comment"># No root privileges </span></span><br><span class="line">curl -sL https://rpm.nodesource.com/setup_14.x | sudo bash -</span><br></pre></td></tr></table></figure>
+
+<h4 id="打包文件含有的配置项"><a href="#打包文件含有的配置项" class="headerlink" title="打包文件含有的配置项"></a>打包文件含有的配置项</h4><ul>
+<li><p>package.json</p>
+</li>
+<li><p>nginx-conf <a href="/posts/a477be03">nginx</a> 配置项</p>
+</li>
+<li><p>process.yaml pm2配置文件 </p>
+</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apps:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">script   :</span> <span class="string">./app.js</span></span><br><span class="line">    <span class="attr">name     :</span> <span class="string">&#x27;app&#x27;</span></span><br><span class="line">    <span class="attr">instances:</span> <span class="number">4</span></span><br><span class="line">    <span class="string">watch</span>	   <span class="string">:</span> <span class="literal">true</span></span><br><span class="line">    <span class="attr">exec_mode:</span> <span class="string">cluster</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="把打包文件上传至服务器"><a href="#把打包文件上传至服务器" class="headerlink" title="把打包文件上传至服务器"></a>把打包文件上传至服务器</h4><p>通过<a href="/posts/b2a05287/#scp">scp命令</a>把打包文件上传至服务器</p>
+<h4 id="启动程序"><a href="#启动程序" class="headerlink" title="启动程序"></a>启动程序</h4><ul>
+<li><p>通过<a href="posts/7375f30c/#%E6%89%93%E5%8C%85">tar解压命令</a> 把项目文件解压到<code>root</code>目录</p>
+</li>
+<li><p>通过  <code>npm install --production</code> 初始化项目</p>
+</li>
+<li><p><code>npm start</code> 启动项目</p>
+</li>
+</ul>
+<p>现在可以通过 服务器地址 + 项项目目配置的端口号 访问项目</p>
+<h4 id="配置Nginx"><a href="#配置Nginx" class="headerlink" title="配置Nginx"></a><a href="/posts/a477be03">配置Nginx</a></h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install nginx</span><br></pre></td></tr></table></figure>
+
+
+
+
+ 
       <!-- reward -->
       
       <div id="reword-out">

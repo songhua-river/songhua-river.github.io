@@ -88,7 +88,7 @@ var _hmt = _hmt || [];
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> 字数统计:</span>
-            <span class="post-count">894</span>
+            <span class="post-count">911</span>
         </span>
     </span>
 
@@ -150,7 +150,7 @@ var _hmt = _hmt || [];
 <li>源文件要使用绝对路径 ,不能使用相对路径,这样可以方便移动链接文件后,仍然能够正常使用</li>
 </ol>
 <p><img src="/posts/7375f30c/0001.png"></p>
-<h4 id="打包"><a href="#打包" class="headerlink" title="打包"></a>打包</h4><p>tar 是 Linux 中最常用的 备份 工具,此命令可以 把一系列文件 打包到 一个大文件中 ,也可以把一个 打包的大文件恢复成一系列文件</p>
+<h4 id="打包-解压"><a href="#打包-解压" class="headerlink" title="打包/解压"></a>打包/解压</h4><p>tar 是 Linux 中最常用的 备份 工具,此命令可以 把一系列文件 打包到 一个大文件中 ,也可以把一个 打包的大文件恢复成一系列文件</p>
 <table>
 <thead>
 <tr>
@@ -183,6 +183,9 @@ var _hmt = _hmt || [];
 
 <p>解包</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -xvf 打包文件.tar</span><br></pre></td></tr></table></figure>
+
+<p>解包到指定路径</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -xvf [文件名].tar -C  /path</span><br></pre></td></tr></table></figure>
 
 <h4 id="压缩"><a href="#压缩" class="headerlink" title="压缩"></a>压缩</h4><ul>
 <li><p>tar 与 gzip 命令结合可以使用实现文件 打包和压缩</p>
