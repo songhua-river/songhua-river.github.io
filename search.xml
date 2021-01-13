@@ -1,6 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>nginx</title>
+    <url>/posts/a477be03/</url>
+    <content><![CDATA[<h4 id="正向-反向代理"><a href="#正向-反向代理" class="headerlink" title="正向/反向代理"></a>正向/反向代理</h4><p>正向代理: 当自己的电脑A需要访问B网站时，如果访问不了，通过一台中间服务器取访问B，在把返回的结果返回给A，特点就是明确的知道想要访问的网站</p>
+<p>反向代理： 我们的A电脑需要访问集群中的资源，代理服务器帮助我们返回资源但是不知道访问的是哪台服务器的资源，这种方式称为反向代理.</p>
+<h4 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h4><p>通过Nginx服务器寻找压力最小的服务器经行访问</p>
+<h4 id="Upstream-模块"><a href="#Upstream-模块" class="headerlink" title="Upstream 模块"></a>Upstream 模块</h4><p>ip_hash 保证用户的多次访问被分发到同一台服务器</p>
+<p>server 指定某台服务器的权重</p>
+<h4 id="安装nginx"><a href="#安装nginx" class="headerlink" title="安装nginx"></a>安装nginx</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo su root</span><br><span class="line">apt-get install nginx</span><br></pre></td></tr></table></figure>
+
+<p>启动 </p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">service nginx start</span><br></pre></td></tr></table></figure>
+
+<p>nginx文件安装完成之后的文件位置：</p>
+<p>/usr/sbin/nginx：主程序<br>/etc/nginx：存放配置文件<br>/usr/share/nginx：存放静态文件<br>/var/log/nginx：存放日志</p>
+<h4 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 必填，表示连接数</span></span><br><span class="line">events &#123;</span><br><span class="line">    worker_connections  1024;</span><br><span class="line">&#125;</span><br><span class="line">http &#123;</span><br><span class="line">  upstream firsttest&#123;</span><br><span class="line">    server xxx.xxx.xx;</span><br><span class="line">  &#125;</span><br><span class="line">  server &#123;</span><br><span class="line">    listen 80;</span><br><span class="line">    location / &#123;</span><br><span class="line">      proxy_pass http://firsttest</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>Node</category>
+      </categories>
+      <tags>
+        <tag>Nginx</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>线上部署</title>
+    <url>/posts/5cd50760/</url>
+    <content><![CDATA[]]></content>
+      <categories>
+        <category>Node</category>
+      </categories>
+      <tags>
+        <tag>Node</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Koa Router</title>
+    <url>/posts/264a155d/</url>
+    <content><![CDATA[<h4 id="中间件"><a href="#中间件" class="headerlink" title="中间件"></a>中间件</h4><p>中间件容器 负责不同组件和不同服务之间的交互，需要一个中间件负责统一的对服务使用</p>
+<p>一个简单的中间件</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> koa = <span class="built_in">require</span>(<span class="string">&#x27;koa&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> app = <span class="keyword">new</span> koa();</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> m1 = <span class="keyword">async</span> (ctx, next) =&gt; &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="number">1</span>);</span><br><span class="line">  <span class="keyword">await</span> next();</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="number">2</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> m2 = <span class="keyword">async</span> (ctx, next) =&gt; &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="number">3</span>);</span><br><span class="line">  <span class="keyword">await</span> next();</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="number">4</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> m3 = <span class="keyword">async</span> (ctx, next) =&gt; &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="number">5</span>);</span><br><span class="line">  <span class="keyword">await</span> next();</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="number">6</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">app</span><br><span class="line">  .use(m1)</span><br><span class="line">  .use(m2)</span><br><span class="line">  .use(m3)</span><br><span class="line"></span><br><span class="line">app.listen(<span class="number">3000</span>)</span><br></pre></td></tr></table></figure>
+
+<p>最终返回的结果为 1 3 5 2 4 6</p>
+<p>也就是洋葱模型，由<code>koa-compose</code>模块来实现</p>
+<p>实现洋葱模型的几个关键：</p>
+<ul>
+<li>统一的上下文 ctx</li>
+<li>操作先进后出 通过<code>next</code>控制</li>
+<li>有提前结束的机制</li>
+</ul>
+<p><strong>中间件类型</strong></p>
+<ul>
+<li>应用级中间件 vue全局导航守卫</li>
+<li>路由级中间件 独享路由守卫</li>
+<li>错误处理中间件  </li>
+<li>第三方中间件</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> koa = <span class="built_in">require</span>(<span class="string">&#x27;koa&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> Router = <span class="built_in">require</span>(<span class="string">&#x27;koa-router&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> app = <span class="keyword">new</span> koa();</span><br><span class="line"><span class="keyword">const</span> router = <span class="keyword">new</span> Router();</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> m1 = <span class="keyword">async</span> (ctx, next) =&gt; &#123;</span><br><span class="line">  <span class="comment">// 应用级中间件最先被访问</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;应用级中间件&#x27;</span>);</span><br><span class="line">  <span class="comment">//通过next进入路由级中间件</span></span><br><span class="line">  <span class="keyword">await</span> next();</span><br><span class="line">  <span class="keyword">if</span> (ctx.status == <span class="number">404</span>) &#123;</span><br><span class="line">    ctx.body = <span class="string">&#x27;404&#x27;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 路由级中间件会按照顺序访问</span></span><br><span class="line">router.get(<span class="string">&#x27;/&#x27;</span>, <span class="keyword">async</span> (ctx, next) =&gt; &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;路由级中间件1&#x27;</span>);</span><br><span class="line">  <span class="keyword">await</span> next()</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">router.get(<span class="string">&#x27;/&#x27;</span>, <span class="keyword">async</span> (ctx, next) =&gt; &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;路由级中间件2&#x27;</span>);</span><br><span class="line">  ctx.body = <span class="string">&#x27;路由&#x27;</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">app.use(router.routes());</span><br><span class="line"></span><br><span class="line">app</span><br><span class="line">  .use(m1)</span><br><span class="line"></span><br><span class="line">app.listen(<span class="number">3000</span>)</span><br></pre></td></tr></table></figure>
+
+<h4 id="koa-和-express-比较"><a href="#koa-和-express-比较" class="headerlink" title="koa 和 express 比较"></a>koa 和 express 比较</h4><p>express 通过connect添加中间件 封装了路由，视图, 异步处理使用callback (深层次的错误不能捕获)</p>
+<p>koa 依赖于co模块，不包含任何中间件， 处理了回调 (使用了async await) 和错误处理(使用了try catch),</p>
+<h4 id="处理get-post-请求参数"><a href="#处理get-post-请求参数" class="headerlink" title="处理get post 请求参数"></a>处理get post 请求参数</h4><p><a href="https://github.com/dlau/koa-body#readme">koa-body</a></p>
+<h4 id="静态资源中间件"><a href="#静态资源中间件" class="headerlink" title="静态资源中间件"></a>静态资源中间件</h4><p><a href="https://github.com/koajs/static#readme">koa-static</a></p>
+]]></content>
+      <categories>
+        <category>JavaScript</category>
+        <category>应用案例</category>
+      </categories>
+      <tags>
+        <tag>JavaScript</tag>
+        <tag>Koa</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>文件系统</title>
     <url>/posts/1b9c8662/</url>
     <content><![CDATA[<h4 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h4><p>文件描述符 </p>

@@ -9,7 +9,7 @@
     
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
   <title>
-    文件系统 |  
+    Koa Router |  
   </title>
   <meta name="generator" content="hexo-theme-ayer">
   
@@ -58,7 +58,7 @@ var _hmt = _hmt || [];
     <main class="content on">
       <section class="outer">
   <article
-  id="post-node/文件系统"
+  id="post-javascript/used/koa"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -69,18 +69,18 @@ var _hmt = _hmt || [];
     <header class="article-header">
        
 <h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  文件系统
+  Koa Router
 </h1>
  
 
     </header>
      
     <div class="article-meta">
-      <a href="/posts/1b9c8662/" class="article-date">
-  <time datetime="2021-01-09T11:13:33.000Z" itemprop="datePublished">2021-01-09</time>
+      <a href="/posts/264a155d/" class="article-date">
+  <time datetime="2021-01-12T14:47:14.000Z" itemprop="datePublished">2021-01-12</time>
 </a> 
   <div class="article-category">
-    <a class="article-category-link" href="/categories/Node/">Node</a>
+    <a class="article-category-link" href="/categories/JavaScript/">JavaScript</a> / <a class="article-category-link" href="/categories/JavaScript/%E5%BA%94%E7%94%A8%E6%A1%88%E4%BE%8B/">应用案例</a>
   </div>
   
 <div class="word_count">
@@ -88,7 +88,7 @@ var _hmt = _hmt || [];
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> 字数统计:</span>
-            <span class="post-count">415</span>
+            <span class="post-count">465</span>
         </span>
     </span>
 
@@ -97,7 +97,7 @@ var _hmt = _hmt || [];
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> 阅读时长≈</span>
-            <span class="post-count">1 分钟</span>
+            <span class="post-count">2 分钟</span>
         </span>
     </span>
 </div>
@@ -112,12 +112,32 @@ var _hmt = _hmt || [];
   
     <div class="article-entry" itemprop="articleBody">
        
-  <h4 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h4><p>文件描述符 </p>
-<p>在 POSIX （可移植操作系统）系统上，对于每个进程，内核都维护着一张当前打开着的文件和资源的表格。 每个打开的文件都分配了一个称为文件描述符的简单的数字标识符。 在系统层，所有文件系统操作都使用这些文件描述符来标识和跟踪每个特定的文件。 Windows 系统使用了一个虽然不同但概念上类似的机制来跟踪资源。 为了简化用户的工作，Node.js 抽象出操作系统之间的特定差异，并为所有打开的文件分配一个数字型的文件描述符。</p>
-<p>fs.open() 方法用于分配新的文件描述符。 一旦被分配，则文件描述符可用于从文件读取数据、向文件写入数据、或请求关于文件的信息。</p>
-<p>大多数操作系统限制在任何给定时间内可能打开的文件描述符的数量，<strong>因此当操作完成时关闭描述符至关重要。 如果不这样做将导致内存泄漏，最终导致应用程序崩溃。</strong></p>
-<p>r+ 打开文件用于读写。<br>w+ 打开文件用于读写，将流定位到文件的开头。如果文件不存在则创建文件。<br>a 打开文件用于写入，将流定位到文件的末尾。如果文件不存在则创建文件。<br>a+ 打开文件用于读写，将流定位到文件的末尾。如果文件不存在则创建文件。</p>
-<h4 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h4> 
+  <h4 id="中间件"><a href="#中间件" class="headerlink" title="中间件"></a>中间件</h4><p>中间件容器 负责不同组件和不同服务之间的交互，需要一个中间件负责统一的对服务使用</p>
+<p>一个简单的中间件</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> koa = <span class="built_in">require</span>(<span class="string">&#x27;koa&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> app = <span class="keyword">new</span> koa();</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> m1 = <span class="keyword">async</span> (ctx, next) =&gt; &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="number">1</span>);</span><br><span class="line">  <span class="keyword">await</span> next();</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="number">2</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> m2 = <span class="keyword">async</span> (ctx, next) =&gt; &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="number">3</span>);</span><br><span class="line">  <span class="keyword">await</span> next();</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="number">4</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> m3 = <span class="keyword">async</span> (ctx, next) =&gt; &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="number">5</span>);</span><br><span class="line">  <span class="keyword">await</span> next();</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="number">6</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">app</span><br><span class="line">  .use(m1)</span><br><span class="line">  .use(m2)</span><br><span class="line">  .use(m3)</span><br><span class="line"></span><br><span class="line">app.listen(<span class="number">3000</span>)</span><br></pre></td></tr></table></figure>
+
+<p>最终返回的结果为 1 3 5 2 4 6</p>
+<p>也就是洋葱模型，由<code>koa-compose</code>模块来实现</p>
+<p>实现洋葱模型的几个关键：</p>
+<ul>
+<li>统一的上下文 ctx</li>
+<li>操作先进后出 通过<code>next</code>控制</li>
+<li>有提前结束的机制</li>
+</ul>
+<p><strong>中间件类型</strong></p>
+<ul>
+<li>应用级中间件 vue全局导航守卫</li>
+<li>路由级中间件 独享路由守卫</li>
+<li>错误处理中间件  </li>
+<li>第三方中间件</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> koa = <span class="built_in">require</span>(<span class="string">&#x27;koa&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> Router = <span class="built_in">require</span>(<span class="string">&#x27;koa-router&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> app = <span class="keyword">new</span> koa();</span><br><span class="line"><span class="keyword">const</span> router = <span class="keyword">new</span> Router();</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> m1 = <span class="keyword">async</span> (ctx, next) =&gt; &#123;</span><br><span class="line">  <span class="comment">// 应用级中间件最先被访问</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;应用级中间件&#x27;</span>);</span><br><span class="line">  <span class="comment">//通过next进入路由级中间件</span></span><br><span class="line">  <span class="keyword">await</span> next();</span><br><span class="line">  <span class="keyword">if</span> (ctx.status == <span class="number">404</span>) &#123;</span><br><span class="line">    ctx.body = <span class="string">&#x27;404&#x27;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 路由级中间件会按照顺序访问</span></span><br><span class="line">router.get(<span class="string">&#x27;/&#x27;</span>, <span class="keyword">async</span> (ctx, next) =&gt; &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;路由级中间件1&#x27;</span>);</span><br><span class="line">  <span class="keyword">await</span> next()</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">router.get(<span class="string">&#x27;/&#x27;</span>, <span class="keyword">async</span> (ctx, next) =&gt; &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;路由级中间件2&#x27;</span>);</span><br><span class="line">  ctx.body = <span class="string">&#x27;路由&#x27;</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">app.use(router.routes());</span><br><span class="line"></span><br><span class="line">app</span><br><span class="line">  .use(m1)</span><br><span class="line"></span><br><span class="line">app.listen(<span class="number">3000</span>)</span><br></pre></td></tr></table></figure>
+
+<h4 id="koa-和-express-比较"><a href="#koa-和-express-比较" class="headerlink" title="koa 和 express 比较"></a>koa 和 express 比较</h4><p>express 通过connect添加中间件 封装了路由，视图, 异步处理使用callback (深层次的错误不能捕获)</p>
+<p>koa 依赖于co模块，不包含任何中间件， 处理了回调 (使用了async await) 和错误处理(使用了try catch),</p>
+<h4 id="处理get-post-请求参数"><a href="#处理get-post-请求参数" class="headerlink" title="处理get post 请求参数"></a>处理get post 请求参数</h4><p><a target="_blank" rel="noopener" href="https://github.com/dlau/koa-body#readme">koa-body</a></p>
+<h4 id="静态资源中间件"><a href="#静态资源中间件" class="headerlink" title="静态资源中间件"></a>静态资源中间件</h4><p><a target="_blank" rel="noopener" href="https://github.com/koajs/static#readme">koa-static</a></p>
+ 
       <!-- reward -->
       
       <div id="reword-out">
@@ -185,12 +205,12 @@ var _hmt = _hmt || [];
     <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/posts/1b9c8662/" alt="微信分享二维码">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/posts/264a155d/" alt="微信分享二维码">
     </div>
 </div>
 
 <div id="share-mask"></div>  
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Node/" rel="tag">Node</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Koa/" rel="tag">Koa</a></li></ul>
 
     </footer>
   </div>
@@ -198,19 +218,19 @@ var _hmt = _hmt || [];
    
   <nav class="article-nav">
     
-      <a href="/posts/264a155d/" class="article-nav-link">
+      <a href="/posts/5cd50760/" class="article-nav-link">
         <strong class="article-nav-caption">上一篇</strong>
         <div class="article-nav-title">
           
-            Koa Router
+            线上部署
           
         </div>
       </a>
     
     
-      <a href="/posts/4a21a07/" class="article-nav-link">
+      <a href="/posts/1b9c8662/" class="article-nav-link">
         <strong class="article-nav-caption">下一篇</strong>
-        <div class="article-nav-title">stream模块</div>
+        <div class="article-nav-title">文件系统</div>
       </a>
     
   </nav>

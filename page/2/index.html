@@ -113,6 +113,245 @@ var _hmt = _hmt || [];
     
     
     <article
+  id="post-javascript/engineering/文件自动同步服务器"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/posts/4bf6e0f1/"
+    >文件自动同步服务器</a> 
+</h2>
+ 
+
+    </header>
+     
+    <div class="article-meta">
+      <a href="/posts/4bf6e0f1/" class="article-date">
+  <time datetime="2020-12-26T13:20:25.000Z" itemprop="datePublished">2020-12-26</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/JavaScript/">JavaScript</a> / <a class="article-category-link" href="/categories/JavaScript/%E5%B7%A5%E7%A8%8B%E5%8C%96/">工程化</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h4 id="index-js"><a href="#index-js" class="headerlink" title="index.js"></a>index.js</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env node</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> shell = <span class="built_in">require</span>(<span class="string">&#x27;shelljs&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> chokidar = <span class="built_in">require</span>(<span class="string">&#x27;chokidar&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> home = <span class="built_in">require</span>(<span class="string">&#x27;user-home&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">&#x27;path&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> WORKSPACE_PATH = path.resolve(home, <span class="string">&#x27;Workspace&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> expectPath = path.join(__dirname, <span class="string">&#x27;./expect.exp&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> to = <span class="string">&#x27;root@144.xxx.xxx.92:/home/backup&#x27;</span></span><br><span class="line"></span><br><span class="line">chokidar</span><br><span class="line">  .watch(<span class="string">&#x27;./index.js&#x27;</span>, &#123;</span><br><span class="line">    ignored: <span class="function">(<span class="params">path</span>) =&gt;</span> path.includes(<span class="string">&#x27;node_modules&#x27;</span>) || path.includes(<span class="string">&#x27;.git&#x27;</span>)</span><br><span class="line">  &#125;)</span><br><span class="line">  .on(<span class="string">&#x27;all&#x27;</span>, <span class="function">(<span class="params">event, path</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(event, path);</span><br><span class="line">    shell.exec(<span class="string">`expect <span class="subst">$&#123;expectPath&#125;</span> <span class="subst">$&#123;path&#125;</span> <span class="subst">$&#123;to&#125;</span>`</span>)</span><br><span class="line">  &#125;); </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="expect-exp"><a href="#expect-exp" class="headerlink" title="expect.exp"></a>expect.exp</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#expect 不能写错</span></span><br><span class="line"><span class="meta">#!/usr/bin/expect</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span> from [lindex <span class="variable">$argv</span> 0]</span><br><span class="line"><span class="built_in">set</span> to [lindex <span class="variable">$argv</span> 1]</span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span> timeout 30</span><br><span class="line"></span><br><span class="line">spawn bash -c <span class="string">&quot;scp <span class="variable">$from</span> <span class="variable">$to</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 特殊符号需要转移 回车符号不需要</span></span><br><span class="line"><span class="comment"># \ 需转义为 \\\</span></span><br><span class="line"><span class="comment"># &#125; 需转义为 \&#125;</span></span><br><span class="line"><span class="comment"># [ 需转义为 \[</span></span><br><span class="line"><span class="comment"># $ 需转义为 \\\$</span></span><br><span class="line"><span class="comment"># ` 需转义为 \`</span></span><br><span class="line"><span class="comment"># &quot; 需转义为 \\\&quot;</span></span><br><span class="line"><span class="comment"># ( 需转义为 \(</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">expect &#123;</span><br><span class="line">  <span class="string">&quot;*password:&quot;</span> &#123; send -- <span class="string">&quot;j\(S7?xx#ky6\[0n=R\r&quot;</span> &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 必须要加这一句，在执行完毕后把持交互状态，把控制台，这时候就可以进行你想要进行的操作了。如果没有这一句，在登陆完成之后就会退出，而不是留在远程终端上。</span></span><br><span class="line">interact</span><br></pre></td></tr></table></figure> 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" rel="tag">工程化</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+   
+</article>
+
+    
+    <article
+  id="post-javascript/used/性能优化"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/posts/98feee78/"
+    >性能优化</a> 
+</h2>
+ 
+
+    </header>
+     
+    <div class="article-meta">
+      <a href="/posts/98feee78/" class="article-date">
+  <time datetime="2020-12-23T14:36:38.000Z" itemprop="datePublished">2020-12-23</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/JavaScript/">JavaScript</a> / <a class="article-category-link" href="/categories/JavaScript/%E5%BA%94%E7%94%A8%E6%A1%88%E4%BE%8B/">应用案例</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h4 id="性能优化开篇"><a href="#性能优化开篇" class="headerlink" title="性能优化开篇"></a>性能优化开篇</h4><p>Html 数量控制 -&gt; 压缩合并（30k为标准，请求变少） -&gt; 开启CDN， gzip,brotli压缩方式 -&gt; 服务端开启keep-alive http2 -&gt; 测速 -&gt; 缓存</p>
+<p>离线缓存</p>
+<p>localStorage 5M 低端机型，不能占用过高</p>
+<p>script 放在底部，不会影响dom的解析，但是会影响dom的渲染</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">h1</span>&gt;</span>标题<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line">    alert(0)</span><br><span class="line">  <span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>同样css不会影响dom的解析，但是影响dom的渲染</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;viewport&quot;</span> <span class="attr">content</span>=<span class="string">&quot;width=device-width, initial-scale=1.0&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;./css&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">h1</span>&gt;</span>标题<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>css 加载会阻塞js的执行，因为不知道js中是否使用了css, 但是不会影响dom的解析</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;viewport&quot;</span> <span class="attr">content</span>=<span class="string">&quot;width=device-width, initial-scale=1.0&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;./css&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">h1</span>&gt;</span>标题<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line">    alert(0)</span><br><span class="line">  <span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>css的加载不会影响dom ready,但是如果css,下面有js脚本，则不会执行dom ready，因为不知道是否使用了css样式</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;viewport&quot;</span> <span class="attr">content</span>=<span class="string">&quot;width=device-width, initial-scale=1.0&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="javascript">    <span class="built_in">document</span>.addEventlister(<span class="string">&#x27;DomContentloaded&#x27;</span>,<span class="function">()=&gt;</span>&#123;<span class="built_in">console</span>.log(<span class="string">&#x27;ready&#x27;</span>)&#125;)</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span> <span class="attr">href</span>=<span class="string">&quot;./css&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">h1</span>&gt;</span>标题<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- &lt;script&gt;</span></span><br><span class="line"><span class="comment">    alert(0)</span></span><br><span class="line"><span class="comment">  &lt;/script&gt; --&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="渲染中的性能优化"><a href="#渲染中的性能优化" class="headerlink" title="渲染中的性能优化"></a>渲染中的性能优化</h4> 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%BA%94%E7%94%A8%E6%A1%88%E4%BE%8B/" rel="tag">应用案例</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+   
+</article>
+
+    
+    <article
+  id="post-javascript/engineering/CLI"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/posts/de5113b6/"
+    >CLI</a> 
+</h2>
+ 
+
+    </header>
+     
+    <div class="article-meta">
+      <a href="/posts/de5113b6/" class="article-date">
+  <time datetime="2020-12-20T06:51:27.000Z" itemprop="datePublished">2020-12-20</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/JavaScript/">JavaScript</a> / <a class="article-category-link" href="/categories/JavaScript/%E5%B7%A5%E7%A8%8B%E5%8C%96/">工程化</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h5 id="命令行工具"><a href="#命令行工具" class="headerlink" title="命令行工具"></a>命令行工具</h5><p>基于文本查看，处理，操作计算机上面文件的程序</p>
+<h5 id="开发环境"><a href="#开发环境" class="headerlink" title="开发环境"></a>开发环境</h5><p>webpack 打包 编译 图片压缩 </p>
+<h5 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h5><p>vue <command> [options]</p>
+<p>主命令 + 子命令 + 参数</p>
+<p>init           generate a new project from a template<br>list           list available official templates<br>build          prototype a new project<br>create         (for v3 warning only)<br>help [cmd]     display help for [cmd]</p>
+<p>通过用户的配置拉取远程的模板，来生成模板</p>
+<p><code>vue list</code> 查看模板的种类</p>
+<p>Available official templates:<br>  ★  browserify - A full-featured Browserify + vueify setup with hot-reload, linting &amp; unit testing.<br>  ★  browserify-simple - A simple Browserify + vueify setup for quick prototyping.<br>  ★  pwa - PWA template for vue-cli based on the webpack template<br>  ★  simple - The simplest possible Vue setup in a single HTML file<br>  ★  webpack - A full-featured Webpack + vue-loader setup with hot reload, linting, testing &amp; css extraction.<br>  ★  webpack-simple - A simple Webpack + vue-loader setup for quick prototyping.</p>
+<p>borwserify 是有另一种打包规范，用于处理使用CMD打包规范，引用的模块</p>
+<h5 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h5><p><code>vue help init</code> 查看初始化命令</p>
+<p>Usage: vue-init <template-name> [project-name]</p>
+<p>Options:<br>  -c, –clone  use git clone<br>  –offline    use cached template<br>  -h, –help   output usage information<br>  Examples:</p>
+<pre><code># create a new project with an official template
+$ vue init webpack my-project
+
+# create a new project straight from a github template
+$ vue init username/repo my-project</code></pre>
+<p>流程：</p>
+<ul>
+<li><p>vue 输入命令 命令内部初始化</p>
+</li>
+<li><p>获取用户配置：交互</p>
+</li>
+<li><p>解析配置 基础配置+用户配置=配置</p>
+</li>
+<li><p>生成项目文件 通过配置来拉取远程官方模板 + 自己写的模板<br>自己写的模板必须包含 ：meta.js / json<br>prompts=&gt;收集弹框信息<br>helpers=&gt;模板引擎的扩展<br>complete=&gt;钩子函数<br>metalsmith=&gt;站点生成器 通过配置和模板生成文件</p>
+<p>还必须包含模板文件：template</p>
+</li>
+<li><p>完善工作</p>
+</li>
+</ul>
+<h5 id="包"><a href="#包" class="headerlink" title="包"></a>包</h5><ul>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/tj/commander.js">commander</a> 完整的 node.js 命令行解决方案</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/SBoudrias/Inquirer.js">Inquirer</a> 弹窗交互</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/chalk/chalk">chalk</a> 命令行美化工具</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/sindresorhus/ora">ora</a> 命令行加载动画</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/sindresorhus/execa">execa</a> 持续集成 提交到主分支</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/lerna/lerna">lerna</a> 处理多包相互依赖</p>
+</li>
+</ul>
+<h5 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h5><ul>
+<li><p>docs 文档</p>
+</li>
+<li><p>scripts 脚本</p>
+</li>
+<li><p>packages =&gt; lerna</p>
+</li>
+<li><p>lib 核心逻辑</p>
+</li>
+<li><p>package.json<br>  bin 放置用户自定义命令</p>
+<p>  为什么没有全局安装的命令可以使用 npm run 来执行，但是不能直接调用？</p>
+<p>  如果一个命令想要全局执行，需要添加到全局的环境变量 PATH 中</p>
+<p>  在执 npm run 或者 yarn 的时候，会自动在node_modules中查找需要执行的文件，通过npm link 软连接，添加到全局的环境变量PATH中，在执行完成后再删除</p>
+<p>  全局安装的命令，会安装在 <code>/usr/local/node12.18.4/lib/node_modules/</code>,执行的时候会自动link,和scripts中写的命令同理</p>
+<p>  bin 文件夹下面的命令需要手动link,在入口文件改变时需要重新link</p>
+<p>  所以写一个命令的步骤： 1）创建bin文件夹，添加文件 2） 文件头部添加 <code>#!/usr/bin/env node </code> 表示可执行文件 3） link 到全局</p>
+</li>
+</ul>
+<h5 id="vue-cli"><a href="#vue-cli" class="headerlink" title="vue-cli"></a>vue-cli</h5><p><strong>vue-list</strong> 请求模板</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env node</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> logger = <span class="built_in">require</span>(<span class="string">&#x27;../lib/logger&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> request = <span class="built_in">require</span>(<span class="string">&#x27;request&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> chalk = <span class="built_in">require</span>(<span class="string">&#x27;chalk&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 监听ctrl + c退出事件</span></span><br><span class="line">process.on(<span class="string">&#x27;exit&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log()</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">//请求模板使用到的包</span></span><br><span class="line"><span class="comment">// 如果没有报错，拼接包的名字 返回上面的列表</span></span><br><span class="line">request(&#123;</span><br><span class="line">  url: <span class="string">&#x27;https://api.github.com/users/vuejs-templates/repos&#x27;</span>,</span><br><span class="line">  headers: &#123;</span><br><span class="line">    <span class="string">&#x27;User-Agent&#x27;</span>: <span class="string">&#x27;vue-cli&#x27;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;, <span class="function">(<span class="params">err, res, body</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (err) logger.fatal(err)</span><br><span class="line">  <span class="keyword">const</span> requestBody = <span class="built_in">JSON</span>.parse(body)</span><br><span class="line">  <span class="keyword">if</span> (<span class="built_in">Array</span>.isArray(requestBody)) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;  Available official templates:&#x27;</span>)</span><br><span class="line">    <span class="built_in">console</span>.log()</span><br><span class="line">    requestBody.forEach(<span class="function"><span class="params">repo</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(</span><br><span class="line">        <span class="string">&#x27;  &#x27;</span> + chalk.yellow(<span class="string">&#x27;★&#x27;</span>) +</span><br><span class="line">        <span class="string">&#x27;  &#x27;</span> + chalk.blue(repo.name) +</span><br><span class="line">        <span class="string">&#x27; - &#x27;</span> + repo.description)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.error(requestBody.message)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>vue-init</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env node</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> download = <span class="built_in">require</span>(<span class="string">&#x27;download-git-repo&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> program = <span class="built_in">require</span>(<span class="string">&#x27;commander&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> exists = <span class="built_in">require</span>(<span class="string">&#x27;fs&#x27;</span>).existsSync</span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">&#x27;path&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> ora = <span class="built_in">require</span>(<span class="string">&#x27;ora&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> home = <span class="built_in">require</span>(<span class="string">&#x27;user-home&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> tildify = <span class="built_in">require</span>(<span class="string">&#x27;tildify&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> chalk = <span class="built_in">require</span>(<span class="string">&#x27;chalk&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> inquirer = <span class="built_in">require</span>(<span class="string">&#x27;inquirer&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> rm = <span class="built_in">require</span>(<span class="string">&#x27;rimraf&#x27;</span>).sync</span><br><span class="line"><span class="keyword">const</span> logger = <span class="built_in">require</span>(<span class="string">&#x27;../lib/logger&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> generate = <span class="built_in">require</span>(<span class="string">&#x27;../lib/generate&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> checkVersion = <span class="built_in">require</span>(<span class="string">&#x27;../lib/check-version&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> warnings = <span class="built_in">require</span>(<span class="string">&#x27;../lib/warnings&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> localPath = <span class="built_in">require</span>(<span class="string">&#x27;../lib/local-path&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> isLocalPath = localPath.isLocalPath</span><br><span class="line"><span class="keyword">const</span> getTemplatePath = localPath.getTemplatePath</span><br><span class="line"></span><br><span class="line">program</span><br><span class="line">  .usage(<span class="string">&#x27;&lt;template-name&gt; [project-name]&#x27;</span>)</span><br><span class="line">  .option(<span class="string">&#x27;-c, --clone&#x27;</span>, <span class="string">&#x27;use git clone&#x27;</span>)</span><br><span class="line">  .option(<span class="string">&#x27;--offline&#x27;</span>, <span class="string">&#x27;use cached template&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Help.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line">program.on(<span class="string">&#x27;--help&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;  Examples:&#x27;</span>)</span><br><span class="line">  <span class="built_in">console</span>.log()</span><br><span class="line">  <span class="built_in">console</span>.log(chalk.gray(<span class="string">&#x27;    # create a new project with an official template&#x27;</span>))</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;    $ vue init webpack my-project&#x27;</span>)</span><br><span class="line">  <span class="built_in">console</span>.log()</span><br><span class="line">  <span class="built_in">console</span>.log(chalk.gray(<span class="string">&#x27;    # create a new project straight from a github template&#x27;</span>))</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;    $ vue init username/repo my-project&#x27;</span>)</span><br><span class="line">  <span class="built_in">console</span>.log()</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Help.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">help</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  program.parse(process.argv)</span><br><span class="line">  <span class="keyword">if</span> (program.args.length &lt; <span class="number">1</span>) <span class="keyword">return</span> program.help()</span><br><span class="line">&#125;</span><br><span class="line">help()</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Settings.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> template = program.args[<span class="number">0</span>]</span><br><span class="line"><span class="keyword">const</span> hasSlash = template.indexOf(<span class="string">&#x27;/&#x27;</span>) &gt; -<span class="number">1</span></span><br><span class="line"><span class="keyword">const</span> rawName = program.args[<span class="number">1</span>]</span><br><span class="line"><span class="keyword">const</span> inPlace = !rawName || rawName === <span class="string">&#x27;.&#x27;</span></span><br><span class="line"><span class="keyword">const</span> name = inPlace ? path.relative(<span class="string">&#x27;../&#x27;</span>, process.cwd()) : rawName</span><br><span class="line"><span class="keyword">const</span> to = path.resolve(rawName || <span class="string">&#x27;.&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> clone = program.clone || <span class="literal">false</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> tmp = path.join(home, <span class="string">&#x27;.vue-templates&#x27;</span>, template.replace(<span class="regexp">/[\/:]/g</span>, <span class="string">&#x27;-&#x27;</span>))</span><br><span class="line"><span class="keyword">if</span> (program.offline) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`&gt; Use cached template at <span class="subst">$&#123;chalk.yellow(tildify(tmp))&#125;</span>`</span>)</span><br><span class="line">  template = tmp</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Padding.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log()</span><br><span class="line">process.on(<span class="string">&#x27;exit&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log()</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (inPlace || exists(to)) &#123;</span><br><span class="line">  inquirer.prompt([&#123;</span><br><span class="line">    type: <span class="string">&#x27;confirm&#x27;</span>,</span><br><span class="line">    message: inPlace</span><br><span class="line">      ? <span class="string">&#x27;Generate project in current directory?&#x27;</span></span><br><span class="line">      : <span class="string">&#x27;Target directory exists. Continue?&#x27;</span>,</span><br><span class="line">    name: <span class="string">&#x27;ok&#x27;</span></span><br><span class="line">  &#125;]).then(<span class="function"><span class="params">answers</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (answers.ok) &#123;</span><br><span class="line">      run()</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;).catch(logger.fatal)</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">  run()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Check, download and generate the project.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">run</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">// check if template is local</span></span><br><span class="line">  <span class="keyword">if</span> (isLocalPath(template)) &#123;</span><br><span class="line">    <span class="keyword">const</span> templatePath = getTemplatePath(template)</span><br><span class="line">    <span class="keyword">if</span> (exists(templatePath)) &#123;</span><br><span class="line">      generate(name, templatePath, to, <span class="function"><span class="params">err</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (err) logger.fatal(err)</span><br><span class="line">        <span class="built_in">console</span>.log()</span><br><span class="line">        logger.success(<span class="string">&#x27;Generated &quot;%s&quot;.&#x27;</span>, name)</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      logger.fatal(<span class="string">&#x27;Local template &quot;%s&quot; not found.&#x27;</span>, template)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    checkVersion(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (!hasSlash) &#123;</span><br><span class="line">        <span class="comment">// use official templates</span></span><br><span class="line">        <span class="keyword">const</span> officialTemplate = <span class="string">&#x27;vuejs-templates/&#x27;</span> + template</span><br><span class="line">        <span class="keyword">if</span> (template.indexOf(<span class="string">&#x27;#&#x27;</span>) !== -<span class="number">1</span>) &#123;</span><br><span class="line">          downloadAndGenerate(officialTemplate)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          <span class="keyword">if</span> (template.indexOf(<span class="string">&#x27;-2.0&#x27;</span>) !== -<span class="number">1</span>) &#123;</span><br><span class="line">            warnings.v2SuffixTemplatesDeprecated(template, inPlace ? <span class="string">&#x27;&#x27;</span> : name)</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line">          <span class="comment">// warnings.v2BranchIsNowDefault(template, inPlace ? &#x27;&#x27; : name)</span></span><br><span class="line">          downloadAndGenerate(officialTemplate)</span><br><span class="line">        &#125;</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        downloadAndGenerate(template)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Download a generate from a template repo.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param <span class="type">&#123;String&#125;</span> <span class="variable">template</span></span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">downloadAndGenerate</span> (<span class="params">template</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> spinner = ora(<span class="string">&#x27;downloading template&#x27;</span>)</span><br><span class="line">  spinner.start()</span><br><span class="line">  <span class="comment">// Remove if local template exists</span></span><br><span class="line">  <span class="keyword">if</span> (exists(tmp)) rm(tmp)</span><br><span class="line">  download(template, tmp, &#123; clone &#125;, <span class="function"><span class="params">err</span> =&gt;</span> &#123;</span><br><span class="line">    spinner.stop()</span><br><span class="line">    <span class="keyword">if</span> (err) logger.fatal(<span class="string">&#x27;Failed to download repo &#x27;</span> + template + <span class="string">&#x27;: &#x27;</span> + err.message.trim())</span><br><span class="line">    generate(name, tmp, to, <span class="function"><span class="params">err</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (err) logger.fatal(err)</span><br><span class="line">      <span class="built_in">console</span>.log()</span><br><span class="line">      logger.success(<span class="string">&#x27;Generated &quot;%s&quot;.&#x27;</span>, name)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure> 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" rel="tag">工程化</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+   
+</article>
+
+    
+    <article
   id="post-algorithm/leetcode/(O03)数组中重复的数字"
   class="article article-type-post"
   itemscope
@@ -699,309 +938,6 @@ var _hmt = _hmt || [];
     <footer class="article-footer">
        
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-   
-</article>
-
-    
-    <article
-  id="post-javascript/engineering/工程化中的linux"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/posts/ed6b4dad/"
-    >工程化中的linux</a> 
-</h2>
- 
-
-    </header>
-     
-    <div class="article-meta">
-      <a href="/posts/ed6b4dad/" class="article-date">
-  <time datetime="2020-12-02T08:52:11.000Z" itemprop="datePublished">2020-12-02</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/JavaScript/">JavaScript</a> / <a class="article-category-link" href="/categories/JavaScript/%E5%B7%A5%E7%A8%8B%E5%8C%96/">工程化</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h4 id="免密登陆"><a href="#免密登陆" class="headerlink" title="免密登陆"></a>免密登陆</h4><ul>
-<li>生成密钥对</li>
-</ul>
-<p>-t 指定密钥类型，默认是 rsa ，可以省略。<br>-C 设置注释文字，比如邮箱。<br>-f 指定密钥文件存储文件名。</p>
-<p>默认生成在home文件加下面</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa -C <span class="string">&quot;自己的名字&quot;</span> -f <span class="string">&quot;名字_rsa(自定义文件名)&quot;</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>上传共钥到服务器对应账号的home目录下.ssh文件夹下面</li>
-</ul>
-<p>公钥的权限为600</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-copy-id -i mykey_rsa.pub user@xxx.xxx.xxx.xxx </span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>指定私钥登陆</li>
-</ul>
-<p>私钥的权限为600</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -i 私钥 user@xxx.xxx.xxx.xxx</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>通过配置文件免密登陆</li>
-</ul>
-<p>把私钥复制到home下的.ssh文件夹下面</p>
-<p>创建cnofig文件</p>
-<p>配置单一服务器免密登陆</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Host 别名</span><br><span class="line">　　HostName IP</span><br><span class="line">　　Port 端口</span><br><span class="line">　　User 用户名</span><br><span class="line">　　IdentitiesOnly yes</span><br><span class="line">   IdentityFile ~/.ssh/user_rsa  (私钥路径)</span><br><span class="line">   Protocal 2 (协议版本号)</span><br><span class="line">   Compression yes </span><br><span class="line">   ServerAliveInterval 60 （防止被踢配置，长时间没有操作会被踢掉，每隔60秒发一个信号）</span><br><span class="line">   ServerAliveCountMax 20 (最大连接数)</span><br><span class="line">   LogLevel INFO</span><br></pre></td></tr></table></figure>
-
-<p>多个账号的免密的登陆</p>
-<p>分别配置部分</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Host xxx-produce</span><br><span class="line">HostName IP</span><br><span class="line">Port 端口</span><br></pre></td></tr></table></figure>
-
-<p>公共配置部分</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Host *_produce</span><br><span class="line">其他配置相同</span><br></pre></td></tr></table></figure>
-
-<p>config的权限为 644</p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" rel="tag">工程化</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-   
-</article>
-
-    
-    <article
-  id="post-javascript/fp/underscore设计"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/posts/db3582e2/"
-    >underscore框架设计</a> 
-</h2>
- 
-
-    </header>
-     
-    <div class="article-meta">
-      <a href="/posts/db3582e2/" class="article-date">
-  <time datetime="2020-12-02T05:44:27.000Z" itemprop="datePublished">2020-12-02</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/JavaScript/">JavaScript</a> / <a class="article-category-link" href="/categories/JavaScript/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/">函数式编程</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h4 id="立即执行函数"><a href="#立即执行函数" class="headerlink" title="立即执行函数"></a>立即执行函数</h4><p>使用立即执行函数，创建局部作用域，隔离环境并初始化代码</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span> (<span class="params"><span class="built_in">global</span>, factory</span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;(<span class="built_in">this</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;))</span><br></pre></td></tr></table></figure>
-
-<h4 id="判断采用那种模块化规范导出"><a href="#判断采用那种模块化规范导出" class="headerlink" title="判断采用那种模块化规范导出"></a>判断采用那种模块化规范导出</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// commomjs 规范</span></span><br><span class="line"><span class="keyword">typeof</span> <span class="built_in">exports</span> === <span class="string">&#x27;object&#x27;</span> &amp;&amp; <span class="keyword">typeof</span> <span class="built_in">module</span> !== <span class="string">&#x27;undefined&#x27;</span> ? <span class="built_in">module</span>.exports = factory() :</span><br><span class="line"><span class="comment">// amd 规范</span></span><br><span class="line"><span class="keyword">typeof</span> define === <span class="string">&#x27;function&#x27;</span> &amp;&amp; define.amd ? define(<span class="string">&#x27;underscore&#x27;</span>, factory) :</span><br><span class="line"><span class="comment">// 如果都不是则 直接挂在this上</span></span><br><span class="line">(<span class="built_in">global</span> = <span class="built_in">global</span> || self, (<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> current = <span class="built_in">global</span>._;</span><br><span class="line">  <span class="keyword">var</span> <span class="built_in">exports</span> = <span class="built_in">global</span>._ = factory();</span><br><span class="line">  <span class="comment">//防止多次引入冲突</span></span><br><span class="line">  <span class="built_in">exports</span>.noConflict = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">global</span>._ = current;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">exports</span>;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;()));</span><br></pre></td></tr></table></figure>
-
-<h4 id="创建根节点"><a href="#创建根节点" class="headerlink" title="创建根节点"></a>创建根节点</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 建立根节点对象，self 在浏览器端， global 在服务端， this 在一些虚拟机中，使用self 代替 window 提供对 Webworker 的支持</span></span><br><span class="line"><span class="keyword">var</span> root = <span class="keyword">typeof</span> self == <span class="string">&#x27;object&#x27;</span> &amp;&amp; self.self === self &amp;&amp; self ||</span><br><span class="line">          <span class="keyword">typeof</span> <span class="built_in">global</span> == <span class="string">&#x27;object&#x27;</span> &amp;&amp; <span class="built_in">global</span>.global === <span class="built_in">global</span> &amp;&amp; <span class="built_in">global</span> ||</span><br><span class="line">          <span class="built_in">Function</span>(<span class="string">&#x27;return this&#x27;</span>)() ||</span><br><span class="line">          &#123;&#125;;</span><br></pre></td></tr></table></figure>
-
-<h4 id="each方法"><a href="#each方法" class="headerlink" title="each方法"></a>each方法</h4><p><strong>each 依赖的函数</strong></p>
-<p>一个内部函数，根据参数返回不同的回调函数的封装，一个复用的方法</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">optimizeCb</span>(<span class="params">func, context, argCount</span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 没有传入执行上下文， 直接返回函数</span></span><br><span class="line">  <span class="keyword">if</span> (context === <span class="keyword">void</span> <span class="number">0</span>) <span class="keyword">return</span> func;</span><br><span class="line">  <span class="keyword">switch</span> (argCount == <span class="literal">null</span> ? <span class="number">3</span> : argCount) &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">1</span>:</span><br><span class="line">      <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">value</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> func.call(context, value);</span><br><span class="line">      &#125;;</span><br><span class="line">      <span class="comment">// The 2-argument case is omitted because we’re not using it.</span></span><br><span class="line">    <span class="keyword">case</span> <span class="number">3</span>:</span><br><span class="line">      <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">value, index, collection</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> func.call(context, value, index, collection);</span><br><span class="line">      &#125;;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">4</span>:</span><br><span class="line">      <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">accumulator, value, index, collection</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> func.call(context, accumulator, value, index, collection);</span><br><span class="line">      &#125;;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> func.apply(context, <span class="built_in">arguments</span>);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>isArrayLike</strong></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> MAX_ARRAY_INDEX = <span class="built_in">Math</span>.pow(<span class="number">2</span>, <span class="number">53</span>) - <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 简单获取属性值</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">shallowProperty</span>(<span class="params">key</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">obj</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> obj == <span class="literal">null</span> ? <span class="keyword">void</span> <span class="number">0</span> : obj[key];</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> getLength = shallowProperty(<span class="string">&#x27;length&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 属性检查 数字格式，且不能超过数组最大值</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createSizePropertyCheck</span>(<span class="params">getSizeProperty</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">collection</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> sizeProperty = getSizeProperty(collection);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">typeof</span> sizeProperty == <span class="string">&#x27;number&#x27;</span> &amp;&amp; sizeProperty &gt;= <span class="number">0</span> &amp;&amp; sizeProperty &lt;= MAX_ARRAY_INDEX;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> isArrayLike = createSizePropertyCheck(getLength);</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">each</span>(<span class="params">obj, iteratee, context</span>) </span>&#123;</span><br><span class="line">  iteratee = optimizeCb(iteratee, context);</span><br><span class="line">  <span class="keyword">var</span> i, length;</span><br><span class="line">  <span class="keyword">if</span> (isArrayLike(obj)) &#123;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>, length = obj.length; i &lt; length; i++) &#123;</span><br><span class="line">      iteratee(obj[i], i, obj);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> _keys = keys(obj);</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>, length = _keys.length; i &lt; length; i++) &#123;</span><br><span class="line">      iteratee(obj[_keys[i]], _keys[i], obj);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> obj;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="挂载方法-混合模式"><a href="#挂载方法-混合模式" class="headerlink" title="挂载方法 混合模式"></a>挂载方法 混合模式</h4><p>依赖的函数</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//内部方法，创建一个toString 基础测试器</span></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">tagTester</span>(<span class="params">name</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> tag = <span class="string">&#x27;[object &#x27;</span> + name + <span class="string">&#x27;]&#x27;</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">obj</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> toString.call(obj) === tag;</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">var</span> isFunction = tagTester(<span class="string">&#x27;Function&#x27;</span>);</span><br><span class="line">  <span class="keyword">var</span> isFunction$<span class="number">1</span> = isFunction;</span><br><span class="line"></span><br><span class="line">  <span class="comment">//返回一个排序的 所有工具函数名的数组</span></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">functions</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> names = [];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> key <span class="keyword">in</span> obj) &#123;</span><br><span class="line">      <span class="keyword">if</span> (isFunction$<span class="number">1</span>(obj[key])) names.push(key);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> names.sort();</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>定义underscore方法</strong></p>
-<ul>
-<li>如果是underscore实例直接返回</li>
-<li>如果不是通过new操作符执行函数</li>
-<li>再次进入第二行的判断，这时已经是underscore的实例会继续往下执行</li>
-<li>在实例上挂在一个变量指向传入的对象</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">_</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> _) <span class="keyword">return</span> obj;</span><br><span class="line">  <span class="keyword">if</span> (!(<span class="built_in">this</span> <span class="keyword">instanceof</span> _)) <span class="keyword">return</span> <span class="keyword">new</span> _(obj);</span><br><span class="line">  <span class="built_in">this</span>._wrapped = obj;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><strong>核心mixin 方法</strong></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">mixin</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 循环所有导出方法的名称</span></span><br><span class="line">  each(functions(obj), <span class="function"><span class="keyword">function</span> (<span class="params">name</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 每个名称对应的方法</span></span><br><span class="line">    <span class="keyword">var</span> func = _[name] = obj[name];</span><br><span class="line">    <span class="comment">//  在原型上挂载同样的方法</span></span><br><span class="line">    _.prototype[name] = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="comment">//拿到上面挂载的 传入的对象</span></span><br><span class="line">      <span class="keyword">var</span> args = [<span class="built_in">this</span>._wrapped];</span><br><span class="line">      <span class="comment">// 拼接为整个数组 </span></span><br><span class="line">      <span class="built_in">Array</span>.prototype.push.apply(args, <span class="built_in">arguments</span>);</span><br><span class="line">      <span class="comment">//直接用定义的内置方法执行</span></span><br><span class="line">      <span class="keyword">return</span> chainResult(<span class="built_in">this</span>, func.apply(_, args));</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="keyword">return</span> _;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> allExports = &#123;</span><br><span class="line">  each:each</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> _$<span class="number">1</span> = mixin(allExports);</span><br><span class="line"><span class="comment">// Legacy Node.js API.</span></span><br><span class="line">_$<span class="number">1.</span>_ = _$<span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> _$<span class="number">1</span>;</span><br></pre></td></tr></table></figure>
-
-<p>所以可以用下面的方法执行方法</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">_([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]).each(<span class="function"><span class="keyword">function</span>(<span class="params">item</span>)</span>&#123;<span class="built_in">console</span>.log(item)&#125;);</span><br></pre></td></tr></table></figure>
-
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/underscore/" rel="tag">underscore</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" rel="tag">函数式编程</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-   
-</article>
-
-    
-    <article
-  id="post-javascript/engineering/测试环境karma"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/posts/8286aa8e/"
-    >测试环境karma</a> 
-</h2>
- 
-
-    </header>
-     
-    <div class="article-meta">
-      <a href="/posts/8286aa8e/" class="article-date">
-  <time datetime="2020-11-23T06:25:20.000Z" itemprop="datePublished">2020-11-23</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/JavaScript/">JavaScript</a> / <a class="article-category-link" href="/categories/JavaScript/%E5%B7%A5%E7%A8%8B%E5%8C%96/">工程化</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h4 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn init -y</span><br></pre></td></tr></table></figure>
-
-<h4 id="实现第一个测试用例"><a href="#实现第一个测试用例" class="headerlink" title="实现第一个测试用例"></a>实现第一个测试用例</h4><p>index.js</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> add = <span class="function"><span class="keyword">function</span>(<span class="params">a</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">1</span> + a</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>index.spec.js</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">describe(<span class="string">&#x27;测试基本api&#x27;</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  it(<span class="string">&#x27;add&#x27;</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    except(add(<span class="number">1</span>)).toBe(<span class="number">2</span>)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-
-<h4 id="如何让上面的代码运行"><a href="#如何让上面的代码运行" class="headerlink" title="如何让上面的代码运行"></a>如何让上面的代码运行</h4><p>安装karma测试框架</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add -D karma</span><br></pre></td></tr></table></figure>
-
-<p>配置package.json可以执行karma命令，如果不想配置可以安装 karma-cli</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&quot;scripts&quot;:&#123;</span><br><span class="line">  &quot;karma-init&quot;:&quot;karma init&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>执行命令初始化</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn karma-init</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>Which testing framework do you want to use?</li>
-</ul>
-<p>想要使用的单元测试框架 jasmine</p>
-<ul>
-<li>Do you want to use Require.js</li>
-</ul>
-<p>是否想要用Requirejs， 不需要</p>
-<ul>
-<li>Do you want to capture any browsers automatically？</li>
-</ul>
-<p>想要自动调用的浏览器 PhantomJS</p>
-<p>PhantomJS是一个可编程的无头浏览器:一个完整的浏览器内核,包括js解析引擎,渲染引擎,请求处理等,但是不包括显示和用户交互页面的浏览器。</p>
-<p>hantomJS的适用范围就是无头浏览器的适用范围。通常无头浏览器可以用于页面自动化，网页监控，网络爬虫等：</p>
-<p>页面自动化测试：希望自动的登陆网站并做一些操作然后检查结果是否正常。<br>网页监控：希望定期打开页面，检查网站是否能正常加载，加载结果是否符合预期。加载速度如何等。<br>网络爬虫：获取页面中使用js来下载和渲染信息，或者是获取链接处使用js来跳转后的真实地址</p>
-<ul>
-<li>What is the location of your source and test files</li>
-</ul>
-<p>想要测试的文件位置，暂时留空</p>
-<ul>
-<li>Should any of the files included by the previous patterns be excluded？</li>
-</ul>
-<p>想要排除哪些文件暂时留空</p>
-<ul>
-<li>Do you want Karma to watch all the files and run the tests on change？</li>
-</ul>
-<p>是否需要监听文件改变， 暂时选no,不监听</p>
-<p><strong>下一步</strong></p>
-<p>打开生成的karma.conf.js文件</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="comment">// 测试框架名称</span></span><br><span class="line">  frameworks: [<span class="string">&#x27;jasmine&#x27;</span>],</span><br><span class="line"></span><br><span class="line">  <span class="comment">//测试文件目录</span></span><br><span class="line">  files: [</span><br><span class="line">    <span class="string">&quot;./test/unit/**/*.js&quot;</span>,</span><br><span class="line">    <span class="string">&quot;./test/unit/**/*.spec.js&quot;</span></span><br><span class="line">  ],</span><br><span class="line"></span><br><span class="line">  singleRun:<span class="literal">true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>在package.json中添加运行命令</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"> <span class="string">&quot;scripts&quot;</span>: &#123;</span><br><span class="line">  <span class="string">&quot;karma-init&quot;</span>: <span class="string">&quot;karma init&quot;</span>,</span><br><span class="line">  <span class="string">&quot;karma-start&quot;</span>: <span class="string">&quot;karma start&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>安装无头浏览器和jasmine适配器</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add -D karma-jasmine karma-phantomjs-launcher phantomjs</span><br></pre></td></tr></table></figure>
-
-<p>编写测试用例</p>
-<p>index.js</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">add</span>(<span class="params">a</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (a == <span class="number">1</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> a + <span class="number">1</span>;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> a + <span class="number">2</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>index.spec.js</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">describe(<span class="string">&#x27;单元测试&#x27;</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  it(<span class="string">&quot;contains spec with an expectation&quot;</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    expect(add(<span class="number">1</span>)).toBe(<span class="number">2</span>);</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-
-<p>执行 <code>karma-start</code> 进行单元测试</p>
-<p><img src="/posts/8286aa8e/0001.png"></p>
-<h4 id="覆盖率测试"><a href="#覆盖率测试" class="headerlink" title="覆盖率测试"></a>覆盖率测试</h4><p>安装 <code>karma-coverage</code></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add -D karma-coverage</span><br></pre></td></tr></table></figure>
-
-<p>修改配置项</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  preprocessors: &#123;</span><br><span class="line">    <span class="string">&quot;./test/unit/**/*.js&quot;</span>:<span class="string">&quot;coverage&quot;</span></span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  reporters: [<span class="string">&#x27;progress&#x27;</span>,<span class="string">&#x27;coverage&#x27;</span>],</span><br><span class="line"></span><br><span class="line">  coverageReporter: &#123;</span><br><span class="line">    dir: <span class="string">&#x27;doc/coverage&#x27;</span>,</span><br><span class="line">    reporters: [</span><br><span class="line">      <span class="comment">// reporters not supporting the `file` property</span></span><br><span class="line">      &#123; <span class="attr">type</span>: <span class="string">&#x27;html&#x27;</span>, <span class="attr">subdir</span>: <span class="string">&#x27;report-html&#x27;</span> &#125;,</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>执行再次执行 <code>karma-start</code></p>
-<h4 id="UI测试"><a href="#UI测试" class="headerlink" title="UI测试"></a>UI测试</h4><p>安装 backstop</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add -D backstop</span><br></pre></td></tr></table></figure>
-
-<p>添加 package.json 命令行</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;scripts&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;backstop-init&quot;</span>: <span class="string">&quot;backstop init&quot;</span>,</span><br><span class="line">    <span class="string">&quot;backstop-start&quot;</span>: <span class="string">&quot;backstop test&quot;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>执行 <code>backstop-init</code> 生成文件目录</p>
-<p>修改文件目录配置</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;id&quot;</span>: <span class="string">&quot;baidu&quot;</span>,</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 设计图分辨率设置</span></span><br><span class="line">  <span class="string">&quot;viewports&quot;</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="string">&quot;label&quot;</span>: <span class="string">&quot;phone&quot;</span>,</span><br><span class="line">      <span class="string">&quot;width&quot;</span>: <span class="number">375</span>,</span><br><span class="line">      <span class="string">&quot;height&quot;</span>: <span class="number">667</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="string">&quot;label&quot;</span>: <span class="string">&quot;tablet&quot;</span>,</span><br><span class="line">      <span class="string">&quot;width&quot;</span>: <span class="number">1024</span>,</span><br><span class="line">      <span class="string">&quot;height&quot;</span>: <span class="number">768</span></span><br><span class="line">    &#125;</span><br><span class="line">  ],</span><br><span class="line"></span><br><span class="line">  <span class="comment">//调用 puppeteer 库的脚本</span></span><br><span class="line">  <span class="string">&quot;onBeforeScript&quot;</span>: <span class="string">&quot;puppet/onBefore.js&quot;</span>,</span><br><span class="line">  <span class="string">&quot;onReadyScript&quot;</span>: <span class="string">&quot;puppet/onReady.js&quot;</span>,</span><br><span class="line">  <span class="string">&quot;scenarios&quot;</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="string">&quot;label&quot;</span>: <span class="string">&quot;baidu home&quot;</span>,</span><br><span class="line">      <span class="string">&quot;cookiePath&quot;</span>: <span class="string">&quot;backstop_data/engine_scripts/cookies.json&quot;</span>,</span><br><span class="line">      <span class="string">&quot;url&quot;</span>: <span class="string">&quot;https://garris.github.io/BackstopJS/&quot;</span>,</span><br><span class="line">      <span class="string">&quot;referenceUrl&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">      <span class="string">&quot;readyEvent&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">      <span class="string">&quot;readySelector&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">      <span class="string">&quot;delay&quot;</span>: <span class="number">0</span>,</span><br><span class="line">      <span class="string">&quot;hideSelectors&quot;</span>: [],</span><br><span class="line">      <span class="string">&quot;removeSelectors&quot;</span>: [],</span><br><span class="line">      <span class="string">&quot;hoverSelector&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">      <span class="string">&quot;clickSelector&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">      <span class="string">&quot;postInteractionWait&quot;</span>: <span class="number">0</span>,</span><br><span class="line">      <span class="string">&quot;selectors&quot;</span>: [],</span><br><span class="line">      <span class="string">&quot;selectorExpansion&quot;</span>: <span class="literal">true</span>,</span><br><span class="line">      <span class="string">&quot;expect&quot;</span>: <span class="number">0</span>,</span><br><span class="line">      <span class="string">&quot;misMatchThreshold&quot;</span> : <span class="number">0.1</span>,</span><br><span class="line">      <span class="string">&quot;requireSameDimensions&quot;</span>: <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">  ],</span><br><span class="line">  <span class="string">&quot;paths&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;bitmaps_reference&quot;</span>: <span class="string">&quot;backstop_data/bitmaps_reference&quot;</span>,</span><br><span class="line">    <span class="string">&quot;bitmaps_test&quot;</span>: <span class="string">&quot;backstop_data/bitmaps_test&quot;</span>,</span><br><span class="line">    <span class="string">&quot;engine_scripts&quot;</span>: <span class="string">&quot;backstop_data/engine_scripts&quot;</span>,</span><br><span class="line">    <span class="string">&quot;html_report&quot;</span>: <span class="string">&quot;doc/backstop_data/html_report&quot;</span>,</span><br><span class="line">    <span class="string">&quot;ci_report&quot;</span>: <span class="string">&quot;backstop_data/ci_report&quot;</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">&quot;report&quot;</span>: [<span class="string">&quot;browser&quot;</span>],</span><br><span class="line">  <span class="string">&quot;engine&quot;</span>: <span class="string">&quot;puppeteer&quot;</span>,</span><br><span class="line">  <span class="string">&quot;engineOptions&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;args&quot;</span>: [<span class="string">&quot;--no-sandbox&quot;</span>]</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">&quot;asyncCaptureLimit&quot;</span>: <span class="number">5</span>,</span><br><span class="line">  <span class="string">&quot;asyncCompareLimit&quot;</span>: <span class="number">50</span>,</span><br><span class="line">  <span class="string">&quot;debug&quot;</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="string">&quot;debugWindow&quot;</span>: <span class="literal">false</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure> 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/" rel="tag">单元测试</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" rel="tag">工程化</a></li></ul>
 
     </footer>
   </div>
