@@ -113,6 +113,197 @@ var _hmt = _hmt || [];
     
     
     <article
+  id="post-javascript/engineering/webpack核心概念"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/posts/731d431a/"
+    >webpack核心概念</a> 
+</h2>
+ 
+
+    </header>
+     
+    <div class="article-meta">
+      <a href="/posts/731d431a/" class="article-date">
+  <time datetime="2020-12-26T14:46:37.000Z" itemprop="datePublished">2020-12-26</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/JavaScript/">JavaScript</a> / <a class="article-category-link" href="/categories/JavaScript/%E5%B7%A5%E7%A8%8B%E5%8C%96/">工程化</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><p>推荐就近安装，即安装在项目中，不要安装在全局中</p>
+<p>通过 <code>npx webpack -v</code> 查看项目中 webpack 版本</p>
+<p><strong>nrm 镜像源管理</strong></p>
+<p><code>yarn add nrm</code></p>
+<p>查看镜像源列表</p>
+<p><code>nrm ls</code></p>
+<p>测速</p>
+<p><code>nrm test taobao</code></p>
+<h4 id="常用工具"><a href="#常用工具" class="headerlink" title="常用工具"></a>常用工具</h4><h5 id="clean-webpack-plugin"><a href="#clean-webpack-plugin" class="headerlink" title="clean-webpack-plugin"></a>clean-webpack-plugin</h5><p><a target="_blank" rel="noopener" href="https://www.npmjs.com/package/clean-webpack-plugin">https://www.npmjs.com/package/clean-webpack-plugin</a></p>
+<h5 id=""><a href="#" class="headerlink" title=""></a></h5><h4 id="source-map"><a href="#source-map" class="headerlink" title="source-map"></a>source-map</h4><p>cheap-module-source-map 用于生产环境，不能暴露源码</p>
+<p>eval-cheap-module-source-map 开发环境中使用</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  devtool:<span class="string">&#x27;cheap-module-source-map&#x27;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="devServer-和热模块更新"><a href="#devServer-和热模块更新" class="headerlink" title="devServer 和热模块更新"></a>devServer 和热模块更新</h4><p>安装devServer</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add -D webpack-dev-server</span><br></pre></td></tr></table></figure>
+
+<p>webpack.config.js 中添加配置项  </p>
+<p>contentBase 只有需要在访问静态文件时候使用，默认下面三个配置项都可以不写</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">devServer: &#123;</span><br><span class="line">  contentBase: path.join(__dirname, <span class="string">&#x27;dist&#x27;</span>),</span><br><span class="line">  compress: <span class="literal">true</span>,</span><br><span class="line">  port: <span class="number">9000</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>package.json 中添加启动命令</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;scripts&quot;</span>:&#123;</span><br><span class="line">    <span class="attr">&quot;server&quot;</span>: <span class="string">&quot;webpack-dev-server --open&quot;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>开启hmr</p>
+<p>1.配置webpack-dev-server<br>2.devServer配置hot:true<br>3.plugins hotModuleeReplaceMentPlugin<br>4.js 文件中添加hmr代码</p>
+<p>webpack.config.js 中添加</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> webpack = <span class="built_in">require</span>(<span class="string">&#x27;webpack&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  devServer: &#123;</span><br><span class="line">  ...</span><br><span class="line">  hot:<span class="literal">true</span></span><br><span class="line">  &#125;,</span><br><span class="line">  plugins: [</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">new</span> webpack.NamedModulesPlugin(),</span><br><span class="line">    <span class="keyword">new</span> webpack.HotModuleReplacementPlugin()</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>index.js 增加代码</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="built_in">module</span>.hot) &#123;</span><br><span class="line">  <span class="built_in">module</span>.hot.accept(<span class="string">&#x27;./print.js&#x27;</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;Accepting the updated printMe module!&#x27;</span>);</span><br><span class="line">   printMe();</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="output-和-devserver-中的-publicpath-作用"><a href="#output-和-devserver-中的-publicpath-作用" class="headerlink" title="output 和 devserver 中的 publicpath 作用"></a>output 和 devserver 中的 publicpath 作用</h4><p><a target="_blank" rel="noopener" href="https://webpack.js.org/configuration/output/#outputpublicpath">output 中的 publicpath</a></p>
+<p>这是一个在使用按需加载和引入外部资源（图片,文件等）非常重要的属性，如果设置了一个错误的值，当加载这些资源时会报404错误</p>
+<p>这个配置项指定了输出目录在浏览器中引用时的公共路径（publicpath）,一个相对路径被解析为相对于HTML页面或[‵<base>`标签](<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base">https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base</a>)</p>
+<blockquote>
+<base> 标签为页面上的所有链接规定默认地址或默认目标。
+</blockquote>
+<p>相对服务器的路径，相对与协议的路径，或绝对路径都是有可能的甚至有时是必须的，换句话说，在CMD 托管静态资源</p>
+<p>在运行时或loader处理时，每一个URL的前缀都会被色设置未配置项中的值，这就是为什么在很多例子中这个配置项被设置为 <code>/</code> 的原因</p>
+<p>webpack-dev-server 也需要从publicPath获取信息，使用它来确定从何处提供输出文件。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line">  output: &#123;</span><br><span class="line">    <span class="comment">// One of the below</span></span><br><span class="line">    publicPath: <span class="string">&#x27;https://cdn.example.com/assets/&#x27;</span>, <span class="comment">// CDN (always HTTPS)</span></span><br><span class="line">    publicPath: <span class="string">&#x27;//cdn.example.com/assets/&#x27;</span>, <span class="comment">// CDN (same protocol)</span></span><br><span class="line">    publicPath: <span class="string">&#x27;/assets/&#x27;</span>, <span class="comment">// server-relative</span></span><br><span class="line">    publicPath: <span class="string">&#x27;assets/&#x27;</span>, <span class="comment">// relative to HTML page</span></span><br><span class="line">    publicPath: <span class="string">&#x27;../assets/&#x27;</span>, <span class="comment">// relative to HTML page</span></span><br><span class="line">    publicPath: <span class="string">&#x27;&#x27;</span>, <span class="comment">// relative to HTML page (same directory)</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://webpack.js.org/configuration/dev-server/#devserverpublicpath-">devServer 中的 publicpath</a></p>
+<p>打包的文件可以在浏览器的这个目录下面得到</p>
+<p>如果服务跑在 <a href="http://localhost:8080，打包的文件为bundle.js，publicPath为">http://localhost:8080，打包的文件为bundle.js，publicPath为</a> <code>/</code>, 可以在 <code>http://localhost:8080/bundle.js</code>访问到打包文件</p>
+<p>如果 publicPath 改为 <code>/assets/</code>, 那么可以在 <code>http://localhost:8080/assets/bundle.js</code>访问，也可以把 publicPath 改为 <code>http://localhost:8080/assets/</code></p>
+<p>这说明了 devServer.publicPath 与 output.publicPath 是一致的</p>
+<h5 id="babel-polyfill-babel-plugin-transform-runtime-babel-runtime-corejs2"><a href="#babel-polyfill-babel-plugin-transform-runtime-babel-runtime-corejs2" class="headerlink" title="@babel/polyfill  @babel/plugin-transform-runtime @babel/runtime-corejs2"></a>@babel/polyfill  @babel/plugin-transform-runtime @babel/runtime-corejs2</h5><p>@babel/preset-env 只会转换新语法，但是不会转换新的api,比如 <code>Array.from</code></p>
+<p>需要 @babel/polyfill 转换新的api,但是 @babel/polyfill 会全量引入，不能按需引入</p>
+<p>可以通过 <code>babel.rc</code> 配置文件来实现</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;presets&quot;</span>: [</span><br><span class="line">    [</span><br><span class="line">      <span class="string">&quot;@babel/preset-env&quot;</span>,</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="attr">&quot;useBuiltIns&quot;</span>: <span class="string">&quot;entry&quot;</span></span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>但是@babel/preset-env也存在问题，虽然会按需引入但是每个文件如果有重复的方法，都会被编译成相同的代码引入，文件多的时候会让冗余的代码越来越多</p>
+<p>@babel/runtime-corejs2 是一个随着 <a target="_blank" rel="noopener" href="https://babeljs.io/docs/en/babel-plugin-transform-runtime">@babel/plugin-transform-runtime</a> 一起时使用的运行时依赖，会把重复的函数覆盖为 @babel/runtime-corejs2 中的引用</p>
+<p>@babel/runtime-corejs2 仅仅是一个包含着函数的包，把函数以模块化的形式引入</p>
+<p>.babelrc</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;plugins&quot;</span>: [</span><br><span class="line">    [</span><br><span class="line">      <span class="string">&quot;@babel/plugin-transform-runtime&quot;</span>,</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="attr">&quot;corejs&quot;</span>: <span class="number">3</span></span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="treeshaking"><a href="#treeshaking" class="headerlink" title="treeshaking"></a>treeshaking</h4><p>webpack4 production 默认开启，需要引入的库使用commonjs 模块化规范</p>
+<p>如 loadsh-es</p>
+<h4 id="全局引入"><a href="#全局引入" class="headerlink" title="全局引入"></a>全局引入</h4><p><a target="_blank" rel="noopener" href="https://webpack.js.org/plugins/provide-plugin/#root">provide-plugin</a></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">plugins: [</span><br><span class="line">  <span class="keyword">new</span> webpack.ProvidePlugin(&#123;</span><br><span class="line">    $: <span class="string">&#x27;jquery&#x27;</span>,</span><br><span class="line">  &#125;)</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<p>多入口文件的每一个都会被引入jquery，所以需要提取公共代码</p>
+<h4 id="动态加载"><a href="#动态加载" class="headerlink" title="动态加载"></a>动态加载</h4><p><a target="_blank" rel="noopener" href="https://babeljs.io/docs/en/babel-plugin-syntax-dynamic-import">@babel/plugin-syntax-dynamic-import</a></p>
+<p><a target="_blank" rel="noopener" href="https://webpack.js.org/guides/code-splitting/#dynamic-imports">Dynamic Imports</a></p>
+<p><strong>需要指明webpackChunkName才能被单独打包</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span>(</span><br><span class="line">   <span class="comment">/* webpackChunkName: &quot;my-jquery&quot; */</span></span><br><span class="line">   <span class="string">&#x27;jquery&#x27;</span></span><br><span class="line"> )</span><br><span class="line">   .then(<span class="function">(<span class="params">&#123; <span class="keyword">default</span>: $ &#125;</span>) =&gt;</span> &#123;</span><br><span class="line">     <span class="built_in">console</span>.log($)</span><br><span class="line">     <span class="keyword">return</span> $(<span class="string">&#x27;body&#x27;</span>);</span><br><span class="line">   &#125;)</span><br></pre></td></tr></table></figure>
+
+<h4 id="代码分割"><a href="#代码分割" class="headerlink" title="代码分割"></a>代码分割</h4><p><a target="_blank" rel="noopener" href="https://webpack.js.org/plugins/split-chunks-plugin/#root">SplitChunksPlugin</a> 代替原来的 commonChunksPlugin</p>
+<ul>
+<li>splitChunks.chunks</li>
+</ul>
+<p>async表示只从异步加载得模块（动态加载import()）里面进行拆分<br>initial表示只从入口模块进行拆分<br>all表示以上两者都包括</p>
+<ul>
+<li>splitChunks.maxInitialRequests</li>
+</ul>
+<p>每个入口的并发请求数, 如果拆出的包的个数大于maxInitialRequests，则不会把较小的包单独拆出</p>
+<ul>
+<li>splitChunks.maxInitialRequests</li>
+</ul>
+<p>动态引入的模块，最多拆分的数量</p>
+<h4 id="css分割"><a href="#css分割" class="headerlink" title="css分割"></a>css分割</h4><p><a target="_blank" rel="noopener" href="https://webpack.js.org/plugins/css-minimizer-webpack-plugin/">css-minimizer-webpack-plugin</a></p>
+<h4 id="压缩css代码"><a href="#压缩css代码" class="headerlink" title="压缩css代码"></a>压缩css代码</h4><p><a target="_blank" rel="noopener" href="https://webpack.js.org/plugins/mini-css-extract-plugin/#getting-started">MiniCssExtractPlugin</a></p>
+<h4 id="可视化分析"><a href="#可视化分析" class="headerlink" title="可视化分析"></a>可视化分析</h4><p><a target="_blank" rel="noopener" href="https://www.npmjs.com/package/webpack-bundle-analyzer">webpack-bundle-analyzer</a></p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/webpack/" rel="tag">webpack</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/" rel="tag">单元测试</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" rel="tag">工程化</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+   
+</article>
+
+    
+    <article
+  id="post-javascript/engineering/热部署代码"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/posts/e3b6331f/"
+    >热部署代码</a> 
+</h2>
+ 
+
+    </header>
+     
+    <div class="article-meta">
+      <a href="/posts/e3b6331f/" class="article-date">
+  <time datetime="2020-12-26T13:26:36.000Z" itemprop="datePublished">2020-12-26</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/JavaScript/">JavaScript</a> / <a class="article-category-link" href="/categories/JavaScript/%E5%B7%A5%E7%A8%8B%E5%8C%96/">工程化</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">&quot;fs&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">&quot;path&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> vm = <span class="built_in">require</span>(<span class="string">&quot;vm&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> handlerMap = &#123;&#125;;</span><br><span class="line"><span class="keyword">const</span> hotsPath = path.join(__dirname, <span class="string">&quot;hots&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 加载文件代码 并 监听指定文件夹目录文件内容变动</span></span><br><span class="line"><span class="keyword">const</span> loadHandlers = <span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line">  <span class="comment">// 遍历出指定文件夹下的所有文件</span></span><br><span class="line">  <span class="keyword">const</span> files = <span class="keyword">await</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">//https://nodejs.org/dist/latest-v14.x/docs/api/fs.html#fs_fs_readdir_path_options_callback</span></span><br><span class="line">    <span class="comment">//异步读取指定目录下的文件和文件夹，返回一个数组</span></span><br><span class="line">    fs.readdir(hotsPath, <span class="function">(<span class="params">err, files</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (err) &#123;</span><br><span class="line">        reject(err);</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        resolve(files);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="comment">// 初始化加载所有文件 把每个文件结果缓存到handlerMap变量当中</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> f <span class="keyword">in</span> files) &#123;</span><br><span class="line">    handlerMap[files[f]] = <span class="keyword">await</span> loadHandler(path.join(hotsPath, files[f]));</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 监听指定文件夹的文件内容变动</span></span><br><span class="line">  <span class="keyword">await</span> watchHandlers();</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 监视指定文件夹下的文件变动</span></span><br><span class="line"><span class="keyword">const</span> watchHandlers = <span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line">  <span class="comment">// 这里建议用chokidar的npm包代替文件夹监听 </span></span><br><span class="line">  <span class="comment">// 监听所有子文件夹</span></span><br><span class="line">  fs.watch(hotsPath, &#123; <span class="attr">recursive</span>: <span class="literal">true</span> &#125;, <span class="keyword">async</span> (eventType, filename) =&gt; &#123;</span><br><span class="line">    <span class="comment">// 获取到每个文件的绝对路径 </span></span><br><span class="line">    <span class="comment">// 包一层require.resolve的原因，拼接好路径以后，它会主动去帮你判断这个路径下的文件是否存在</span></span><br><span class="line">    <span class="comment">//使用require.resolve函数查询模块文件名时并不会加载该模块。</span></span><br><span class="line">    <span class="keyword">const</span> targetFile = <span class="built_in">require</span>.resolve(path.join(hotsPath, filename));</span><br><span class="line">    <span class="comment">// 使用require加载一个模块后，模块的数据就会缓存到require.cache中，下次再加载相同模块，就会直接走require.cache</span></span><br><span class="line">    <span class="comment">// 所以我们热加载部署，首要做的就是清除require.cache中对应文件的缓存</span></span><br><span class="line">    <span class="keyword">const</span> cacheModule = <span class="built_in">require</span>.cache[targetFile];</span><br><span class="line">    <span class="comment">// 去除掉在require.cache缓存中parent对当前模块的引用，否则会引起内存泄露，具体解释可以看下面的文章</span></span><br><span class="line">	<span class="comment">// 《记录一次由一行代码引发的“血案”》https://cnodejs.org/topic/5aaba2dc19b2e3db18959e63</span></span><br><span class="line">	<span class="comment">// 《一行 delete require.cache 引发的内存泄漏血案》https://zhuanlan.zhihu.com/p/34702356</span></span><br><span class="line">    <span class="keyword">if</span> (cacheModule.parent) &#123;    </span><br><span class="line">        cacheModule.parent.children.splice(cacheModule.parent.children.indexOf(cacheModule), <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 清除指定路径对应模块的require.cache缓存</span></span><br><span class="line">    <span class="built_in">require</span>.cache[targetFile] = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 重新加载发生变动后的模块文件，实现热加载部署效果，并将重新加载后的结果，更新到handlerMap变量当中</span></span><br><span class="line">    <span class="keyword">const</span> code = <span class="keyword">await</span> loadHandler(targetFile)</span><br><span class="line">    handlerMap[filename] = code;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;热部署文件：&quot;</span>, filename, <span class="string">&quot;，执行结果：&quot;</span>, handlerMap);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 加载指定文件的代码</span></span><br><span class="line"><span class="keyword">const</span> loadHandler = <span class="function"><span class="params">filename</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">//https://nodejs.org/dist/latest-v14.x/docs/api/fs.html#fs_fs_readfile_path_options_callback</span></span><br><span class="line">    <span class="comment">//读取文件中的内容 默认返回buffer</span></span><br><span class="line">    <span class="comment">//当目录为文件夹时抛出错误</span></span><br><span class="line">    fs.readFile(filename, <span class="function">(<span class="params">err, data</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (err) &#123;</span><br><span class="line">        resolve(<span class="literal">null</span>);</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">          <span class="comment">// 使用vm模块的Script方法来预编译发生变化后的文件代码，检查语法错误，提前发现是否存在语法错误等报错</span></span><br><span class="line">          <span class="keyword">new</span> vm.Script(data);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">          <span class="comment">// 语法错误,编译失败</span></span><br><span class="line">          reject(e);</span><br><span class="line">          <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 编译通过后，重新require加载最新的代码</span></span><br><span class="line">        resolve(<span class="built_in">require</span>(filename));</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">loadHandlers()</span><br></pre></td></tr></table></figure> 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" rel="tag">工程化</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+   
+</article>
+
+    
+    <article
   id="post-javascript/engineering/文件自动同步服务器"
   class="article article-type-post"
   itemscope
@@ -814,194 +1005,6 @@ $ vue init username/repo my-project</code></pre>
     <footer class="article-footer">
        
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-   
-</article>
-
-    
-    <article
-  id="post-linux/question/网络配置问题"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/posts/cb5b2e8d/"
-    >网络配置问题</a> 
-</h2>
- 
-
-    </header>
-     
-    <div class="article-meta">
-      <a href="/posts/cb5b2e8d/" class="article-date">
-  <time datetime="2020-12-03T01:39:04.000Z" itemprop="datePublished">2020-12-03</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Linux/">Linux</a> / <a class="article-category-link" href="/categories/Linux/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/">常见问题</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p><strong>可以使用<code>type +命令</code>来查看命令所在目录</strong></p>
-<h4 id="查看网络配置基本信息"><a href="#查看网络配置基本信息" class="headerlink" title="查看网络配置基本信息"></a>查看网络配置基本信息</h4><p>centenOS 6 之前使用 <code>ifconfg</code> 命令, 之后使用<code>ip</code> 命令， 也可以安装 <code>ifconfig</code>命令包</p>
-<h4 id="重启网卡"><a href="#重启网卡" class="headerlink" title="重启网卡"></a>重启网卡</h4><p>如果可以直接操作服务其 可以使用 <code>ifup</code> ,<code>ifdown</code></p>
-<p>如果提示系统没有命令可以使用 <code>apt install ifupdown</code>安装</p>
-<p><strong>如果是远程不能使用这个两个命令重启网卡，使用ifdown后会断开网络连接</strong></p>
-<p>可以在确保网络配置修改成功之后，使用 <code>systemctl restar network</code></p>
-<p>如果命令不可用可以使用 <code>service network-manager restart</code></p>
-<p>如果是 Kali Linux（Debian），则需要<code>service networking restart</code></p>
-<p>如果是Centos 8 需要<code>nmcli c reload</code></p>
-<h4 id="查找占用端口"><a href="#查找占用端口" class="headerlink" title="查找占用端口"></a>查找占用端口</h4><p>可以使用 <code>ss</code> 或 <code>netstat</code> 命令 后面加 <code> -anp</code> </p>
-<p>如果没有 <code>netstat</code> 命令，可以通过 <code>apt install net-tools</code> 安装</p>
-<p>最后使用 <code>kill</code> 命令杀掉端口</p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-   
-</article>
-
-    
-    <article
-  id="post-javascript/engineering/工程化中的linux"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/posts/ed6b4dad/"
-    >工程化中的linux</a> 
-</h2>
- 
-
-    </header>
-     
-    <div class="article-meta">
-      <a href="/posts/ed6b4dad/" class="article-date">
-  <time datetime="2020-12-02T08:52:11.000Z" itemprop="datePublished">2020-12-02</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/JavaScript/">JavaScript</a> / <a class="article-category-link" href="/categories/JavaScript/%E5%B7%A5%E7%A8%8B%E5%8C%96/">工程化</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h4 id="ps"><a href="#ps" class="headerlink" title="ps"></a>ps</h4><p>查看进程</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps aux</span><br></pre></td></tr></table></figure>
-
-<h4 id="kill-pkill"><a href="#kill-pkill" class="headerlink" title="kill pkill"></a>kill pkill</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">kill</span> -9 pid</span><br></pre></td></tr></table></figure>
-
-<p>pkill 后面可以直接写进程的名字</p>
-<p>如果是一个服务使用 <code>systemctl stop</code></p>
-<h4 id="w-who"><a href="#w-who" class="headerlink" title="w who"></a>w who</h4><p>看谁正在连接系统</p>
-<h4 id="lsof-查看端口占用"><a href="#lsof-查看端口占用" class="headerlink" title="lsof 查看端口占用"></a>lsof 查看端口占用</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#列出所有打开的文件:</span></span><br><span class="line">lsof</span><br><span class="line">备注: 如果不加任何参数，就会打开所有被打开的文件，建议加上一下参数来具体定位</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看谁正在使用某个文件</span></span><br><span class="line">lsof   /filepath/file</span><br><span class="line"></span><br><span class="line"><span class="comment">#递归查看某个目录的文件信息</span></span><br><span class="line">lsof +D /filepath/filepath2/</span><br><span class="line">备注: 使用了+D，对应目录下的所有子目录和文件都会被列出</span><br><span class="line"></span><br><span class="line"><span class="comment"># 比使用+D选项，遍历查看某个目录的所有文件信息 的方法</span></span><br><span class="line">lsof | grep ‘/filepath/filepath2/’</span><br><span class="line"></span><br><span class="line"><span class="comment"># 列出某个用户打开的文件信息</span></span><br><span class="line">lsof  -u username</span><br><span class="line">备注: -u 选项，u其实是user的缩写</span><br><span class="line"></span><br><span class="line"><span class="comment"># 列出某个程序所打开的文件信息</span></span><br><span class="line">lsof -c mysql</span><br><span class="line">备注: -c 选项将会列出所有以mysql开头的程序的文件，其实你也可以写成lsof | grep mysql,但是第一种方法明显比第二种方法要少打几个字符了</span><br><span class="line"></span><br><span class="line"><span class="comment"># 列出多个程序多打开的文件信息</span></span><br><span class="line">lsof -c mysql -c apache</span><br><span class="line"></span><br><span class="line"><span class="comment"># 列出某个用户以及某个程序所打开的文件信息</span></span><br><span class="line">lsof -u <span class="built_in">test</span> -c mysql</span><br><span class="line"></span><br><span class="line"><span class="comment"># 列出除了某个用户外的被打开的文件信息</span></span><br><span class="line">lsof   -u ^root</span><br><span class="line">备注：^这个符号在用户名之前，将会把是root用户打开的进程不让显示</span><br><span class="line"></span><br><span class="line"><span class="comment"># 通过某个进程号显示该进行打开的文件</span></span><br><span class="line">lsof -p 1</span><br><span class="line"></span><br><span class="line"><span class="comment"># 列出多个进程号对应的文件信息</span></span><br><span class="line">lsof -p 123,456,789</span><br><span class="line"></span><br><span class="line"><span class="comment"># 列出除了某个进程号，其他进程号所打开的文件信息</span></span><br><span class="line">lsof -p ^1</span><br><span class="line"></span><br><span class="line"><span class="comment"># 列出所有的网络连接</span></span><br><span class="line">lsof -i</span><br><span class="line"></span><br><span class="line"><span class="comment"># 列出所有tcp 网络连接信息</span></span><br><span class="line">lsof  -i tcp</span><br><span class="line"></span><br><span class="line"><span class="comment"># 列出所有udp网络连接信息</span></span><br><span class="line">lsof  -i udp</span><br><span class="line"></span><br><span class="line"><span class="comment"># 列出谁在使用某个端口</span></span><br><span class="line">lsof -i :3306</span><br><span class="line"></span><br><span class="line"><span class="comment"># 列出谁在使用某个特定的udp端口</span></span><br><span class="line">lsof -i udp:55</span><br><span class="line"></span><br><span class="line"><span class="comment"># 特定的tcp端口</span></span><br><span class="line">lsof -i tcp:80</span><br><span class="line"></span><br><span class="line"><span class="comment"># 列出某个用户的所有活跃的网络端口</span></span><br><span class="line">lsof  -a -u <span class="built_in">test</span> -i</span><br><span class="line"></span><br><span class="line"><span class="comment"># 列出所有网络文件系统</span></span><br><span class="line">lsof -N</span><br><span class="line"></span><br><span class="line"><span class="comment">#域名socket文件</span></span><br><span class="line">lsof -u</span><br><span class="line"></span><br><span class="line"><span class="comment">#某个用户组所打开的文件信息</span></span><br><span class="line">lsof -g 5555</span><br><span class="line"></span><br><span class="line"><span class="comment"># 根据文件描述列出对应的文件信息</span></span><br><span class="line">lsof -d description(like 2)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 根据文件描述范围列出文件信息</span></span><br><span class="line">lsof -d 2-3</span><br></pre></td></tr></table></figure>
-
-<h4 id="免密登陆"><a href="#免密登陆" class="headerlink" title="免密登陆"></a>免密登陆</h4><ul>
-<li>生成密钥对</li>
-</ul>
-<p>-t 指定密钥类型，默认是 rsa ，可以省略。<br>-C 设置注释文字，比如邮箱。<br>-f 指定密钥文件存储文件名。</p>
-<p><strong>默认生成在home文件加下面</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa -C <span class="string">&quot;自己的名字&quot;</span> -f <span class="string">&quot;名字_rsa(自定义文件名)&quot;</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>上传共钥到服务器对应账号的home目录下.ssh文件夹下面</li>
-</ul>
-<p>公钥的权限为600</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-copy-id -i mykey_rsa.pub user@xxx.xxx.xxx.xxx </span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>指定私钥登陆</li>
-</ul>
-<p>私钥的权限为600</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -i 私钥 user@xxx.xxx.xxx.xxx</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>通过配置文件免密登陆</li>
-</ul>
-<p>把私钥复制到home下的.ssh文件夹下面</p>
-<p>创建cnofig文件</p>
-<p>配置单一服务器免密登陆</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Host 别名</span><br><span class="line">　　HostName IP</span><br><span class="line">　　Port 端口</span><br><span class="line">　　User 用户名</span><br><span class="line">　　IdentitiesOnly yes</span><br><span class="line">   IdentityFile ~/.ssh/user_rsa  (私钥路径)</span><br><span class="line">   Protocal 2 (协议版本号)</span><br><span class="line">   Compression yes </span><br><span class="line">   ServerAliveInterval 60 （防止被踢配置，长时间没有操作会被踢掉，每隔60秒发一个信号）</span><br><span class="line">   ServerAliveCountMax 20 (最大连接数)</span><br><span class="line">   LogLevel INFO</span><br></pre></td></tr></table></figure>
-
-<p>多个账号的免密的登陆</p>
-<p>分别配置部分</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Host xxx-produce</span><br><span class="line">HostName IP</span><br><span class="line">Port 端口</span><br></pre></td></tr></table></figure>
-
-<p>公共配置部分</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Host *_produce</span><br><span class="line">其他配置相同</span><br></pre></td></tr></table></figure>
-
-<p>config的权限为 644</p>
-<h4 id="wget"><a href="#wget" class="headerlink" title="wget"></a>wget</h4><p>wget 是一个从网络上自动下载文件的自由工具，支持通过 HTTP、HTTPS、FTP 三个最常见的 TCP/IP协议 下载，并可以使用 HTTP 代理。”wget” 这个名称来源于 “World Wide Web” 与 “get” 的结合。</p>
-<p>wget可以在用户退出系统的之后在后台执行。这意味这你可以登录系统，启动一个wget下载任务，然后退出系统，wget将在后台执行直到任务完成，相对于其它大部分浏览器在下载大量数据时需要用户一直的参与.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget (选项) (参数)</span><br></pre></td></tr></table></figure>
-
-<p>其中选项如下：</p>
-<p>-a&lt;日志文件&gt;：在指定的日志文件中记录资料的执行过程；</p>
-<p>-A&lt;后缀名&gt;：指定要下载文件的后缀名，多个后缀名之间使用逗号进行分隔；</p>
-<p>-b：进行后台的方式运行wget；</p>
-<p>-B&lt;连接地址&gt;：设置参考的连接地址的基地地址；</p>
-<p>-c：继续执行上次终端的任务；</p>
-<p>-C&lt;标志&gt;：设置服务器数据块功能标志on为激活，off为关闭，默认值为on；</p>
-<p>-d：调试模式运行指令；</p>
-<p>-D&lt;域名列表&gt;：设置顺着的域名列表，域名之间用“，”分隔；</p>
-<p>-e&lt;指令&gt;：作为文件“.wgetrc”中的一部分执行指定的指令；</p>
-<p>-h：显示指令帮助信息；</p>
-<p>-i&lt;文件&gt;：从指定文件获取要下载的URL地址；</p>
-<p>-l&lt;目录列表&gt;：设置顺着的目录列表，多个目录用“，”分隔；</p>
-<p>-L：仅顺着关联的连接；</p>
-<p>-r：递归下载方式；</p>
-<p>-nc：文件存在时，下载文件不覆盖原有文件；</p>
-<p>-nv：下载时只显示更新和出错信息，不显示指令的详细执行过程；</p>
-<p>-q：不显示指令执行过程；</p>
-<p>-nh：不查询主机名称；</p>
-<p>-v：显示详细执行过程；</p>
-<p>-V：显示版本信息；</p>
-<p>–passive-ftp：使用被动模式PASV连接FTP服务器；</p>
-<p>–follow-ftp：从HTML文件中下载FTP连接文件。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">wget http://test.com/testfile.zip -&gt;下载指定文件到当前文件夹</span><br><span class="line">wget -O wordpress.zip http://test.com/download -&gt;指定保存名字</span><br><span class="line">wget --limit-rate=300k http://www.linuxde.net/testfile.zip -&gt;限制下载速度</span><br><span class="line">wget -c http://www.linuxde.net/testfile.zip -&gt;断点续传</span><br><span class="line">wget -b http://www.linuxde.net/testfile.zip -&gt;后台下载</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置使用指定浏览器下载（伪装下载）</span></span><br><span class="line">wget --user-agent=<span class="string">&quot;Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US) AppleWebKit/534.16 (KHTML, like Gecko) Chrome/10.0.648.204 Safari/534.16&quot;</span> http://www.linuxde.net/testfile.zip</span><br><span class="line"></span><br><span class="line">wget --spider url -&gt;测试下载</span><br><span class="line">wget --tries=40 URL -&gt;设置重试次数为40</span><br><span class="line">wget -i filelist.txt -&gt;从filelist.txt获取下载地址</span><br><span class="line"></span><br><span class="line"><span class="comment"># 镜像网站</span></span><br><span class="line"><span class="comment"># --miror开户镜像下载。</span></span><br><span class="line"><span class="comment"># -p下载所有为了html页面显示正常的文件。</span></span><br><span class="line"><span class="comment"># --convert-links下载后，转换成本地的链接。</span></span><br><span class="line"><span class="comment"># -P ./LOCAL保存所有文件和目录到本地指定目录</span></span><br><span class="line">wget --mirror -p --convert-links -P ./LOCAL URL</span><br><span class="line"></span><br><span class="line">wget --reject=gif ur -&gt;下载一个网站，但你不希望下载图片，可以使用这条命令</span><br><span class="line">wget -o download.log URL -&gt;把下载信息存入日志文件</span><br><span class="line">wget -Q5m -i filelist.txt -&gt;限制总下载文件大小</span><br><span class="line">wget -r -A.pdf url -&gt;下载指定格式文件</span><br><span class="line"></span><br><span class="line"><span class="comment"># FTP下载</span></span><br><span class="line">wget ftp-url</span><br><span class="line">wget --ftp-user=USERNAME --ftp-password=PASSWORD url</span><br></pre></td></tr></table></figure> 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" rel="tag">工程化</a></li></ul>
 
     </footer>
   </div>

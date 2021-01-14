@@ -113,6 +113,151 @@ var _hmt = _hmt || [];
     
     
     <article
+  id="post-javascript/used/co模块"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/posts/3688f66e/"
+    >co模块</a> 
+</h2>
+ 
+
+    </header>
+     
+    <div class="article-meta">
+      <a href="/posts/3688f66e/" class="article-date">
+  <time datetime="2021-01-14T05:37:56.000Z" itemprop="datePublished">2021-01-14</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/JavaScript/">JavaScript</a> / <a class="article-category-link" href="/categories/JavaScript/%E5%BA%94%E7%94%A8%E6%A1%88%E4%BE%8B/">应用案例</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h4 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h4><p>基于生成器的nodej和浏览器控制流，使用promises，让您以一种很好的方式编写非阻塞代码。</p>
+<p>可以让Generator函数的自动执行。不用编写Generator函数的执行器。</p>
+<h4 id="API"><a href="#API" class="headerlink" title="API"></a>API</h4><p>*<em>co(fn</em>).then( val =&gt; )**</p>
+<p>通过解析一个Generator，Generator函数，或任何返回Generator的函数，并返回一个Promise</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">co(<span class="function"><span class="keyword">function</span>* (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">yield</span> <span class="built_in">Promise</span>.resolve(<span class="literal">true</span>);</span><br><span class="line">&#125;).then(<span class="function"><span class="keyword">function</span> (<span class="params">val</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(val);</span><br><span class="line">&#125;, <span class="function"><span class="keyword">function</span> (<span class="params">err</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.error(err.stack);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>*<em>var fn = co.wrap(fn</em>)**</p>
+<p>把<code>generator</code>转换为一个普通函数并返回<code>Promise</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> fn = co.wrap(<span class="function"><span class="keyword">function</span>* (<span class="params">val</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">yield</span> <span class="built_in">Promise</span>.resolve(val);</span><br><span class="line">&#125;);</span><br><span class="line"> </span><br><span class="line">fn(<span class="literal">true</span>).then(<span class="function"><span class="keyword">function</span> (<span class="params">val</span>) </span>&#123;</span><br><span class="line"> </span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h4 id="执行逻辑"><a href="#执行逻辑" class="headerlink" title="执行逻辑"></a>执行逻辑</h4><ul>
+<li><p><code>co(fn)</code> 执行传入<code>co</code>模块的 generator 函数 fn </p>
+</li>
+<li><p>把 fn 执行的结果 res，包装成 promise 对象</p>
+</li>
+</ul>
+<p><code>const gen = fn(); const res = gen.next()</code>  <code>const rp =  toPromise(res.value)</code></p>
+<ul>
+<li>如果是合法的 promise 这继续调用 fn 的 next 方法</li>
+</ul>
+<p><code>rp.then((value)=&gt; res.next())</code></p>
+<p>co其实是一个返回promise对象的函数， 内部通过递归的方式调用 generator 的 next 方法</p>
+<h4 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h4><p>工具方法</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// sllice 引用</span></span><br><span class="line"><span class="keyword">var</span> slice = <span class="built_in">Array</span>.prototype.slice;</span><br><span class="line"></span><br><span class="line"><span class="comment">// isObject</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">isObject</span>(<span class="params">val</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">Object</span> == val.constructor;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//导出方法</span></span><br><span class="line"><span class="built_in">module</span>.exports = co[<span class="string">&#x27;default&#x27;</span>] = co.co = co;</span><br><span class="line"></span><br><span class="line"><span class="comment">//判断是否是promise对象，只要是实现了thenable的对象都可以视为promise对象</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">isPromise</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="string">&#x27;function&#x27;</span> == <span class="keyword">typeof</span> obj.then;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">isGenerator</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="string">&#x27;function&#x27;</span> == <span class="keyword">typeof</span> obj.next &amp;&amp; <span class="string">&#x27;function&#x27;</span> == <span class="keyword">typeof</span> obj.throw;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 是否是generator函数</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">isGeneratorFunction</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 一定是GeneratorFunction构造函数的实例</span></span><br><span class="line">  <span class="comment">// (function()&#123;&#125;).constructor === Function =&gt; true</span></span><br><span class="line">  <span class="keyword">var</span> <span class="title">constructor</span> = <span class="title">obj</span>.<span class="title">constructor</span>;</span><br><span class="line">  <span class="keyword">if</span> (!<span class="title">constructor</span>) <span class="title">return</span> <span class="title">false</span>;</span><br><span class="line">  <span class="keyword">if</span> (<span class="string">&#x27;GeneratorFunction&#x27;</span> === <span class="title">constructor</span>.<span class="title">name</span> || &#x27;<span class="title">GeneratorF</span>方法</span><br><span class="line"><span class="title">function</span> <span class="title">thunkToPromise</span>(<span class="params">fn</span>) &#123;</span><br><span class="line">  <span class="keyword">var</span> ctx = <span class="built_in">this</span>;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span> (<span class="params">resolve, reject</span>) </span>&#123;</span><br><span class="line">    fn.call(ctx, <span class="function"><span class="keyword">function</span> (<span class="params">err, res</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">if</span> (err) <span class="keyword">return</span> reject(err);</span><br><span class="line">      <span class="keyword">if</span> (<span class="built_in">arguments</span>.length &gt; <span class="number">2</span>) res = slice.call(<span class="built_in">arguments</span>, <span class="number">1</span>);</span><br><span class="line">      resolve(res);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// arrayToPromise yeildable数组转换为promise</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">arrayToPromise</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 每一项都转换为promise</span></span><br><span class="line">  <span class="comment">// 第二个参数为toPromise执行时的this值</span></span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">Promise</span>.all(obj.map(toPromise, <span class="built_in">this</span>));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// objectToPromise yieldables对象转为promise</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">objectToPromise</span>(<span class="params">obj</span>)</span>&#123;</span><br><span class="line">  <span class="comment">// 借用 function Object()&#123;&#125;</span></span><br><span class="line">  <span class="keyword">var</span> results = <span class="keyword">new</span> obj.constructor();</span><br><span class="line">  <span class="keyword">var</span> keys = <span class="built_in">Object</span>.keys(obj);</span><br><span class="line">  <span class="keyword">var</span> promises = [];</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; keys.length; i++) &#123;</span><br><span class="line">    <span class="keyword">var</span> key = keys[i];</span><br><span class="line">    <span class="comment">// 每一项转为promise</span></span><br><span class="line">    <span class="keyword">var</span> promise = toPromise.call(<span class="built_in">this</span>, obj[key]);</span><br><span class="line">    <span class="keyword">if</span> (promise &amp;&amp; isPromise(promise)) defer(promise, key);</span><br><span class="line">    <span class="comment">// 其他情况直接返回key值</span></span><br><span class="line">    <span class="keyword">else</span> results[key] = obj[key];</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">Promise</span>.all(promises).then(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> results;</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">defer</span>(<span class="params">promise, key</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 提前在results中定义key</span></span><br><span class="line">    results[key] = <span class="literal">undefined</span>;</span><br><span class="line">    promises.push(promise.then(<span class="function"><span class="keyword">function</span> (<span class="params">res</span>) </span>&#123;</span><br><span class="line">      <span class="comment">// 提前一步拿到结果</span></span><br><span class="line">      <span class="comment">// 通常自己的写法为这里直接返回promise</span></span><br><span class="line">      <span class="comment">// 在promise.all 中在遍历结果生成result,这样写法更简洁一点</span></span><br><span class="line">      results[key] = res;</span><br><span class="line">    &#125;));</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//把yeild转为Promise对象</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">toPromise</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 如果为假直接返回</span></span><br><span class="line">  <span class="keyword">if</span> (!obj) <span class="keyword">return</span> obj;</span><br><span class="line">  <span class="comment">//如果已经是promise直接返回</span></span><br><span class="line">  <span class="keyword">if</span> (isPromise(obj)) <span class="keyword">return</span> obj;</span><br><span class="line">  <span class="comment">// 如果是generator函数 通过co函数栈为promise</span></span><br><span class="line">  <span class="keyword">if</span> (isGeneratorFunction(obj) || isGenerator(obj)) <span class="keyword">return</span> co.call(<span class="built_in">this</span>, obj);</span><br><span class="line">  <span class="comment">// this通过next方法中toPromise.call(ctx, ret.value)来绑定</span></span><br><span class="line">  <span class="keyword">if</span> (<span class="string">&#x27;function&#x27;</span> == <span class="keyword">typeof</span> obj) <span class="keyword">return</span> thunkToPromise.call(<span class="built_in">this</span>, obj);</span><br><span class="line">  <span class="keyword">if</span> (<span class="built_in">Array</span>.isArray(obj)) <span class="keyword">return</span> arrayToPromise.call(<span class="built_in">this</span>, obj);</span><br><span class="line">  <span class="keyword">if</span> (isObject(obj)) <span class="keyword">return</span> objectToPromise.call(<span class="built_in">this</span>, obj);</span><br><span class="line">  <span class="keyword">return</span> obj;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>co 核心方法</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">co</span>(<span class="params">gen</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> ctx = <span class="built_in">this</span>;</span><br><span class="line">  <span class="keyword">var</span> args = slice.call(<span class="built_in">arguments</span>, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 把任何东西包装成promise, 从而避免promise调用链</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 内存泄漏的问题</span></span><br><span class="line">  <span class="comment">// https://github.com/tj/co/issues/180</span></span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params">resolve, reject</span>) </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 执行Generator函数，返回Generator</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> gen === <span class="string">&#x27;function&#x27;</span>) gen = gen.apply(ctx, args);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 如果没有next方法，则直接返回</span></span><br><span class="line">    <span class="keyword">if</span> (!gen || <span class="keyword">typeof</span> gen.next !== <span class="string">&#x27;function&#x27;</span>) <span class="keyword">return</span> resolve(gen);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    onFulfilled();</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param <span class="type">&#123;Mixed&#125;</span> <span class="variable">res</span></span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return <span class="type">&#123;Promise&#125;</span></span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@api <span class="variable">private</span></span></span></span><br><span class="line"><span class="comment">     * 通过 try catch 捕获执行时错误</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">onFulfilled</span>(<span class="params">res</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">var</span> ret;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        ret = gen.next(res);</span><br><span class="line">      &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">        <span class="keyword">return</span> reject(e);</span><br><span class="line">      &#125;</span><br><span class="line">      next(ret);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param <span class="type">&#123;Error&#125;</span> <span class="variable">err</span></span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return <span class="type">&#123;Promise&#125;</span></span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@api <span class="variable">private</span></span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">onRejected</span>(<span class="params">err</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">var</span> ret;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        ret = gen.throw(err);</span><br><span class="line">      &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">        <span class="keyword">return</span> reject(e);</span><br><span class="line">      &#125;</span><br><span class="line">      next(ret);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Get the next value in the generator,</span></span><br><span class="line"><span class="comment">     * return a promise.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param <span class="type">&#123;Object&#125;</span> <span class="variable">ret</span></span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return <span class="type">&#123;Promise&#125;</span></span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@api <span class="variable">private</span></span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">next</span>(<span class="params">ret</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">if</span> (ret.done) <span class="keyword">return</span> resolve(ret.value);</span><br><span class="line">      <span class="keyword">var</span> value = toPromise.call(ctx, ret.value);</span><br><span class="line">      <span class="comment">// 如果可以包装成promise, 通过thenable方法继续调用onFulfilled，执行下一个next, 并把promise的值传入，当作上一个next的结果</span></span><br><span class="line">      <span class="keyword">if</span> (value &amp;&amp; isPromise(value)) <span class="keyword">return</span> value.then(onFulfilled, onRejected);</span><br><span class="line">      <span class="comment">// 抛出错误</span></span><br><span class="line">      <span class="keyword">return</span> onRejected(<span class="keyword">new</span> <span class="built_in">TypeError</span>(<span class="string">&#x27;You may only yield a function, promise, generator, array, or object, &#x27;</span></span><br><span class="line">        + <span class="string">&#x27;but the following object was passed: &quot;&#x27;</span> + <span class="built_in">String</span>(ret.value) + <span class="string">&#x27;&quot;&#x27;</span>));</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>co.wrap(fn*)</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 通过柯理化函数，返回一个包含co执行结果的正常函数</span></span><br><span class="line"></span><br><span class="line">co.wrap = <span class="function"><span class="keyword">function</span> (<span class="params">fn</span>) </span>&#123;</span><br><span class="line">  createPromise.__generatorFunction__ = fn;</span><br><span class="line">  <span class="keyword">return</span> createPromise;</span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">createPromise</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> co.call(<span class="built_in">this</span>, fn.apply(<span class="built_in">this</span>, <span class="built_in">arguments</span>));</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure> 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Node/" rel="tag">Node</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+   
+</article>
+
+    
+    <article
+  id="post-algorithm/structure/数组"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/posts/340249a9/"
+    >数组</a> 
+</h2>
+ 
+
+    </header>
+     
+    <div class="article-meta">
+      <a href="/posts/340249a9/" class="article-date">
+  <time datetime="2021-01-14T03:03:00.000Z" itemprop="datePublished">2021-01-14</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a> / <a class="article-category-link" href="/categories/%E7%AE%97%E6%B3%95/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h4 id="unshift-开头插入元素"><a href="#unshift-开头插入元素" class="headerlink" title="unshift 开头插入元素"></a>unshift 开头插入元素</h4><p>unshift 实现原理如下</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Array</span>.prototype.unshift = <span class="function"><span class="keyword">function</span> (<span class="params">value</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> len = <span class="built_in">this</span>.length;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = len; i &gt; <span class="number">0</span>; i--) &#123;</span><br><span class="line">    <span class="built_in">this</span>[i] = <span class="built_in">this</span>[i - <span class="number">1</span>];</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">this</span>[<span class="number">0</span>] = value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="shift-删除开头元素"><a href="#shift-删除开头元素" class="headerlink" title="shift 删除开头元素"></a>shift 删除开头元素</h4><p>如果只是单纯的用后一个位置覆盖前一个位置，数组的长度没有发生改变，最后一个将为<code>undefined</code>，可能导致错误</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; numbers.length; i++) &#123;</span><br><span class="line">  numbers[i] = numbers[i + <span class="number">1</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以通过<code>length</code>属性来修改</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Array</span>.prototype.shift = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> item = <span class="built_in">this</span>[<span class="number">0</span>];</span><br><span class="line">  length = <span class="built_in">this</span>.length;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; length - <span class="number">1</span>; i++) &#123;</span><br><span class="line">    <span class="built_in">this</span>[i] = <span class="built_in">this</span>[i + <span class="number">1</span>]</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">this</span>.length--;</span><br><span class="line">  <span class="keyword">return</span> item;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="类型数组"><a href="#类型数组" class="headerlink" title="类型数组"></a>类型数组</h4><p>类型数组则用于存储单一类型的数据。它的语法是 let myArray = new TypedArray(length) ,其中 TypedArray 需替换为下表所列之一。</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%B0%E7%BB%84/" rel="tag">数组</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+   
+</article>
+
+    
+    <article
   id="post-node/nginx"
   class="article article-type-post"
   itemscope
@@ -233,12 +378,7 @@ var _hmt = _hmt || [];
 </li>
 </ul>
 <p>现在可以通过 服务器地址 + 项项目目配置的端口号 访问项目</p>
-<h4 id="配置Nginx"><a href="#配置Nginx" class="headerlink" title="配置Nginx"></a><a href="/posts/a477be03">配置Nginx</a></h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install nginx</span><br></pre></td></tr></table></figure>
-
-
-
-
- 
+<h4 id="配置Nginx"><a href="#配置Nginx" class="headerlink" title="配置Nginx"></a><a href="/posts/a477be03">配置Nginx</a></h4> 
       <!-- reward -->
       
     </div>
@@ -780,197 +920,6 @@ var _hmt = _hmt || [];
     <footer class="article-footer">
        
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%BA%94%E7%94%A8%E6%A1%88%E4%BE%8B/" rel="tag">应用案例</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-   
-</article>
-
-    
-    <article
-  id="post-javascript/engineering/webpack核心概念"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/posts/731d431a/"
-    >webpack核心概念</a> 
-</h2>
- 
-
-    </header>
-     
-    <div class="article-meta">
-      <a href="/posts/731d431a/" class="article-date">
-  <time datetime="2020-12-26T14:46:37.000Z" itemprop="datePublished">2020-12-26</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/JavaScript/">JavaScript</a> / <a class="article-category-link" href="/categories/JavaScript/%E5%B7%A5%E7%A8%8B%E5%8C%96/">工程化</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><p>推荐就近安装，即安装在项目中，不要安装在全局中</p>
-<p>通过 <code>npx webpack -v</code> 查看项目中 webpack 版本</p>
-<p><strong>nrm 镜像源管理</strong></p>
-<p><code>yarn add nrm</code></p>
-<p>查看镜像源列表</p>
-<p><code>nrm ls</code></p>
-<p>测速</p>
-<p><code>nrm test taobao</code></p>
-<h4 id="常用工具"><a href="#常用工具" class="headerlink" title="常用工具"></a>常用工具</h4><h5 id="clean-webpack-plugin"><a href="#clean-webpack-plugin" class="headerlink" title="clean-webpack-plugin"></a>clean-webpack-plugin</h5><p><a target="_blank" rel="noopener" href="https://www.npmjs.com/package/clean-webpack-plugin">https://www.npmjs.com/package/clean-webpack-plugin</a></p>
-<h5 id=""><a href="#" class="headerlink" title=""></a></h5><h4 id="source-map"><a href="#source-map" class="headerlink" title="source-map"></a>source-map</h4><p>cheap-module-source-map 用于生产环境，不能暴露源码</p>
-<p>eval-cheap-module-source-map 开发环境中使用</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  devtool:<span class="string">&#x27;cheap-module-source-map&#x27;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="devServer-和热模块更新"><a href="#devServer-和热模块更新" class="headerlink" title="devServer 和热模块更新"></a>devServer 和热模块更新</h4><p>安装devServer</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add -D webpack-dev-server</span><br></pre></td></tr></table></figure>
-
-<p>webpack.config.js 中添加配置项  </p>
-<p>contentBase 只有需要在访问静态文件时候使用，默认下面三个配置项都可以不写</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">devServer: &#123;</span><br><span class="line">  contentBase: path.join(__dirname, <span class="string">&#x27;dist&#x27;</span>),</span><br><span class="line">  compress: <span class="literal">true</span>,</span><br><span class="line">  port: <span class="number">9000</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>package.json 中添加启动命令</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;scripts&quot;</span>:&#123;</span><br><span class="line">    <span class="attr">&quot;server&quot;</span>: <span class="string">&quot;webpack-dev-server --open&quot;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>开启hmr</p>
-<p>1.配置webpack-dev-server<br>2.devServer配置hot:true<br>3.plugins hotModuleeReplaceMentPlugin<br>4.js 文件中添加hmr代码</p>
-<p>webpack.config.js 中添加</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> webpack = <span class="built_in">require</span>(<span class="string">&#x27;webpack&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  devServer: &#123;</span><br><span class="line">  ...</span><br><span class="line">  hot:<span class="literal">true</span></span><br><span class="line">  &#125;,</span><br><span class="line">  plugins: [</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">new</span> webpack.NamedModulesPlugin(),</span><br><span class="line">    <span class="keyword">new</span> webpack.HotModuleReplacementPlugin()</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>index.js 增加代码</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="built_in">module</span>.hot) &#123;</span><br><span class="line">  <span class="built_in">module</span>.hot.accept(<span class="string">&#x27;./print.js&#x27;</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;Accepting the updated printMe module!&#x27;</span>);</span><br><span class="line">   printMe();</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-<h4 id="output-和-devserver-中的-publicpath-作用"><a href="#output-和-devserver-中的-publicpath-作用" class="headerlink" title="output 和 devserver 中的 publicpath 作用"></a>output 和 devserver 中的 publicpath 作用</h4><p><a target="_blank" rel="noopener" href="https://webpack.js.org/configuration/output/#outputpublicpath">output 中的 publicpath</a></p>
-<p>这是一个在使用按需加载和引入外部资源（图片,文件等）非常重要的属性，如果设置了一个错误的值，当加载这些资源时会报404错误</p>
-<p>这个配置项指定了输出目录在浏览器中引用时的公共路径（publicpath）,一个相对路径被解析为相对于HTML页面或[‵<base>`标签](<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base">https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base</a>)</p>
-<blockquote>
-<base> 标签为页面上的所有链接规定默认地址或默认目标。
-</blockquote>
-<p>相对服务器的路径，相对与协议的路径，或绝对路径都是有可能的甚至有时是必须的，换句话说，在CMD 托管静态资源</p>
-<p>在运行时或loader处理时，每一个URL的前缀都会被色设置未配置项中的值，这就是为什么在很多例子中这个配置项被设置为 <code>/</code> 的原因</p>
-<p>webpack-dev-server 也需要从publicPath获取信息，使用它来确定从何处提供输出文件。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line">  output: &#123;</span><br><span class="line">    <span class="comment">// One of the below</span></span><br><span class="line">    publicPath: <span class="string">&#x27;https://cdn.example.com/assets/&#x27;</span>, <span class="comment">// CDN (always HTTPS)</span></span><br><span class="line">    publicPath: <span class="string">&#x27;//cdn.example.com/assets/&#x27;</span>, <span class="comment">// CDN (same protocol)</span></span><br><span class="line">    publicPath: <span class="string">&#x27;/assets/&#x27;</span>, <span class="comment">// server-relative</span></span><br><span class="line">    publicPath: <span class="string">&#x27;assets/&#x27;</span>, <span class="comment">// relative to HTML page</span></span><br><span class="line">    publicPath: <span class="string">&#x27;../assets/&#x27;</span>, <span class="comment">// relative to HTML page</span></span><br><span class="line">    publicPath: <span class="string">&#x27;&#x27;</span>, <span class="comment">// relative to HTML page (same directory)</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p><a target="_blank" rel="noopener" href="https://webpack.js.org/configuration/dev-server/#devserverpublicpath-">devServer 中的 publicpath</a></p>
-<p>打包的文件可以在浏览器的这个目录下面得到</p>
-<p>如果服务跑在 <a href="http://localhost:8080，打包的文件为bundle.js，publicPath为">http://localhost:8080，打包的文件为bundle.js，publicPath为</a> <code>/</code>, 可以在 <code>http://localhost:8080/bundle.js</code>访问到打包文件</p>
-<p>如果 publicPath 改为 <code>/assets/</code>, 那么可以在 <code>http://localhost:8080/assets/bundle.js</code>访问，也可以把 publicPath 改为 <code>http://localhost:8080/assets/</code></p>
-<p>这说明了 devServer.publicPath 与 output.publicPath 是一致的</p>
-<h5 id="babel-polyfill-babel-plugin-transform-runtime-babel-runtime-corejs2"><a href="#babel-polyfill-babel-plugin-transform-runtime-babel-runtime-corejs2" class="headerlink" title="@babel/polyfill  @babel/plugin-transform-runtime @babel/runtime-corejs2"></a>@babel/polyfill  @babel/plugin-transform-runtime @babel/runtime-corejs2</h5><p>@babel/preset-env 只会转换新语法，但是不会转换新的api,比如 <code>Array.from</code></p>
-<p>需要 @babel/polyfill 转换新的api,但是 @babel/polyfill 会全量引入，不能按需引入</p>
-<p>可以通过 <code>babel.rc</code> 配置文件来实现</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;presets&quot;</span>: [</span><br><span class="line">    [</span><br><span class="line">      <span class="string">&quot;@babel/preset-env&quot;</span>,</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="attr">&quot;useBuiltIns&quot;</span>: <span class="string">&quot;entry&quot;</span></span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>但是@babel/preset-env也存在问题，虽然会按需引入但是每个文件如果有重复的方法，都会被编译成相同的代码引入，文件多的时候会让冗余的代码越来越多</p>
-<p>@babel/runtime-corejs2 是一个随着 <a target="_blank" rel="noopener" href="https://babeljs.io/docs/en/babel-plugin-transform-runtime">@babel/plugin-transform-runtime</a> 一起时使用的运行时依赖，会把重复的函数覆盖为 @babel/runtime-corejs2 中的引用</p>
-<p>@babel/runtime-corejs2 仅仅是一个包含着函数的包，把函数以模块化的形式引入</p>
-<p>.babelrc</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;plugins&quot;</span>: [</span><br><span class="line">    [</span><br><span class="line">      <span class="string">&quot;@babel/plugin-transform-runtime&quot;</span>,</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="attr">&quot;corejs&quot;</span>: <span class="number">3</span></span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-<h4 id="treeshaking"><a href="#treeshaking" class="headerlink" title="treeshaking"></a>treeshaking</h4><p>webpack4 production 默认开启，需要引入的库使用commonjs 模块化规范</p>
-<p>如 loadsh-es</p>
-<h4 id="全局引入"><a href="#全局引入" class="headerlink" title="全局引入"></a>全局引入</h4><p><a target="_blank" rel="noopener" href="https://webpack.js.org/plugins/provide-plugin/#root">provide-plugin</a></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">plugins: [</span><br><span class="line">  <span class="keyword">new</span> webpack.ProvidePlugin(&#123;</span><br><span class="line">    $: <span class="string">&#x27;jquery&#x27;</span>,</span><br><span class="line">  &#125;)</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
-
-<p>多入口文件的每一个都会被引入jquery，所以需要提取公共代码</p>
-<h4 id="动态加载"><a href="#动态加载" class="headerlink" title="动态加载"></a>动态加载</h4><p><a target="_blank" rel="noopener" href="https://babeljs.io/docs/en/babel-plugin-syntax-dynamic-import">@babel/plugin-syntax-dynamic-import</a></p>
-<p><a target="_blank" rel="noopener" href="https://webpack.js.org/guides/code-splitting/#dynamic-imports">Dynamic Imports</a></p>
-<p><strong>需要指明webpackChunkName才能被单独打包</strong></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span>(</span><br><span class="line">   <span class="comment">/* webpackChunkName: &quot;my-jquery&quot; */</span></span><br><span class="line">   <span class="string">&#x27;jquery&#x27;</span></span><br><span class="line"> )</span><br><span class="line">   .then(<span class="function">(<span class="params">&#123; <span class="keyword">default</span>: $ &#125;</span>) =&gt;</span> &#123;</span><br><span class="line">     <span class="built_in">console</span>.log($)</span><br><span class="line">     <span class="keyword">return</span> $(<span class="string">&#x27;body&#x27;</span>);</span><br><span class="line">   &#125;)</span><br></pre></td></tr></table></figure>
-
-<h4 id="代码分割"><a href="#代码分割" class="headerlink" title="代码分割"></a>代码分割</h4><p><a target="_blank" rel="noopener" href="https://webpack.js.org/plugins/split-chunks-plugin/#root">SplitChunksPlugin</a> 代替原来的 commonChunksPlugin</p>
-<ul>
-<li>splitChunks.chunks</li>
-</ul>
-<p>async表示只从异步加载得模块（动态加载import()）里面进行拆分<br>initial表示只从入口模块进行拆分<br>all表示以上两者都包括</p>
-<ul>
-<li>splitChunks.maxInitialRequests</li>
-</ul>
-<p>每个入口的并发请求数, 如果拆出的包的个数大于maxInitialRequests，则不会把较小的包单独拆出</p>
-<ul>
-<li>splitChunks.maxInitialRequests</li>
-</ul>
-<p>动态引入的模块，最多拆分的数量</p>
-<h4 id="css分割"><a href="#css分割" class="headerlink" title="css分割"></a>css分割</h4><p><a target="_blank" rel="noopener" href="https://webpack.js.org/plugins/css-minimizer-webpack-plugin/">css-minimizer-webpack-plugin</a></p>
-<h4 id="压缩css代码"><a href="#压缩css代码" class="headerlink" title="压缩css代码"></a>压缩css代码</h4><p><a target="_blank" rel="noopener" href="https://webpack.js.org/plugins/mini-css-extract-plugin/#getting-started">MiniCssExtractPlugin</a></p>
-<h4 id="可视化分析"><a href="#可视化分析" class="headerlink" title="可视化分析"></a>可视化分析</h4><p><a target="_blank" rel="noopener" href="https://www.npmjs.com/package/webpack-bundle-analyzer">webpack-bundle-analyzer</a></p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/webpack/" rel="tag">webpack</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/" rel="tag">单元测试</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" rel="tag">工程化</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-   
-</article>
-
-    
-    <article
-  id="post-javascript/engineering/热部署代码"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/posts/e3b6331f/"
-    >热部署代码</a> 
-</h2>
- 
-
-    </header>
-     
-    <div class="article-meta">
-      <a href="/posts/e3b6331f/" class="article-date">
-  <time datetime="2020-12-26T13:26:36.000Z" itemprop="datePublished">2020-12-26</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/JavaScript/">JavaScript</a> / <a class="article-category-link" href="/categories/JavaScript/%E5%B7%A5%E7%A8%8B%E5%8C%96/">工程化</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">&quot;fs&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">&quot;path&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> vm = <span class="built_in">require</span>(<span class="string">&quot;vm&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> handlerMap = &#123;&#125;;</span><br><span class="line"><span class="keyword">const</span> hotsPath = path.join(__dirname, <span class="string">&quot;hots&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 加载文件代码 并 监听指定文件夹目录文件内容变动</span></span><br><span class="line"><span class="keyword">const</span> loadHandlers = <span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line">  <span class="comment">// 遍历出指定文件夹下的所有文件</span></span><br><span class="line">  <span class="keyword">const</span> files = <span class="keyword">await</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">//https://nodejs.org/dist/latest-v14.x/docs/api/fs.html#fs_fs_readdir_path_options_callback</span></span><br><span class="line">    <span class="comment">//异步读取指定目录下的文件和文件夹，返回一个数组</span></span><br><span class="line">    fs.readdir(hotsPath, <span class="function">(<span class="params">err, files</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (err) &#123;</span><br><span class="line">        reject(err);</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        resolve(files);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="comment">// 初始化加载所有文件 把每个文件结果缓存到handlerMap变量当中</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> f <span class="keyword">in</span> files) &#123;</span><br><span class="line">    handlerMap[files[f]] = <span class="keyword">await</span> loadHandler(path.join(hotsPath, files[f]));</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 监听指定文件夹的文件内容变动</span></span><br><span class="line">  <span class="keyword">await</span> watchHandlers();</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 监视指定文件夹下的文件变动</span></span><br><span class="line"><span class="keyword">const</span> watchHandlers = <span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line">  <span class="comment">// 这里建议用chokidar的npm包代替文件夹监听 </span></span><br><span class="line">  <span class="comment">// 监听所有子文件夹</span></span><br><span class="line">  fs.watch(hotsPath, &#123; <span class="attr">recursive</span>: <span class="literal">true</span> &#125;, <span class="keyword">async</span> (eventType, filename) =&gt; &#123;</span><br><span class="line">    <span class="comment">// 获取到每个文件的绝对路径 </span></span><br><span class="line">    <span class="comment">// 包一层require.resolve的原因，拼接好路径以后，它会主动去帮你判断这个路径下的文件是否存在</span></span><br><span class="line">    <span class="comment">//使用require.resolve函数查询模块文件名时并不会加载该模块。</span></span><br><span class="line">    <span class="keyword">const</span> targetFile = <span class="built_in">require</span>.resolve(path.join(hotsPath, filename));</span><br><span class="line">    <span class="comment">// 使用require加载一个模块后，模块的数据就会缓存到require.cache中，下次再加载相同模块，就会直接走require.cache</span></span><br><span class="line">    <span class="comment">// 所以我们热加载部署，首要做的就是清除require.cache中对应文件的缓存</span></span><br><span class="line">    <span class="keyword">const</span> cacheModule = <span class="built_in">require</span>.cache[targetFile];</span><br><span class="line">    <span class="comment">// 去除掉在require.cache缓存中parent对当前模块的引用，否则会引起内存泄露，具体解释可以看下面的文章</span></span><br><span class="line">	<span class="comment">// 《记录一次由一行代码引发的“血案”》https://cnodejs.org/topic/5aaba2dc19b2e3db18959e63</span></span><br><span class="line">	<span class="comment">// 《一行 delete require.cache 引发的内存泄漏血案》https://zhuanlan.zhihu.com/p/34702356</span></span><br><span class="line">    <span class="keyword">if</span> (cacheModule.parent) &#123;    </span><br><span class="line">        cacheModule.parent.children.splice(cacheModule.parent.children.indexOf(cacheModule), <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 清除指定路径对应模块的require.cache缓存</span></span><br><span class="line">    <span class="built_in">require</span>.cache[targetFile] = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 重新加载发生变动后的模块文件，实现热加载部署效果，并将重新加载后的结果，更新到handlerMap变量当中</span></span><br><span class="line">    <span class="keyword">const</span> code = <span class="keyword">await</span> loadHandler(targetFile)</span><br><span class="line">    handlerMap[filename] = code;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&quot;热部署文件：&quot;</span>, filename, <span class="string">&quot;，执行结果：&quot;</span>, handlerMap);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 加载指定文件的代码</span></span><br><span class="line"><span class="keyword">const</span> loadHandler = <span class="function"><span class="params">filename</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">//https://nodejs.org/dist/latest-v14.x/docs/api/fs.html#fs_fs_readfile_path_options_callback</span></span><br><span class="line">    <span class="comment">//读取文件中的内容 默认返回buffer</span></span><br><span class="line">    <span class="comment">//当目录为文件夹时抛出错误</span></span><br><span class="line">    fs.readFile(filename, <span class="function">(<span class="params">err, data</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (err) &#123;</span><br><span class="line">        resolve(<span class="literal">null</span>);</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">          <span class="comment">// 使用vm模块的Script方法来预编译发生变化后的文件代码，检查语法错误，提前发现是否存在语法错误等报错</span></span><br><span class="line">          <span class="keyword">new</span> vm.Script(data);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">          <span class="comment">// 语法错误,编译失败</span></span><br><span class="line">          reject(e);</span><br><span class="line">          <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 编译通过后，重新require加载最新的代码</span></span><br><span class="line">        resolve(<span class="built_in">require</span>(filename));</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">loadHandlers()</span><br></pre></td></tr></table></figure> 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" rel="tag">工程化</a></li></ul>
 
     </footer>
   </div>
