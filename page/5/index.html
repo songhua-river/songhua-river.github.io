@@ -113,6 +113,166 @@ var _hmt = _hmt || [];
     
     
     <article
+  id="post-javascript/basic/generator"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/posts/6b643b84/"
+    >Generator</a> 
+</h2>
+ 
+
+    </header>
+     
+    <div class="article-meta">
+      <a href="/posts/6b643b84/" class="article-date">
+  <time datetime="2020-11-01T08:44:40.000Z" itemprop="datePublished">2020-11-01</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/JavaScript/">JavaScript</a> / <a class="article-category-link" href="/categories/JavaScript/%E5%9F%BA%E7%A1%80/">基础</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h4 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h4><p>Generator 函数是 ES6 提供的一种异步编程解决方案</p>
+<p>Generator 函数有多种理解角度。语法上，首先可以把它理解成，Generator 函数是一个状态机，封装了多个内部状态。</p>
+<p>执行 Generator 函数会返回一个遍历器对象，也就是说，Generator 函数除了状态机，还是一个遍历器对象生成函数。返回的遍历器对象，可以依次遍历 Generator 函数内部的每一个状态。</p>
+<p>调用 Generator 函数后，该函数并不执行，返回的也不是函数运行结果，而是一个指向内部状态的指针对象，也就是上一章介绍的遍历器对象（Iterator Object）。</p>
+<h4 id="yeild"><a href="#yeild" class="headerlink" title="yeild"></a>yeild</h4><p>yield表达式与return语句既有相似之处，也有区别。相似之处在于，都能返回紧跟在语句后面的那个表达式的值。区别在于每次遇到yield，函数暂停执行，下一次再从该位置继续向后执行，而return语句不具备位置记忆的功能。</p>
+<p>yield表达式如果用在另一个表达式之中，必须放在圆括号里面。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span>* <span class="title">demo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;Hello&#x27;</span> + <span class="keyword">yield</span>); <span class="comment">// SyntaxError</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;Hello&#x27;</span> + <span class="keyword">yield</span> <span class="number">123</span>); <span class="comment">// SyntaxError</span></span><br><span class="line"></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;Hello&#x27;</span> + (<span class="keyword">yield</span>)); <span class="comment">// OK</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;Hello&#x27;</span> + (<span class="keyword">yield</span> <span class="number">123</span>)); <span class="comment">// OK</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>yield表达式用作函数参数或放在赋值表达式的右边，可以不加括号。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span>* <span class="title">demo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  foo(<span class="keyword">yield</span> <span class="string">&#x27;a&#x27;</span>, <span class="keyword">yield</span> <span class="string">&#x27;b&#x27;</span>); <span class="comment">// OK</span></span><br><span class="line">  <span class="keyword">let</span> input = <span class="keyword">yield</span>; <span class="comment">// OK</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="与-Iterator-接口的关系"><a href="#与-Iterator-接口的关系" class="headerlink" title="与 Iterator 接口的关系"></a>与 Iterator 接口的关系</h4><p>任意一个对象的Symbol.iterator方法，等于该对象的遍历器生成函数，调用该函数会返回该对象的一个遍历器对象。由于 Generator 函数就是遍历器生成函数，因此可以把 Generator 赋值给对象的Symbol.iterator属性，从而使得该对象具有 Iterator 接口。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span>* <span class="title">gen</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="comment">// some code</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> g = gen();</span><br><span class="line"></span><br><span class="line">g[<span class="built_in">Symbol</span>.iterator]() === g</span><br><span class="line"><span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="next-方法的参数"><a href="#next-方法的参数" class="headerlink" title="next 方法的参数"></a>next 方法的参数</h4><p>yield表达式本身没有返回值，或者说总是返回undefined。next方法可以带一个参数，该参数就会被当作上一个yield表达式的返回值。</p>
+<p><strong>这个功能有很重要的语法意义。Generator 函数从暂停状态到恢复运行，它的上下文状态（context）是不变的。通过next方法的参数，就有办法在 Generator 函数开始运行之后，继续向函数体内部注入值。也就是说，可以在 Generator 函数运行的不同阶段，从外部向内部注入不同的值，从而调整函数行为。</strong></p>
+<h4 id="for…of-循环"><a href="#for…of-循环" class="headerlink" title="for…of 循环"></a>for…of 循环</h4><p><code>for...of</code>循环可以自动遍历 <code>Generator</code> 函数运行时生成的<code>Iterator</code>对象，且此时不再需要调用<code>next</code>方法。</p>
+<p>一旦<code>next</code>方法的返回对象的<code>done</code>属性为<code>true</code>，<code>for...of</code>循环就会中止,<code>return</code>语句返回的不包括在<code>for...of</code>循环之中。</p>
+<h4 id="Generator-prototype-throw"><a href="#Generator-prototype-throw" class="headerlink" title="Generator.prototype.throw()"></a>Generator.prototype.throw()</h4><h4 id="Generator-prototype-return"><a href="#Generator-prototype-return" class="headerlink" title="Generator.prototype.return()"></a>Generator.prototype.return()</h4><h4 id="共同点"><a href="#共同点" class="headerlink" title="共同点"></a>共同点</h4><p><code>next()</code>、<code>throw()</code>、<code>return()</code>这三个方法本质上是同一件事，可以放在一起理解。它们的作用都是让 <code>Generator</code> 函数恢复执行，并且使用不同的语句替换<code>yield</code>表达式。</p>
+<h4 id="yield"><a href="#yield" class="headerlink" title="yield*"></a>yield*</h4><p>如果在 Generator 函数内部，调用另一个 Generator 函数。需要在前者的函数体内部，自己手动完成遍历。</p>
+<p>ES6 提供了yield*表达式，作为解决办法，用来在一个 Generator 函数里面执行另一个 Generator 函数。</p>
+<h4 id="this"><a href="#this" class="headerlink" title="this"></a>this</h4><p>Generator 函数总是返回一个遍历器，ES6 规定这个遍历器是 Generator 函数的实例，也继承了 Generator 函数的prototype对象上的方法。</p>
+<p>Generator 函数也不能跟new命令一起用，会报错。</p>
+<p>首先，生成一个空对象，使用call方法绑定 Generator 函数内部的this。这样，构造函数调用以后，这个空对象就是 Generator 函数的实例对象了。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span>* <span class="title">gen</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">this</span>.a = <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">yield</span> <span class="built_in">this</span>.b = <span class="number">2</span>;</span><br><span class="line">  <span class="keyword">yield</span> <span class="built_in">this</span>.c = <span class="number">3</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">F</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> gen.call(gen.prototype);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> f = <span class="keyword">new</span> F();</span><br><span class="line"></span><br><span class="line">f.next();  <span class="comment">// Object &#123;value: 2, done: false&#125;</span></span><br><span class="line">f.next();  <span class="comment">// Object &#123;value: 3, done: false&#125;</span></span><br><span class="line">f.next();  <span class="comment">// Object &#123;value: undefined, done: true&#125;</span></span><br><span class="line"></span><br><span class="line">f.a <span class="comment">// 1</span></span><br><span class="line">f.b <span class="comment">// 2</span></span><br><span class="line">f.c <span class="comment">// 3</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="Generator-与状态机"><a href="#Generator-与状态机" class="headerlink" title="Generator 与状态机"></a>Generator 与状态机</h4><p>Generator 之所以可以不用外部变量保存状态，是因为它本身就包含了一个状态信息，即目前是否处于暂停态。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> clock = <span class="function"><span class="keyword">function</span>* (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;Tick!&#x27;</span>);</span><br><span class="line">    <span class="keyword">yield</span>;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;Tock!&#x27;</span>);</span><br><span class="line">    <span class="keyword">yield</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h4 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h4><ul>
+<li>异步操作的同步化表达</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span>* <span class="title">main</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> result = <span class="keyword">yield</span> request(<span class="string">&quot;http://some.url&quot;</span>);</span><br><span class="line">  <span class="keyword">var</span> resp = <span class="built_in">JSON</span>.parse(result);</span><br><span class="line">    <span class="built_in">console</span>.log(resp.value);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">request</span>(<span class="params">url</span>) </span>&#123;</span><br><span class="line">  makeAjaxCall(url, <span class="function"><span class="keyword">function</span>(<span class="params">response</span>)</span>&#123;</span><br><span class="line">    it.next(response);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> it = main();</span><br><span class="line">it.next();</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>控制流管理</p>
+</li>
+<li><p>部署 Iterator 接口</p>
+</li>
+<li><p>作为数据结构</p>
+</li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ES6%E5%9F%BA%E7%A1%80/" rel="tag">ES6基础</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+   
+</article>
+
+    
+    <article
+  id="post-javascript/fp/(2)高阶Javascript"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/posts/22054a3/"
+    >2.进阶</a> 
+</h2>
+ 
+
+    </header>
+     
+    <div class="article-meta">
+      <a href="/posts/22054a3/" class="article-date">
+  <time datetime="2020-10-30T04:34:24.000Z" itemprop="datePublished">2020-10-30</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/JavaScript/">JavaScript</a> / <a class="article-category-link" href="/categories/JavaScript/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/">函数式编程</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>为什么说JavaScript是适合函数式的编程语言<br>JavaScript语言的多范型开发<br>不可变性和变化的对策<br>理解高阶函数和一等函数<br>闭包和作用域的概念探讨<br>闭包的实际使用</p>
+<h4 id="函数式与面向对象"><a href="#函数式与面向对象" class="headerlink" title="函数式与面向对象"></a>函数式与面向对象</h4><p>面向对象的关键是创建继承层次结构（如继承Person的Student对象）并将方法与数据紧密的绑定在一起。函数式编程则更倾向于通过广义的多态函数交叉应用于不同的数据类型，同时避免使用this</p>
+<h4 id="属性保护"><a href="#属性保护" class="headerlink" title="属性保护"></a>属性保护</h4><p><img src="/posts/22054a3/0001.jpg"></p>
+<p>试用递归来冻结数属性</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> isObject = <span class="function">(<span class="params">val</span>) =&gt;</span> val &amp;&amp; <span class="keyword">typeof</span> val === <span class="string">&#x27;object&#x27;</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">deepFreeze</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(isObject(obj) <span class="comment">//遍历所有属性并递归调用Object.freeze()（使用第3章介绍的map）</span></span><br><span class="line">    &amp;&amp; !<span class="built_in">Object</span>.isFrozen(obj)) &#123; <span class="comment">//跳过已经冻结过的对象，冻结没有被冻结过的对象</span></span><br><span class="line">    <span class="built_in">Object</span>.keys(obj). <span class="comment">//跳过所有的函数，即使从技术上说，函数也可以被修改，但是我们更希望注意在数据的属性上</span></span><br><span class="line">  forEach(<span class="function"><span class="params">name</span> =&gt;</span> deepFreeze(obj[name])); <span class="comment">//递归地自调用（第3章会介绍递归）</span></span><br><span class="line">    <span class="built_in">Object</span>.freeze(obj); <span class="comment">//冻结根对象</span></span><br><span class="line">  &#125;</span><br><span class="line"><span class="keyword">return</span> obj;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>R.lensProp</strong> 保证对象属性的不可变性</p>
+<h4 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h4><p>需要区分表达式（如返回一个值的函数）和语句（如不返回值的函数）。命令式编程和过程式程序大多是由一系列有序的语句组成的，而函数式编程完全依赖于表达式，因此无值函数在该范式下并没有意义。</p>
+<ul>
+<li><p>一等函数</p>
+</li>
+<li><p>高阶函数</p>
+</li>
+</ul>
+<h4 id="闭包作用域"><a href="#闭包作用域" class="headerlink" title="闭包作用域"></a>闭包作用域</h4> 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" rel="tag">函数式编程</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+   
+</article>
+
+    
+    <article
   id="post-javascript/basic/iterator"
   class="article article-type-post"
   itemscope
@@ -1013,311 +1173,13 @@ var _hmt = _hmt || [];
 </article>
 
     
-    <article
-  id="post-linux/basic/user_managment"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/posts/500fed5c/"
-    >用户管理</a> 
-</h2>
- 
-
-    </header>
-     
-    <div class="article-meta">
-      <a href="/posts/500fed5c/" class="article-date">
-  <time datetime="2020-10-21T01:14:09.000Z" itemprop="datePublished">2020-10-21</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Linux/">Linux</a> / <a class="article-category-link" href="/categories/Linux/%E5%9F%BA%E7%A1%80%E5%91%BD%E4%BB%A4/">基础命令</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h4 id="创建用户／设置密码／删除用户"><a href="#创建用户／设置密码／删除用户" class="headerlink" title="创建用户／设置密码／删除用户"></a>创建用户／设置密码／删除用户</h4><blockquote>
-<p>提示：创建用户 / 删除用户 / 修改其他用户密码 的终端命令都需要通过 <code>sudo</code> 执行</p>
-</blockquote>
-<table>
-<thead>
-<tr>
-<th>序号</th>
-<th>命令</th>
-<th>作用</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>01</td>
-<td>useradd -m -g 组 新建用户名</td>
-<td>添加新用户</td>
-<td>-m 自动建立用户家目录-g 指定用户所在的组，否则会建立一个和同名的组</td>
-</tr>
-<tr>
-<td>02</td>
-<td>passwd 用户名</td>
-<td>设置用户密码</td>
-<td>使用sudo运行，如果是普通用户，直接用 passwd 可以修改自己的账户密码</td>
-</tr>
-<tr>
-<td>03</td>
-<td>userdel -r 用户名</td>
-<td>删除用户</td>
-<td>-r 选项会自动删除用户家目录</td>
-</tr>
-<tr>
-<td>04</td>
-<td>cat /etc/passwd | grep 用户名</td>
-<td>确认用户信息</td>
-<td>新建用户后，用户信息会保存在 /etc/passwd 文件中</td>
-</tr>
-</tbody></table>
-<blockquote>
-<p>提示：</p>
-</blockquote>
-<ul>
-<li><p>创建用户时，如果忘记添加 -m 选项指定新用户的家目录,<strong>最简单的方法就是删除用户</strong>。</p>
-</li>
-<li><p>重新创建创建用户时,默认会创建一个和用户名同名的组名,用户信息保存在 /etc/passwd 文件中</p>
-</li>
-</ul>
-<h4 id="查看用户信息"><a href="#查看用户信息" class="headerlink" title="查看用户信息"></a>查看用户信息</h4><table>
-<thead>
-<tr>
-<th>序号</th>
-<th>命令</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>01</td>
-<td>id [用户名]</td>
-<td>查看用户 UID 和 GID 信息,没写用户名默认是当前用户信息</td>
-</tr>
-<tr>
-<td>02</td>
-<td>who</td>
-<td>查看当前所有登录的用户列表</td>
-</tr>
-<tr>
-<td>03</td>
-<td>whoami</td>
-<td>查看当前登录用户的账户名</td>
-</tr>
-</tbody></table>
-<p><img src="/posts/500fed5c/0002.png"></p>
-<p><strong>passwd 文件</strong></p>
-<ul>
-<li>/etc/passwd 文件存放的是用户的信息，由 6 个分号组成的 7 个信息，分别是</li>
-</ul>
-<ol>
-<li>用户名</li>
-<li>密码（x，表示加密的密码）</li>
-<li>UID（用户标识）</li>
-<li>GID（组标识）</li>
-<li>用户全名或本地帐号</li>
-<li>家目录</li>
-<li>登录使用的 Shell，就是登录之后，使用的终端命令，ubuntu 默认是 dash</li>
-</ol>
-<p><img src="/posts/500fed5c/0001.png"></p>
-<p><strong>usermod</strong></p>
-<ul>
-<li><p>usermod 可以用来设置 用户 的 主组 ／ 附加组 和 登录 Shell</p>
-</li>
-<li><p>主组：通常在新建用户时指定，在 etc/passwd 的第 4 列 GID 对应的组</p>
-</li>
-<li><p>附加组：在 etc/group 中最后一列表示该组的用户列表，用于指定 用户的附加权限</p>
-</li>
-</ul>
-<blockquote>
-<p>提示：设置了用户的附加组之后，需要重新登录才能生效！</p>
-</blockquote>
-<p>修改用户的主组（passwd 中的 GID）</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">usermod -g 组 用户名</span><br></pre></td></tr></table></figure>
-
-<p>修改用户的附加组</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">usermod -G 组 用户名</span><br></pre></td></tr></table></figure>
-
-<p>修改用户登录 Shell</p>
-<p>由于新建用户默认使用的shell是dash,会导致windows下终端中没有文件高亮，不能使用方向键，所以要修改新建用户的默认shell</p>
-<blockquote>
-<p>提示：设置了用户登录 Shell之后，需要重新登录才能生效！</p>
-</blockquote>
-<p><img src="/posts/500fed5c/0003.png"></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">usermod -s /bin/bash 用户名</span><br></pre></td></tr></table></figure>
-
-<p><strong>which</strong></p>
-<blockquote>
-<p>/etc/passwd 是用于保存用户信息的文件</p>
-</blockquote>
-<p>  /usr/bin/passwd 是用于修改用户密码的程序</p>
-<p>which 命令可以查看执行命令所在位置，例如:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">which</span> ls</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">which</span> useradd</span><br><span class="line">///usr/sbin/useradd</span><br></pre></td></tr></table></figure>
-
-<p>bin 和 sbin</p>
-<ul>
-<li><p>在 Linux 中，绝大多数可执行文件都是保存在 /bin、/sbin、/usr/bin、/usr/sbin</p>
-</li>
-<li><p>/bin（binary）是二进制执行文件目录，主要用于具体应用</p>
-</li>
-<li><p>/sbin（system binary）是系统管理员专用的二进制代码存放目录，主要用于系统管理</p>
-</li>
-<li><p>/usr/bin（user commands for applications）后期安装的一些软件</p>
-</li>
-<li><p>/usr/sbin（super user commands for applications）超级用户的一些管理程序</p>
-</li>
-</ul>
-<blockquote>
-<p>cd 这个终端命令是内置在系统内核中的，没有独立的文件，因此用 which 无法找到 cd 命令的位置</p>
-</blockquote>
-<h4 id="切换用户"><a href="#切换用户" class="headerlink" title="切换用户"></a>切换用户</h4><table>
-<thead>
-<tr>
-<th>序号</th>
-<th>命令</th>
-<th>作用</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>01</td>
-<td>su - 用户名</td>
-<td>切换用户，并且切换目录</td>
-<td>- 可以切换到用户家目录，否则保持位置不变</td>
-</tr>
-<tr>
-<td>02</td>
-<td>exit</td>
-<td>退出当前登录账户</td>
-<td></td>
-</tr>
-</tbody></table>
-<ul>
-<li><p>su 不接用户名，可以切换到 root，但是不推荐使用，因为不安全</p>
-</li>
-<li><p>exit 示意图如下：</p>
-</li>
-</ul>
-<p><img src="/posts/500fed5c/0004.jpg"></p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-   
-</article>
-
-    
-    <article
-  id="post-algorithm/structure/(5)队列和双端队列"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/posts/885dbafa/"
-    >队列和双端队列</a> 
-</h2>
- 
-
-    </header>
-     
-    <div class="article-meta">
-      <a href="/posts/885dbafa/" class="article-date">
-  <time datetime="2020-10-20T04:46:56.000Z" itemprop="datePublished">2020-10-20</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a> / <a class="article-category-link" href="/categories/%E7%AE%97%E6%B3%95/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h4 id="队列数据结构"><a href="#队列数据结构" class="headerlink" title="队列数据结构"></a>队列数据结构</h4><p>队列是遵循先进先出（FIFO，也称为先来先服务）原则的一组有序的项。队列在尾部添加元素，并从顶部移除元素。最新添加的元素必须排在队列的末尾。</p>
-<h4 id="创建队列"><a href="#创建队列" class="headerlink" title="创建队列"></a>创建队列</h4><p>通过双指针标明队列的头尾</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Queue</span> </span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>() &#123;</span><br><span class="line">        <span class="built_in">this</span>.count = <span class="number">0</span>;</span><br><span class="line">        <span class="built_in">this</span>.lowestCount = <span class="number">0</span>;</span><br><span class="line">        <span class="built_in">this</span>.items = &#123;&#125;;</span><br><span class="line">    &#125;</span><br><span class="line">    enqueue(element) &#123;</span><br><span class="line">        <span class="built_in">this</span>.items[<span class="built_in">this</span>.count] = element;</span><br><span class="line">        <span class="built_in">this</span>.count++;</span><br><span class="line">    &#125;</span><br><span class="line">    dequeue() &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">this</span>.isEmpty()) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">undefined</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">const</span> result = <span class="built_in">this</span>.items[<span class="built_in">this</span>.lowestCount];</span><br><span class="line">        <span class="keyword">delete</span> <span class="built_in">this</span>.items[<span class="built_in">this</span>.lowestCount];</span><br><span class="line">        <span class="built_in">this</span>.lowestCount++;</span><br><span class="line">        <span class="keyword">return</span> result; </span><br><span class="line">    &#125;</span><br><span class="line">    peek() &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">this</span>.isEmpty()) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">undefined</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.items[<span class="built_in">this</span>.lowestCount];</span><br><span class="line">    &#125;</span><br><span class="line">    isEmpty() &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.count - <span class="built_in">this</span>.lowestCount === <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    size() &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.count - <span class="built_in">this</span>.lowestCount;</span><br><span class="line">    &#125;</span><br><span class="line">    clear() &#123;</span><br><span class="line">        <span class="built_in">this</span>.items = &#123;&#125;;</span><br><span class="line">        <span class="built_in">this</span>.count = <span class="number">0</span>;</span><br><span class="line">        <span class="built_in">this</span>.lowestCount = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    toString() &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">this</span>.isEmpty()) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">let</span> objString = <span class="string">`<span class="subst">$&#123;<span class="built_in">this</span>.items[<span class="built_in">this</span>.lowestCount]&#125;</span>`</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="built_in">this</span>.lowestCount + <span class="number">1</span>; i &lt; <span class="built_in">this</span>.count; i++) &#123;</span><br><span class="line">            objString = <span class="string">`<span class="subst">$&#123;objString&#125;</span>,<span class="subst">$&#123;<span class="built_in">this</span>.items[i]&#125;</span>`</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> objString;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="双端队列数据结构"><a href="#双端队列数据结构" class="headerlink" title="双端队列数据结构"></a>双端队列数据结构</h4><p>双端队列（deque，或称double-ended queue）是一种允许我们同时从前端和后端添加和移除元素的特殊队列。</p>
-<p>双端队列的一个常见应用是存储一系列的撤销操作</p>
-<p>在头部插入的时候为了保证头部索引为0，类似数组的性质，也可以把所有的元素都向后移动一位</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Deque</span> </span>&#123;</span><br><span class="line">    <span class="keyword">constructor</span>() &#123;</span><br><span class="line">        <span class="built_in">this</span>.count = <span class="number">0</span>;</span><br><span class="line">        <span class="built_in">this</span>.lowestCount = <span class="number">0</span>;</span><br><span class="line">        <span class="built_in">this</span>.items = &#123;&#125;;</span><br><span class="line">    &#125;</span><br><span class="line">    addFront(element) &#123;</span><br><span class="line">        <span class="built_in">this</span>.lowestCount--;</span><br><span class="line">        <span class="built_in">this</span>.items[<span class="built_in">this</span>.lowestCount] = element;</span><br><span class="line">    &#125;</span><br><span class="line">    addBack(element) &#123;</span><br><span class="line">        <span class="built_in">this</span>.items[<span class="built_in">this</span>.count] = element;</span><br><span class="line">        <span class="built_in">this</span>.count++;</span><br><span class="line">    &#125;</span><br><span class="line">    removeFront() &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">this</span>.isEmpty()) <span class="keyword">return</span>;</span><br><span class="line">        <span class="keyword">const</span> ele = <span class="built_in">this</span>.items[<span class="built_in">this</span>.lowestCount];</span><br><span class="line">        <span class="keyword">delete</span> <span class="built_in">this</span>.items[<span class="built_in">this</span>.lowestCount];</span><br><span class="line">        <span class="built_in">this</span>.lowestCount++;</span><br><span class="line">        <span class="keyword">return</span> ele;</span><br><span class="line">    &#125;</span><br><span class="line">    removeBack() &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">this</span>.isEmpty()) <span class="keyword">return</span>;</span><br><span class="line">        <span class="keyword">const</span> ele = <span class="built_in">this</span>.items[<span class="built_in">this</span>.count];</span><br><span class="line">        <span class="keyword">delete</span> <span class="built_in">this</span>.items[<span class="built_in">this</span>.count];</span><br><span class="line">        <span class="built_in">this</span>.lowestCount--;</span><br><span class="line">        <span class="keyword">return</span> ele;</span><br><span class="line">    &#125;</span><br><span class="line">    peekFront() &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.items[<span class="built_in">this</span>.lowestCount];</span><br><span class="line">    &#125;</span><br><span class="line">    peekBack() &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.items[<span class="built_in">this</span>.count - <span class="number">1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    isEmpty() &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.count === <span class="built_in">this</span>.lowestCount</span><br><span class="line">    &#125;</span><br><span class="line">    size() &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">this</span>.count - <span class="built_in">this</span>.lowestCount</span><br><span class="line">    &#125;</span><br><span class="line">    clear() &#123;</span><br><span class="line">        <span class="built_in">this</span>.count = <span class="number">0</span>;</span><br><span class="line">        <span class="built_in">this</span>.lowestCount = <span class="number">0</span>;</span><br><span class="line">        <span class="built_in">this</span>.items = &#123;&#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="循环队列"><a href="#循环队列" class="headerlink" title="循环队列"></a>循环队列</h4><p>队列模拟循环队列，击鼓传花问题</p>
-<p>规则：有五位玩家，从第一位开始游戏，每轮游戏传7次，结束后花在谁手里，谁就被淘汰，从下一个人继续开始</p>
-<ul>
-<li>把玩家加入到上面创建好的队列中</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> player = [<span class="string">&#x27;John&#x27;</span>, <span class="string">&#x27;Jack&#x27;</span>, <span class="string">&#x27;Camila&#x27;</span>, <span class="string">&#x27;Ingrid&#x27;</span>, <span class="string">&#x27;Carl&#x27;</span>];</span><br><span class="line"><span class="keyword">const</span> queue = <span class="keyword">new</span> Queue();</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> p <span class="keyword">of</span> player) &#123;</span><br><span class="line">    queue.enqueue(p);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-<ul>
-<li><p><code>game</code>函数执行，表示游戏开始，输入每轮传花次数7，最终返回获胜玩家</p>
-<p>每次传花经过的人，添加到队列尾部，形成一个循环队列，循环停止时，队列头部的就是拿到花的人，被淘汰即从头部移除</p>
-</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">game</span>(<span class="params">queue, nums</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (queue.size() &gt; <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; nums; i++) &#123;</span><br><span class="line">            queue.enqueue(queue.dequeue());</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">&quot;淘汰==&quot;</span> + queue.dequeue())</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;获胜==&#x27;</span> + queue.peek());</span><br><span class="line">&#125;</span><br><span class="line">game(queue, <span class="number">7</span>)</span><br></pre></td></tr></table></figure>
-
-<h4 id="解决回文数"><a href="#解决回文数" class="headerlink" title="解决回文数"></a>解决回文数</h4><p>可以通过栈这种数据结构解决</p>
-<p>本章也可以使用双端队列解决，先把字符串插入到双端队列中，通过<code>while</code>循环检查头部元素和尾部元素是否相同，不同则跳出</p>
-<h4 id="JavaScript-任务队列"><a href="#JavaScript-任务队列" class="headerlink" title="JavaScript 任务队列"></a>JavaScript 任务队列</h4><p>在浏览器中打开新标签时，就会创建一个任务队列。这是因为每个标签都是单线程处理所有的任务，称为事件循环。</p>
-<p>浏览器要负责多个任务，如渲染HTML、执行JavaScript 代码、处理用户交互（用户输入、鼠标点击等）、执行和处理异步请求</p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%98%9F%E5%88%97/" rel="tag">队列</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-   
-</article>
-
-    
   </article>
   
 
   
   <nav class="page-nav">
     
-    <a class="extend prev" rel="prev" href="/page/4/">上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/6/">下一页</a>
+    <a class="extend prev" rel="prev" href="/page/4/">上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/6/">下一页</a>
   </nav>
   
 </section>

@@ -113,6 +113,216 @@ var _hmt = _hmt || [];
     
     
     <article
+  id="post-node/node环境和npm"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/posts/1128db1b/"
+    >node和npm</a> 
+</h2>
+ 
+
+    </header>
+     
+    <div class="article-meta">
+      <a href="/posts/1128db1b/" class="article-date">
+  <time datetime="2021-01-06T12:05:53.000Z" itemprop="datePublished">2021-01-06</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Node/">Node</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h4 id="REPL-交互式显示"><a href="#REPL-交互式显示" class="headerlink" title="REPL 交互式显示"></a>REPL 交互式显示</h4><p>在命令行工具中输入node,进入交互式环境</p>
+<ul>
+<li>linux ctrl+d 退出</li>
+<li>tab 键补全</li>
+<li>.help 查看帮助</li>
+</ul>
+<h4 id="npm"><a href="#npm" class="headerlink" title="npm"></a>npm</h4><p>升级npm <code>npm install -g npm</code></p>
+<p>查询可安装的包 <code>npm serch xxx</code> </p>
+<h4 id="node模块化"><a href="#node模块化" class="headerlink" title="node模块化"></a>node模块化</h4><p>文件和模块是一一对应的，一个node文件就是一个模块</p>
+<p>这个文件可能是JavaScript代码，JSON或者编译过的c/c++ 扩展</p>
+<p>Node.js 中存在4类模块（原生模块和3种文件模块）</p>
+<p><strong>builtin module</strong>: Node中以c++形式提供的模块，如tcp_wrap、contextify等</p>
+<p><strong>constants module</strong>: Node中定义常量的模块，用来导出如signal, openssl库、文件访问权限等常量的定义。如文件访问权限中的O_RDONLY，O_CREAT、signal中的SIGHUP，SIGINT等。</p>
+<p><strong>native module</strong>: Node中以JavaScript形式提供的模块，如http,https,fs等。有些native module需要借助于builtin module实现背后的功能。如对于native模块buffer ,还是需要借助builtin node_buffer.cc中提供的功能来实现大容量内存申请和管理，目的是能够脱离V8内存大小使用限制。</p>
+<p><strong>3rd-party module</strong>: 以上模块可以统称Node内建模块，除此之外为第三方模块，典型的如express模块。</p>
+<ul>
+<li>module.exports和exports的区别</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> circle = <span class="built_in">require</span>(<span class="string">&#x27;./circle.js&#x27;</span>);  </span><br><span class="line"><span class="built_in">console</span>.log( <span class="string">&#x27;The area of a circle of radius 4 is &#x27;</span> + circle.area(<span class="number">4</span>)); </span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> PI = <span class="built_in">Math</span>.PI;  </span><br><span class="line"><span class="built_in">exports</span>.area = <span class="function"><span class="keyword">function</span> (<span class="params">r</span>) </span>&#123;  </span><br><span class="line">  <span class="keyword">return</span> PI * r * r;  </span><br><span class="line">&#125;;  </span><br></pre></td></tr></table></figure>
+
+<p>如果你的模块属于“模块实例（module instances）”，就像官方文档中给出的示例那样，那么exports足以满足要求。</p>
+<p>但是事实上，require()返回的是module.exports，exports只是module.exports的一个引用，exports的作用只在module.exports没有指定的时候，收集属性并附加到module.exports。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = <span class="string">&#x27;孙悟空&#x27;</span>;  </span><br><span class="line"><span class="built_in">exports</span>.name = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;  </span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;我是白骨精&#x27;</span>);  </span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>这个模块会完全忽略exports.name，因为module.exports被指定了另一个对象。你的模块不一定是模块实例（module instances），你的模块可以是任意的，你设置成module.exports的Javascript对象。如果你不显示的指定module.exports，那么返回的将是exports和exports附加的值。</p>
+<p>也可以这样认为，一个模块刚开始的时候，module.exports和exports是一样的，exports只是module.exports的一个别名，两者都是{}。</p>
+<p>当你给module.exports指定一个对象的时候，两者就不再一样的，而模块导出的一定是module.exports。</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Node/" rel="tag">Node</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+   
+</article>
+
+    
+    <article
+  id="post-javascript/used/性能优化基础"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/posts/5527b4f7/"
+    >性能优化基础</a> 
+</h2>
+ 
+
+    </header>
+     
+    <div class="article-meta">
+      <a href="/posts/5527b4f7/" class="article-date">
+  <time datetime="2020-12-27T09:59:35.000Z" itemprop="datePublished">2020-12-27</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/JavaScript/">JavaScript</a> / <a class="article-category-link" href="/categories/JavaScript/%E5%BA%94%E7%94%A8%E6%A1%88%E4%BE%8B/">应用案例</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h4 id="Navigation-Timing"><a href="#Navigation-Timing" class="headerlink" title="Navigation Timing"></a><a target="_blank" rel="noopener" href="https://www.w3.org/TR/2012/REC-navigation-timing-20121217/">Navigation Timing</a></h4><p><img src="/posts/5527b4f7/0001.png"></p>
+<ul>
+<li>prompt for unload </li>
+</ul>
+<p>为卸载页面作准备， 释放js资源</p>
+<ul>
+<li>DNS domainLookupStart domainLookupEnd</li>
+</ul>
+<p>DNS 服务器会影响解析时间，DNS基于UDP协议</p>
+<p>DNS （Domain Name System) 域名系统，用于将域名转换为IP</p>
+<p>顶级域名: .com .org .club</p>
+<p>域名资源记录： 域名服务商的配置记录 （3A，4A）</p>
+<p>域名解析流程： </p>
+<ul>
+<li>TCP </li>
+</ul>
+<p>可能会产生ssl的握手（secureConnetionStart），需要放在nigix上处理</p>
+<p>服务器的连接数会影响响应的速度，也受到物理距离的影响</p>
+<ul>
+<li>request response</li>
+</ul>
+<p>请求开始到响应开始包括，数据传输时间，服务器处理时间，服务器请求时间，服务器渲染时间</p>
+<p>服务端优化： 服务端缓存，sql查询时间，服务端渲染，生成数据大小（使用压缩）</p>
+<h4 id="三次握手四次挥手"><a href="#三次握手四次挥手" class="headerlink" title="三次握手四次挥手"></a>三次握手四次挥手</h4><p><img src="/posts/5527b4f7/0001.jpeg"></p>
+<p>序列号seq：占4个字节，用来标记数据段的顺序，TCP把连接中发送的所有数据字节都编上一个序号，第一个字节的编号由本地随机产生；给字节编上序号后，就给每一个报文段指派一个序号；序列号seq就是这个报文段中的第一个字节的数据编号。</p>
+<p>确认号ack：占4个字节，期待收到对方下一个报文段的第一个数据字节的序号；序列号表示报文段携带数据的第一个字节的编号；而确认号指的是期望接收到下一个字节的编号；因此当前报文段最后一个字节的编号+1即为确认号。</p>
+<p>确认ACK：占1位，仅当ACK=1时，确认号字段才有效。ACK=0时，确认号无效</p>
+<p>同步SYN：连接建立时用于同步序号。当SYN=1，ACK=0时表示：这是一个连接请求报文段。若同意连接，则在响应报文段中使得SYN=1，ACK=1。因此，SYN=1表示这是一个连接请求，或连接接受报文。SYN这个标志位只有在TCP建产连接时才会被置1，握手完成后SYN标志位被置0。</p>
+<p>终止FIN：用来释放一个连接。FIN=1表示：此报文段的发送方的数据已经发送完毕，并要求释放运输连接</p>
+<p>PS：ACK、SYN和FIN这些大写的单词表示标志位，其值要么是1，要么是0；ack、seq小写的单词表示序号。</p>
+<p><img src="/posts/5527b4f7/0002.png"></p>
+<p>第一次握手：建立连接时，客户端发送syn包（syn=x）到服务器，并进入SYN_SENT状态，等待服务器确认；SYN：同步序列编号（Synchronize Sequence Numbers）。</p>
+<p>第二次握手：服务器收到syn包，必须确认客户的SYN（ack=x+1），同时自己也发送一个SYN包（syn=y），即SYN+ACK包，此时服务器进入SYN_RECV状态；</p>
+<p>第三次握手：客户端收到服务器的SYN+ACK包，向服务器发送确认包ACK(ack=y+1），此包发送完毕，客户端和服务器进入ESTABLISHED（TCP连接成功）状态，完成三次握手。</p>
+<p>！<a href="0003.png"></a></p>
+<p>1）客户端进程发出连接释放报文，并且停止发送数据。释放数据报文首部，FIN=1，其序列号为seq=u（等于前面已经传送过来的数据的最后一个字节的序号加1），此时，客户端进入FIN-WAIT-1（终止等待1）状态。 TCP规定，FIN报文段即使不携带数据，也要消耗一个序号。</p>
+<p>2）服务器收到连接释放报文，发出确认报文，ACK=1，ack=u+1，并且带上自己的序列号seq=v，此时，服务端就进入了CLOSE-WAIT（关闭等待）状态。TCP服务器通知高层的应用进程，客户端向服务器的方向就释放了，这时候处于半关闭状态，即客户端已经没有数据要发送了，但是服务器若发送数据，客户端依然要接受。这个状态还要持续一段时间，也就是整个CLOSE-WAIT状态持续的时间。</p>
+<p>3）客户端收到服务器的确认请求后，此时，客户端就进入FIN-WAIT-2（终止等待2）状态，等待服务器发送连接释放报文（在这之前还需要接受服务器发送的最后的数据）。</p>
+<p>4）服务器将最后的数据发送完毕后，就向客户端发送连接释放报文，FIN=1，ack=u+1，由于在半关闭状态，服务器很可能又发送了一些数据，假定此时的序列号为seq=w，此时，服务器就进入了LAST-ACK（最后确认）状态，等待客户端的确认。</p>
+<p>5）客户端收到服务器的连接释放报文后，必须发出确认，ACK=1，ack=w+1，而自己的序列号是seq=u+1，此时，客户端就进入了TIME-WAIT（时间等待）状态。注意此时TCP连接还没有释放，必须经过2∗∗MSL（最长报文段寿命）的时间后，当客户端撤销相应的TCB后，才进入CLOSED状态。</p>
+<p>6）服务器只要收到了客户端发出的确认，立即进入CLOSED状态。同样，撤销TCB后，就结束了这次的TCP连接。可以看到，服务器结束TCP连接的时间要比客户端早一些。</p>
+<ul>
+<li>为什么连接的时候是三次握手，关闭的时候却是四次握手？</li>
+</ul>
+<p>因为当Server端收到Client端的SYN连接请求报文后，可以直接发送SYN+ACK报文。其中ACK报文是用来应答的，SYN报文是用来同步的。但是关闭连接时，当Server端收到FIN报文时，很可能并不会立即关闭SOCKET，所以只能先回复一个ACK报文，告诉Client端，”你发的FIN报文我收到了”。只有等到我Server端所有的报文都发送完了，我才能发送FIN报文，因此不能一起发送。故需要四步握手。</p>
+<ul>
+<li>为什么TIME_WAIT状态需要经过2MSL(最大报文段生存时间)才能返回到CLOSE状态？</li>
+</ul>
+<p>有可以最后一个ACK丢失。所以TIME_WAIT状态就是用来重发可能丢失的ACK报文。在Client发送出最后的ACK回复，但该ACK可能丢失。Server如果没有收到ACK，将不断重复发送FIN片段。所以Client不能立即关闭，它必须确认Server接收到了该ACK。Client会在发送出ACK之后进入到TIME_WAIT状态。Client会设置一个计时器，等待2MSL的时间。如果在该时间内再次收到FIN，那么Client会重发ACK并再次等待2MSL。所谓的2MSL是两倍的MSL(Maximum Segment Lifetime)。MSL指一个片段在网络中最大的存活时间，2MSL就是一个发送和一个回复所需的最大时间。如果直到2MSL，Client都没有再次收到FIN，那么Client推断ACK已经被成功接收，则结束TCP连接。</p>
+<ul>
+<li>为什么不能用两次握手进行连接？ </li>
+</ul>
+<p>3次握手完成两个重要的功能，既要双方做好发送数据的准备工作(双方都知道彼此已准备好)，也要允许双方就初始序列号进行协商，这个序列号在握手过程中被发送和确认。<br>假定C给S发送一个连接请求分组，S收到了这个分组，并发 送了确认应答分组。按照两次握手的协定，S认为连接已经成功地建立了，可以开始发送数据分组。可是，C在S的应答分组在传输中被丢失的情况下，将不知道S 是否已准备好，不知道S建立什么样的序列号，C甚至怀疑S是否收到自己的连接请求分组。在这种情况下，C认为连接还未建立成功，将忽略S发来的任何数据分 组，只等待连接确认应答分组。而S在发出的分组超时后，重复发送同样的分组。这样就形成了死锁。</p>
+<ul>
+<li>如果已经建立了连接，但是客户端突然出现故障了怎么办？</li>
+</ul>
+<p>TCP还设有一个保活计时器，显然，客户端如果出现故障，服务器不能一直等下去，白白浪费资源。服务器每收到一次客户端的请求后都会重新复位这个计时器，时间通常是设置为2小时，若两小时还没有收到客户端的任何数据，服务器就会发送一个探测报文段，以后每隔75秒钟发送一次。若一连发送10个探测报文仍然没反应，服务器就认为客户端出了故障，接着就关闭连接。</p>
+<h4 id="缓存策略"><a href="#缓存策略" class="headerlink" title="缓存策略"></a>缓存策略</h4><p><img src="/posts/5527b4f7/0004.png"></p>
+<p><img src="/posts/5527b4f7/0005.png"></p>
+<h5 id="强制缓存"><a href="#强制缓存" class="headerlink" title="强制缓存"></a>强制缓存</h5><p>浏览器不会像服务器发送任何请求，直接从本地缓存中读取文件并返回Status Code: 200 OK </p>
+<p><img src="/posts/5527b4f7/0006.png"></p>
+<p>200 from disk cache： 不访问服务器，已经在之前的某个时间加载过该资源，直接从硬盘中读取缓存，关闭浏览器后，数据依然存在，此资源不会随着该页面的关闭而释放掉下次打开仍然会是from disk cache。</p>
+<p><img src="/posts/5527b4f7/0007.png"></p>
+<p>200 form memory cache : 不访问服务器，一般已经加载过该资源且缓存在了内存当中，直接从内存中读取缓存。浏览器关闭后，数据将不存在（资源被释放掉了），再次打开相同的页面时，不会出现from memory cache。</p>
+<p><strong>header参数</strong></p>
+<p>Expires：过期时间，如果设置了时间，则浏览器会在设置的时间内直接读取缓存，不再请求</p>
+<p>Cache-Control：当值设为max-age=300时，则代表在这个请求正确返回时间（浏览器也会记录下来）的5分钟内再次加载资源，就会命中强缓存。</p>
+<p>（1） max-age：用来设置资源（representations）可以被缓存多长时间，单位为秒；<br>（2） s-maxage：和max-age是一样的，不过它只针对代理服务器缓存而言；<br>（3）public：指示响应可被任何缓存区缓存；<br>（4）private：只能针对个人用户，而不能被代理服务器缓存；<br>（5）no-cache：强制客户端直接向服务器发送请求,也就是说每次请求都必须向服务器发送。服务器接收到     请求，然后判断资源是否变更，是则返回新内容，否则返回304，未变更。这个很容易让人产生误解，使人误     以为是响应不被缓存。实际上Cache-Control:     no-cache是会被缓存的，只不过每次在向客户端（浏览器）提供响应数据时，缓存都要向服务器评估缓存响应的有效性。<br>（6）no-store：禁止一切缓存（这个才是响应不被缓存的意思）。</p>
+<p>cache-control是http1.1的头字段，expires是http1.0的头字段,如果expires和cache-control同时存在，cache-control会覆盖expires，建议两个都写。</p>
+<h5 id="协商缓存"><a href="#协商缓存" class="headerlink" title="协商缓存"></a>协商缓存</h5><p><img src="/posts/5527b4f7/0008.png"></p>
+<p>向服务器发送请求，服务器会根据这个请求的request header的一些参数来判断是否命中协商缓存，如果命中，则返回304状态码并带上新的response header通知浏览器从缓存中读取资源；</p>
+<p><strong>header参数</strong></p>
+<p>Etag/If-None-Match：</p>
+<p>Etag是属于HTTP 1.1属性，它是由服务器（Apache或者其他工具）生成返回给前端，用来帮助服务器控制Web端的缓存验证。Apache中，ETag的值，默认是对文件的索引节（INode），大小（Size）和最后修改时间（MTime）进行Hash后得到的。</p>
+<p>当资源过期时，浏览器发现响应头里有Etag,则再次像服务器请求时带上请求头if-none-match(值是Etag的值)。服务器收到请求进行比对，决定返回200或304</p>
+<p>Last-Modifed/If-Modified-Since：</p>
+<p>Last-Modified 浏览器向服务器发送资源最后的修改时间</p>
+<p>If-Modified-Since 当资源过期时（浏览器判断Cache-Control标识的max-age过期），发现响应头具有Last-Modified声明，则再次向服务器请求时带上头if-modified-since，表示请求时间。服务器收到请求后发现有if-modified-since则与被请求资源的最后修改时间进行对比（Last-Modified）,若最后修改时间较新（大），说明资源又被改过，则返回最新资源，HTTP 200 OK;若最后修改时间较旧（小），说明资源无新修改，响应HTTP 304 走缓存。</p>
+<p>Last-Modifed/If-Modified-Since的时间精度是秒，而Etag可以更精确。<br>Etag优先级是高于Last-Modifed的，所以服务器会优先验证Etag<br>Last-Modifed/If-Modified-Since是http1.0的头字段</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%BA%94%E7%94%A8%E6%A1%88%E4%BE%8B/" rel="tag">应用案例</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+   
+</article>
+
+    
+    <article
   id="post-javascript/engineering/webpack核心概念"
   class="article article-type-post"
   itemscope
@@ -866,162 +1076,13 @@ $ vue init username/repo my-project</code></pre>
 </article>
 
     
-    <article
-  id="post-javascript/engineering/CI-CD"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/posts/adc51d9c/"
-    >CI CD</a> 
-</h2>
- 
-
-    </header>
-     
-    <div class="article-meta">
-      <a href="/posts/adc51d9c/" class="article-date">
-  <time datetime="2020-12-04T06:18:09.000Z" itemprop="datePublished">2020-12-04</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/JavaScript/">JavaScript</a> / <a class="article-category-link" href="/categories/JavaScript/%E5%B7%A5%E7%A8%8B%E5%8C%96/">工程化</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p><img src="/posts/adc51d9c/0001.png"></p>
-<p>代码 -&gt; 构建 -&gt; 集成 -&gt; 测试 -&gt; 发布 -&gt; 部署</p>
-<p>|———持续集成——| CI</p>
-<p>|———–持续发布————| CD</p>
-<p>|—————持续部署—————| CD</p>
-<h4 id="CI-CD"><a href="#CI-CD" class="headerlink" title="CI CD"></a>CI CD</h4><p><img src="/posts/adc51d9c/0002.png"></p>
-<ul>
-<li><p>持续集成(CI)</p>
-</li>
-<li><p>持续交付和持续部署(CD)</p>
-</li>
-<li><p>现代软件开发的需求加上部署到不同基础设施的复杂性使得创建应用程序成为一个繁琐的过程。当应用程序出现规模性增长,开发团队人员变得更分散时,快速且不断地生产和发布软件的流程将会变得更加困难。</p>
-</li>
-<li><p>为了解决这些问题,开发团队开始探索新的策略来使他们的构建、测试和发布流程自动化,以帮助其更快地部署新的生产。这就是持续交付和持续集成发展的由来。</p>
-</li>
-</ul>
-<p>流程</p>
-<p><img src="/posts/adc51d9c/0003.png"></p>
-<h4 id="自动构建"><a href="#自动构建" class="headerlink" title="自动构建"></a>自动构建</h4><p>在软件开发过程中,构建流程会将开发人员生成的代码转换为可执行的可用软件。</p>
-<p>对于Go或者C语言等编译语言,此阶段需要通过编译器运行源代码以生成独立的二进制文件。</p>
-<p>对于JavaScript或PHP等解释性语言,没有编译的步骤,但是代码依旧需要在特定的时间内冻结、绑定依赖项、打包以便于分发。这些过程通常称为“构建”或“发布”的工件。</p>
-<p>虽然开发人员可以手动构建,但这样操作有诸多不利。首先,从主动开发到创建构建的转变中引入了上下文转换,使得开发人员不得不停止生产效率更高的工作来专注于构建过程。其次,每个开发人员都在制作自己的工件,这可能导致构建过程不一致。</p>
-<p>为了解决这些顾虑,许多开发团队配置了自动构建流水线。这些系统监视源代码存储库,并在检测到更改时自动启动预配置的构建过程。这一配置无需牵涉过多的人力在其中并且确保了每个构建过程一致。</p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" rel="tag">工程化</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-   
-</article>
-
-    
-    <article
-  id="post-linux/question/进程,线程,协程"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/posts/885dbafa/"
-    >进程，线程，协程</a> 
-</h2>
- 
-
-    </header>
-     
-    <div class="article-meta">
-      <a href="/posts/885dbafa/" class="article-date">
-  <time datetime="2020-12-03T02:54:42.000Z" itemprop="datePublished">2020-12-03</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Linux/">Linux</a> / <a class="article-category-link" href="/categories/Linux/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/">常见问题</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <p><strong>程序执行</strong></p>
-<ul>
-<li>写在硬盘上的静态程序文件 </li>
-<li>cpu从磁盘上找到程序文件</li>
-<li>.exe 文件中包含操作cpu的指令</li>
-<li>把指令放到内存中</li>
-<li>在内存中的指令就可以叫做cpu的<strong>进程</strong></li>
-</ul>
-<h4 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h4><p>对于cpu来讲，有一个时间线的概念，时间线上的每一个点对应着一个操作指令</p>
-<p>操作系统把时间线分割为不同的时间片，时间片是执行程序的小单位</p>
-<p>按照 1，2，1，2的顺序，来回切换任务的分配，可以让cpu调度进程，看起来在同时执行多个操作</p>
-<p>进程比较重，每个任务分配一个进程，频繁切换的时候损耗比较大，所以有了线程的概念</p>
-<p>进程之间内存相互独立，进程之间相互通信需要内核转发（系统调用）。也就是进程之间的通信需要经过操作系统，损耗比较大</p>
-<p>进程主要占据的内存代码（进程的实现代码），数据（需要处理的数据），文件（和硬盘文件关联的文件句柄，需要通过系统内核，来完成文件的操作）</p>
-<p>执行的时候需要写寄存器，在进程切换的时候需要保存寄存器中信息的状态，把寄存器中的数据写到内存中。</p>
-<p>栈 函数调用栈</p>
-<h4 id="线程"><a href="#线程" class="headerlink" title="线程"></a>线程</h4><p>线程比较轻，线程依附与进程，是多个线程对应一个进程的关系，</p>
-<p>线程共享进程的内存（代码，数据，文件），但是有自己独立的寄存器和栈，所以线程比较轻</p>
-<p>线程共享数据存在的问题，可能读写同时操作，需要线程锁</p>
-<h4 id="IO-密集型"><a href="#IO-密集型" class="headerlink" title="IO 密集型"></a>IO 密集型</h4><p>输入输出的速度远小于CPU的速度。 </p>
-<p>多任务 -&gt; 多线程 -&gt; 时间驱动 -&gt; 协程</p>
-<h4 id="CPU密集型"><a href="#CPU密集型" class="headerlink" title="CPU密集型"></a>CPU密集型</h4><p>多进程 -&gt; 多线程</p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-   
-</article>
-
-    
   </article>
   
 
   
   <nav class="page-nav">
     
-    <a class="extend prev" rel="prev" href="/">上一页</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/3/">下一页</a>
+    <a class="extend prev" rel="prev" href="/">上一页</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/3/">下一页</a>
   </nav>
   
 </section>
