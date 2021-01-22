@@ -386,22 +386,3 @@ exports.dev = series(es6);
 exports.default = series(es6dev, codeClean);
 ```
 
-
-##### chunk
-
-生成chunk的几种方式
-
-+ 多页面entry生成多个chunk
-+ 异步组件生成chunk
-+ code split 
-
-##### hash 
-
-+ hash 如果都使用hash的话，即每次修改任何一个文件，所有文件名的hash至都将改变。所以一旦修改了任何一个文件，整个项目的文件缓存都将失效.
-
-+ chunkhash chunkhash根据不同的入口文件(Entry)进行依赖文件解析、构建对应的chunk，生成对应的哈希值。在生产环境里把一些公共库和程序入口文件区分开，单独打包构建，接着我们采用chunkhash的方式生成哈希值，那么只要我们不改动公共库的代码，就可以保证其哈希值不会受影响。动态import也受chunkhash的影响.
-
-因为我们是将样式作为模块import到JavaScript文件中的，所以它们的chunkhash是一致的,这样就会有个问题，只要对应css或则js改变，与其关联的文件hash值也会改变，但其内容并没有改变呢，所以没有达到缓存意义。固contenthash的用途随之而来。
-
-+ contenthash是针对文件内容级别的，只有你自己模块的内容变了，那么hash值才改变
-

@@ -1,14 +1,14 @@
 ---
 title: 调试npm包
 mathjax: true
-date: 2021-01-16 22:16:47
 categories:
   - JavaScript
   - 工程化
 tags:
   - 工程化
   - npm
-abbrlink:
+abbrlink: 8f2be328
+date: 2021-01-16 22:16:47
 ---
 
 #### npm/yarn link

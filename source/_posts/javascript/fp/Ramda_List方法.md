@@ -1,17 +1,17 @@
 ---
 layout: post
 title: Ramda List 方法源码分析
-date: 2021-01-19 12:57:53
 categories:
   - JavaScript
   - 函数式编程
 tags:
   - 函数式编程
   - Ramda
-abbrlink:
+abbrlink: 6ac7a6cf
+date: 2021-01-19 12:57:53
 ---
 
-#### adjust
+#### [adjust](https://ramda.cn/docs/#adjust)
 
 判断索引的合法性
 
@@ -31,7 +31,9 @@ var adjust = _curry3(function adjust(idx, fn, list) {
 ```
 
 
-#### all
+#### [all](https://ramda.cn/docs/#all)
+
+[_dispatchable](/posts/2b6baf0c/#dispatchable)
 
 ```javascript
 var all = _curry2(_dispatchable(['all'], _xall, function all(fn, list) {

@@ -2,14 +2,12 @@
 layout: post
 title: webpack核心概念
 abbrlink: 731d431a
-date: 2020-12-26 22:46:37
 categories:
-  - JavaScript
-  - 工程化
+  - webpack
 tags:
-  - 单元测试
   - 工程化
   - webpack
+date: 2021-01-16 21:32:37
 ---
 
 #### 安装
@@ -35,9 +33,6 @@ tags:
 ##### clean-webpack-plugin
 
 https://www.npmjs.com/package/clean-webpack-plugin
-
-##### 
-
 
 #### source-map
 
@@ -169,16 +164,17 @@ module.exports = {
 
 需要 @babel/polyfill 转换新的api,但是 @babel/polyfill 会全量引入，不能按需引入
 
-可以通过 `babel.rc` 配置文件来实现
+可以通过 `babel.rc` 配置文件来实现 
 
 ```json
 {
   "presets": [
     [
       "@babel/preset-env",
-      {
-        "useBuiltIns": "entry"
-      }
+      // This option was removed in v7 by just making it the default.在新版本中已经移除，无需添加
+      // {
+      //   "useBuiltIns": "usage"
+      // }
     ]
   ]
 }
@@ -188,7 +184,7 @@ module.exports = {
 
 @babel/runtime-corejs2 是一个随着 [@babel/plugin-transform-runtime](https://babeljs.io/docs/en/babel-plugin-transform-runtime) 一起时使用的运行时依赖，会把重复的函数覆盖为 @babel/runtime-corejs2 中的引用
 
-@babel/runtime-corejs2 仅仅是一个包含着函数的包，把函数以模块化的形式引入
+@babel/runtime-corejs2 仅仅是一个包含着函数的包，把函数以模块化的形式引入, **要安装到生产依赖中**
 
 .babelrc
 
