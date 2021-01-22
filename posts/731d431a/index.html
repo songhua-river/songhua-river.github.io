@@ -58,7 +58,7 @@ var _hmt = _hmt || [];
     <main class="content on">
       <section class="outer">
   <article
-  id="post-javascript/engineering/webpack核心概念"
+  id="post-webpack/webpack核心概念"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -77,10 +77,10 @@ var _hmt = _hmt || [];
      
     <div class="article-meta">
       <a href="/posts/731d431a/" class="article-date">
-  <time datetime="2020-12-26T14:46:37.000Z" itemprop="datePublished">2020-12-26</time>
+  <time datetime="2021-01-16T13:32:37.000Z" itemprop="datePublished">2021-01-16</time>
 </a> 
   <div class="article-category">
-    <a class="article-category-link" href="/categories/JavaScript/">JavaScript</a> / <a class="article-category-link" href="/categories/JavaScript/%E5%B7%A5%E7%A8%8B%E5%8C%96/">工程化</a>
+    <a class="article-category-link" href="/categories/webpack/">webpack</a>
   </div>
   
 <div class="word_count">
@@ -121,7 +121,7 @@ var _hmt = _hmt || [];
 <p>测速</p>
 <p><code>nrm test taobao</code></p>
 <h4 id="常用工具"><a href="#常用工具" class="headerlink" title="常用工具"></a>常用工具</h4><h5 id="clean-webpack-plugin"><a href="#clean-webpack-plugin" class="headerlink" title="clean-webpack-plugin"></a>clean-webpack-plugin</h5><p><a target="_blank" rel="noopener" href="https://www.npmjs.com/package/clean-webpack-plugin">https://www.npmjs.com/package/clean-webpack-plugin</a></p>
-<h5 id=""><a href="#" class="headerlink" title=""></a></h5><h4 id="source-map"><a href="#source-map" class="headerlink" title="source-map"></a>source-map</h4><p>cheap-module-source-map 用于生产环境，不能暴露源码</p>
+<h4 id="source-map"><a href="#source-map" class="headerlink" title="source-map"></a>source-map</h4><p>cheap-module-source-map 用于生产环境，不能暴露源码</p>
 <p>eval-cheap-module-source-map 开发环境中使用</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  devtool:<span class="string">&#x27;cheap-module-source-map&#x27;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -162,12 +162,12 @@ var _hmt = _hmt || [];
 <p>这说明了 devServer.publicPath 与 output.publicPath 是一致的</p>
 <h5 id="babel-polyfill-babel-plugin-transform-runtime-babel-runtime-corejs2"><a href="#babel-polyfill-babel-plugin-transform-runtime-babel-runtime-corejs2" class="headerlink" title="@babel/polyfill  @babel/plugin-transform-runtime @babel/runtime-corejs2"></a>@babel/polyfill  @babel/plugin-transform-runtime @babel/runtime-corejs2</h5><p>@babel/preset-env 只会转换新语法，但是不会转换新的api,比如 <code>Array.from</code></p>
 <p>需要 @babel/polyfill 转换新的api,但是 @babel/polyfill 会全量引入，不能按需引入</p>
-<p>可以通过 <code>babel.rc</code> 配置文件来实现</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;presets&quot;</span>: [</span><br><span class="line">    [</span><br><span class="line">      <span class="string">&quot;@babel/preset-env&quot;</span>,</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="attr">&quot;useBuiltIns&quot;</span>: <span class="string">&quot;entry&quot;</span></span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以通过 <code>babel.rc</code> 配置文件来实现 </p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;presets&quot;</span>: [</span><br><span class="line">    [</span><br><span class="line">      <span class="string">&quot;@babel/preset-env&quot;</span>,</span><br><span class="line">      <span class="comment">// This option was removed in v7 by just making it the default.在新版本中已经移除，无需添加</span></span><br><span class="line">      <span class="comment">// &#123;</span></span><br><span class="line">      <span class="comment">//   &quot;useBuiltIns&quot;: &quot;usage&quot;</span></span><br><span class="line">      <span class="comment">// &#125;</span></span><br><span class="line">    ]</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>但是@babel/preset-env也存在问题，虽然会按需引入但是每个文件如果有重复的方法，都会被编译成相同的代码引入，文件多的时候会让冗余的代码越来越多</p>
 <p>@babel/runtime-corejs2 是一个随着 <a target="_blank" rel="noopener" href="https://babeljs.io/docs/en/babel-plugin-transform-runtime">@babel/plugin-transform-runtime</a> 一起时使用的运行时依赖，会把重复的函数覆盖为 @babel/runtime-corejs2 中的引用</p>
-<p>@babel/runtime-corejs2 仅仅是一个包含着函数的包，把函数以模块化的形式引入</p>
+<p>@babel/runtime-corejs2 仅仅是一个包含着函数的包，把函数以模块化的形式引入, <strong>要安装到生产依赖中</strong></p>
 <p>.babelrc</p>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;plugins&quot;</span>: [</span><br><span class="line">    [</span><br><span class="line">      <span class="string">&quot;@babel/plugin-transform-runtime&quot;</span>,</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="attr">&quot;corejs&quot;</span>: <span class="number">3</span></span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -272,7 +272,7 @@ var _hmt = _hmt || [];
 </div>
 
 <div id="share-mask"></div>  
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/webpack/" rel="tag">webpack</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/" rel="tag">单元测试</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" rel="tag">工程化</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/webpack/" rel="tag">webpack</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%B7%A5%E7%A8%8B%E5%8C%96/" rel="tag">工程化</a></li></ul>
 
     </footer>
   </div>
@@ -280,19 +280,19 @@ var _hmt = _hmt || [];
    
   <nav class="article-nav">
     
-      <a href="/posts/5527b4f7/" class="article-nav-link">
+      <a href="/posts/8f2be328/" class="article-nav-link">
         <strong class="article-nav-caption">上一篇</strong>
         <div class="article-nav-title">
           
-            性能优化基础
+            调试npm包
           
         </div>
       </a>
     
     
-      <a href="/posts/e3b6331f/" class="article-nav-link">
+      <a href="/posts/168a1e12/" class="article-nav-link">
         <strong class="article-nav-caption">下一篇</strong>
-        <div class="article-nav-title">热部署代码</div>
+        <div class="article-nav-title">Ramda Object方法源码分析</div>
       </a>
     
   </nav>
