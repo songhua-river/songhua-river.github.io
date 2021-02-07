@@ -113,6 +113,196 @@ var _hmt = _hmt || [];
     
     
     <article
+  id="post-javascript/fp/Ramda_Relation方法"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/posts/13a0b176/"
+    >Ramda Relation 方法源码分析</a> 
+</h2>
+ 
+
+    </header>
+     
+    <div class="article-meta">
+      <a href="/posts/13a0b176/" class="article-date">
+  <time datetime="2021-01-16T08:14:44.000Z" itemprop="datePublished">2021-01-16</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/JavaScript/">JavaScript</a> / <a class="article-category-link" href="/categories/JavaScript/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/">函数式编程</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+   
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Ramda/" rel="tag">Ramda</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" rel="tag">函数式编程</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+   
+</article>
+
+    
+    <article
+  id="post-javascript/fp/Ramda_Math方法"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/posts/12e07a8d/"
+    >Ramda Math 方法源码分析</a> 
+</h2>
+ 
+
+    </header>
+     
+    <div class="article-meta">
+      <a href="/posts/12e07a8d/" class="article-date">
+  <time datetime="2021-01-16T07:45:51.000Z" itemprop="datePublished">2021-01-16</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/JavaScript/">JavaScript</a> / <a class="article-category-link" href="/categories/JavaScript/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/">函数式编程</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+   
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Ramda/" rel="tag">Ramda</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" rel="tag">函数式编程</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+   
+</article>
+
+    
+    <article
+  id="post-javascript/fp/Ramda中的柯理化"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/posts/33dcfd3a/"
+    >Ramda中的柯理化</a> 
+</h2>
+ 
+
+    </header>
+     
+    <div class="article-meta">
+      <a href="/posts/33dcfd3a/" class="article-date">
+  <time datetime="2021-01-15T13:54:03.000Z" itemprop="datePublished">2021-01-15</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/JavaScript/">JavaScript</a> / <a class="article-category-link" href="/categories/JavaScript/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/">函数式编程</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h4 id="curry1"><a href="#curry1" class="headerlink" title="_curry1"></a>_curry1</h4><p>内置接口，保证了参数的个数，无需判断</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Optimized internal one-arity curry function.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@private</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@category <span class="variable">Function</span></span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param <span class="type">&#123;Function&#125;</span> </span>fn The function to curry.</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return <span class="type">&#123;Function&#125;</span> </span>The curried function.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span> <span class="title">_curry1</span>(<span class="params">fn</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">f1</span>(<span class="params">a</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">arguments</span>.length === <span class="number">0</span> || _isPlaceholder(a)) &#123;</span><br><span class="line">      <span class="keyword">return</span> f1;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> fn.apply(<span class="built_in">this</span>, <span class="built_in">arguments</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="curry2"><a href="#curry2" class="headerlink" title="_curry2"></a>_curry2</h4><p>如果以值的真假为纬度分支会比较复杂，而且不能正确参数的位置</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> _curry2 = <span class="function"><span class="keyword">function</span> (<span class="params">fn</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">f2</span>(<span class="params">a, b</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a !== <span class="literal">undefined</span> &amp;&amp; b !== <span class="literal">undefined</span></span><br><span class="line">      ? _isPlaceholder(a) &amp;&amp; _isPlaceholder(b)</span><br><span class="line">        ? f2</span><br><span class="line">        : isPlaceholder(a)</span><br><span class="line">          ? _curry1(<span class="function"><span class="keyword">function</span> (<span class="params">_a</span>) </span>&#123; <span class="keyword">return</span> fn(_a, b) &#125;)</span><br><span class="line">          : _isPlaceholder(b)</span><br><span class="line">            ? _curry1(<span class="function"><span class="keyword">function</span> (<span class="params">_b</span>) </span>&#123; <span class="keyword">return</span> fn(a, _b) &#125;)</span><br><span class="line">            : fn.apply(<span class="built_in">this</span>, <span class="built_in">arguments</span>)</span><br><span class="line">      : a !== <span class="literal">undefined</span></span><br><span class="line">        ? _curry1(<span class="function"><span class="keyword">function</span> (<span class="params">_b</span>) </span>&#123; <span class="keyword">return</span> fn(a, _b) &#125;)</span><br><span class="line">        : f2</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>作者以参数的个数为纬度考虑</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Optimized internal two-arity curry function.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@private</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@category <span class="variable">Function</span></span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param <span class="type">&#123;Function&#125;</span> </span>fn The function to curry.</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return <span class="type">&#123;Function&#125;</span> </span>The curried function.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span> <span class="title">_curry2</span>(<span class="params">fn</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">f2</span>(<span class="params">a, b</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">switch</span> (<span class="built_in">arguments</span>.length) &#123;</span><br><span class="line">      <span class="keyword">case</span> <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> f2;</span><br><span class="line">      <span class="keyword">case</span> <span class="number">1</span>:</span><br><span class="line">        <span class="comment">// 如果a传入的是undefined也是一个参数</span></span><br><span class="line">        <span class="keyword">return</span> _isPlaceholder(a)</span><br><span class="line">          ? f2</span><br><span class="line">          : _curry1(<span class="function"><span class="keyword">function</span>(<span class="params">_b</span>) </span>&#123; <span class="keyword">return</span> fn(a, _b); &#125;);</span><br><span class="line">      <span class="keyword">default</span>:</span><br><span class="line">        <span class="keyword">return</span> _isPlaceholder(a) &amp;&amp; _isPlaceholder(b)</span><br><span class="line">          ? f2</span><br><span class="line">          : _isPlaceholder(a)</span><br><span class="line">            ? _curry1(<span class="function"><span class="keyword">function</span>(<span class="params">_a</span>) </span>&#123; <span class="keyword">return</span> fn(_a, b); &#125;)</span><br><span class="line">            : _isPlaceholder(b)</span><br><span class="line">              ? _curry1(<span class="function"><span class="keyword">function</span>(<span class="params">_b</span>) </span>&#123; <span class="keyword">return</span> fn(a, _b); &#125;)</span><br><span class="line">              : fn(a, b);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="curry3"><a href="#curry3" class="headerlink" title="_curry3"></a>_curry3</h4><p>同理增加分支判断</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Optimized internal three-arity curry function.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@private</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@category <span class="variable">Function</span></span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param <span class="type">&#123;Function&#125;</span> </span>fn The function to curry.</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return <span class="type">&#123;Function&#125;</span> </span>The curried function.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span> <span class="title">_curry3</span>(<span class="params">fn</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">f3</span>(<span class="params">a, b, c</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">switch</span> (<span class="built_in">arguments</span>.length) &#123;</span><br><span class="line">      <span class="keyword">case</span> <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> f3;</span><br><span class="line">      <span class="keyword">case</span> <span class="number">1</span>:</span><br><span class="line">        <span class="keyword">return</span> _isPlaceholder(a)</span><br><span class="line">          ? f3</span><br><span class="line">          : _curry2(<span class="function"><span class="keyword">function</span>(<span class="params">_b, _c</span>) </span>&#123; <span class="keyword">return</span> fn(a, _b, _c); &#125;);</span><br><span class="line">      <span class="keyword">case</span> <span class="number">2</span>:</span><br><span class="line">        <span class="keyword">return</span> _isPlaceholder(a) &amp;&amp; _isPlaceholder(b)</span><br><span class="line">          ? f3</span><br><span class="line">          : _isPlaceholder(a)</span><br><span class="line">            ? _curry2(<span class="function"><span class="keyword">function</span>(<span class="params">_a, _c</span>) </span>&#123; <span class="keyword">return</span> fn(_a, b, _c); &#125;)</span><br><span class="line">            : _isPlaceholder(b)</span><br><span class="line">              ? _curry2(<span class="function"><span class="keyword">function</span>(<span class="params">_b, _c</span>) </span>&#123; <span class="keyword">return</span> fn(a, _b, _c); &#125;)</span><br><span class="line">              : _curry1(<span class="function"><span class="keyword">function</span>(<span class="params">_c</span>) </span>&#123; <span class="keyword">return</span> fn(a, b, _c); &#125;);</span><br><span class="line">      <span class="keyword">default</span>:</span><br><span class="line">        <span class="keyword">return</span> _isPlaceholder(a) &amp;&amp; _isPlaceholder(b) &amp;&amp; _isPlaceholder(c)</span><br><span class="line">          ? f3</span><br><span class="line">          <span class="comment">// 其中两个是占位符的情况</span></span><br><span class="line">          : _isPlaceholder(a) &amp;&amp; _isPlaceholder(b)</span><br><span class="line">            ? _curry2(<span class="function"><span class="keyword">function</span>(<span class="params">_a, _b</span>) </span>&#123; <span class="keyword">return</span> fn(_a, _b, c); &#125;)</span><br><span class="line">            : _isPlaceholder(a) &amp;&amp; _isPlaceholder(c)</span><br><span class="line">              ? _curry2(<span class="function"><span class="keyword">function</span>(<span class="params">_a, _c</span>) </span>&#123; <span class="keyword">return</span> fn(_a, b, _c); &#125;)</span><br><span class="line">              : _isPlaceholder(b) &amp;&amp; _isPlaceholder(c)</span><br><span class="line">                ? _curry2(<span class="function"><span class="keyword">function</span>(<span class="params">_b, _c</span>) </span>&#123; <span class="keyword">return</span> fn(a, _b, _c); &#125;)</span><br><span class="line">                <span class="comment">// 其中一个是占位符的情况</span></span><br><span class="line">                : _isPlaceholder(a)</span><br><span class="line">                  ? _curry1(<span class="function"><span class="keyword">function</span>(<span class="params">_a</span>) </span>&#123; <span class="keyword">return</span> fn(_a, b, c); &#125;)</span><br><span class="line">                  : _isPlaceholder(b)</span><br><span class="line">                    ? _curry1(<span class="function"><span class="keyword">function</span>(<span class="params">_b</span>) </span>&#123; <span class="keyword">return</span> fn(a, _b, c); &#125;)</span><br><span class="line">                    : _isPlaceholder(c)</span><br><span class="line">                      ? _curry1(<span class="function"><span class="keyword">function</span>(<span class="params">_c</span>) </span>&#123; <span class="keyword">return</span> fn(a, b, _c); &#125;)</span><br><span class="line">                      : fn(a, b, c);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="curry"><a href="#curry" class="headerlink" title="curry"></a>curry</h4><p>共有方法curry的实现， 对共有方法curryN的封装，在不确定参数个数时候通过 <code>fn.length</code> 获取参数长度</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> curry = _curry1(<span class="function"><span class="keyword">function</span> <span class="title">curry</span>(<span class="params">fn</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> curryN(fn.length, fn);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h4 id="curryN"><a href="#curryN" class="headerlink" title="curryN"></a>curryN</h4><p>需要指定参数的个数， 抽象出参数个数的判断，最多个数为10个，防止参数过多造成栈溢出</p>
+<p>_arity 对参数个数的处理</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span> <span class="title">_arity</span>(<span class="params">n, fn</span>) </span>&#123;</span><br><span class="line">  <span class="comment">/* eslint-disable no-unused-vars */</span></span><br><span class="line">  <span class="keyword">switch</span> (n) &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">0</span>: <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; <span class="keyword">return</span> fn.apply(<span class="built_in">this</span>, <span class="built_in">arguments</span>); &#125;;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">1</span>: <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">a0</span>) </span>&#123; <span class="keyword">return</span> fn.apply(<span class="built_in">this</span>, <span class="built_in">arguments</span>); &#125;;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">2</span>: <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">a0, a1</span>) </span>&#123; <span class="keyword">return</span> fn.apply(<span class="built_in">this</span>, <span class="built_in">arguments</span>); &#125;;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="keyword">case</span> <span class="number">10</span>: <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">a0, a1, a2, a3, a4, a5, a6, a7, a8, a9</span>) </span>&#123; <span class="keyword">return</span> fn.apply(<span class="built_in">this</span>, <span class="built_in">arguments</span>); &#125;;</span><br><span class="line">    <span class="keyword">default</span>: <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">&#x27;First argument to _arity must be a non-negative integer no greater than ten&#x27;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> curryN = _curry2(<span class="function"><span class="keyword">function</span> <span class="title">curryN</span>(<span class="params">length, fn</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (length === <span class="number">1</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> _curry1(fn);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> _arity(length, _curryN(length, [], fn));</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>在参数较少时使用其他的内置方法  </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">curryN</span>(<span class="params">length, fn</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> _curry2(<span class="function"><span class="keyword">function</span> (<span class="params">length, fn</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> length === <span class="number">1</span></span><br><span class="line">      ? _curry1(fn)</span><br><span class="line">      : length === <span class="number">2</span></span><br><span class="line">        ? _curry2(fn)</span><br><span class="line">        : length === <span class="number">3</span></span><br><span class="line">          ? _curry3(fn)</span><br><span class="line">          : _arity(length, _curryN(length, [], fn))</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="curryN-核心方法"><a href="#curryN-核心方法" class="headerlink" title="_curryN 核心方法"></a>_curryN 核心方法</h4><p>下面是一段糟糕的代码</p>
+<p>receive保持了源数组的引用，不符合函数式编成数据不可变的思想</p>
+<p>每次添加新参数，都要查询可添加的位置</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. 真实参数个数和length项等 则执行函数</span></span><br><span class="line"><span class="comment">// 2. 实时记录占位符的位置， 新参数优先放到占位符</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">_curryN</span>(<span class="params">length, receive, fn</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">fN</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> index = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">var</span> zw = <span class="number">0</span>;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">findzw</span>(<span class="params">zw, receive</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">while</span> (zw &lt; receive.length) &#123;</span><br><span class="line">        <span class="keyword">if</span> (_isPlaceholder(receive[zw])) &#123;</span><br><span class="line">          <span class="comment">//指向占位符的前一位， 方便后面处理</span></span><br><span class="line">          <span class="keyword">return</span> zw - <span class="number">1</span></span><br><span class="line">        &#125;</span><br><span class="line">        zw++</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> zw - <span class="number">1</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 找到占位符的位置</span></span><br><span class="line">    zw = findzw(zw, receive);</span><br><span class="line">    <span class="keyword">while</span> (index &lt; <span class="built_in">arguments</span>.length) &#123;</span><br><span class="line">      receive[zw + <span class="number">1</span>] = <span class="built_in">arguments</span>[index];</span><br><span class="line">      <span class="comment">//更新之后重新查找占位符, 条过当前的占位符</span></span><br><span class="line">      zw = findzw(zw + <span class="number">1</span>, receive);</span><br><span class="line">      index++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 没有占位符 则位置+1为参数长度</span></span><br><span class="line">    <span class="keyword">if</span> (zw + <span class="number">1</span> === length) &#123;</span><br><span class="line">      <span class="keyword">return</span> fn.apply(<span class="built_in">this</span>, receive)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="comment">// 计算剩余参数</span></span><br><span class="line">      <span class="keyword">var</span> j = <span class="number">0</span>;</span><br><span class="line">      <span class="keyword">var</span> len = <span class="number">0</span></span><br><span class="line">      <span class="keyword">while</span> (j &lt; receive.length) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!_isPlaceholder(receive[index])) &#123;</span><br><span class="line">          len++;</span><br><span class="line">        &#125;</span><br><span class="line">        j++</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> _arity(length - len, _curryN(length, receive, fn))</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>源码的实现</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">_curryN</span>(<span class="params">length, receive, fn</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 复制已接受参数的数组</span></span><br><span class="line">    <span class="keyword">var</span> combined = [];</span><br><span class="line">    <span class="comment">// 遍历入参的索引</span></span><br><span class="line">    <span class="keyword">var</span> argsIdx = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">// 剩余参数</span></span><br><span class="line">    <span class="keyword">var</span> left = length;</span><br><span class="line">    <span class="comment">// 遍历已接受参数索引</span></span><br><span class="line">    <span class="keyword">var</span> combinedIdx = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 如果参数没有复制完成，或新如参没有添加完成则继续执行</span></span><br><span class="line">    <span class="keyword">while</span> (combinedIdx &lt; received.length || argsIdx &lt; <span class="built_in">arguments</span>.length) &#123;</span><br><span class="line">      <span class="keyword">var</span> result;</span><br><span class="line">      <span class="comment">// 通过条件语句处理了占位符的问题</span></span><br><span class="line">      <span class="comment">// 如果老参数没有复制完成，且复制的值不是占位符，或者入参已经都处理了，直接取出当前的老参数，用于复制到新的数组中</span></span><br><span class="line">      <span class="comment">// 通过双指针解决占位符的问题</span></span><br><span class="line">      <span class="keyword">if</span> (combinedIdx &lt; received.length &amp;&amp;</span><br><span class="line">        (!_isPlaceholder(received[combinedIdx]) ||</span><br><span class="line">          argsIdx &gt;= <span class="built_in">arguments</span>.length)) &#123;</span><br><span class="line">        result = received[combinedIdx];</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 如果老参数都复制完，或者时占位符，或者还有新参数没有复制</span></span><br><span class="line">        <span class="comment">// 取一个新参数加到数组中</span></span><br><span class="line">        result = <span class="built_in">arguments</span>[argsIdx];</span><br><span class="line">        argsIdx += <span class="number">1</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="comment">// 添加到新数组中</span></span><br><span class="line">      combined[combinedIdx] = result;</span><br><span class="line">      <span class="comment">// 如果不是占位符剩余参数 -1</span></span><br><span class="line">      <span class="keyword">if</span> (!_isPlaceholder(result)) &#123;</span><br><span class="line">        left -= <span class="number">1</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      combinedIdx += <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 如果没有剩余参数直接执行</span></span><br><span class="line">    <span class="keyword">return</span> left &lt;= <span class="number">0</span></span><br><span class="line">      ? fn.apply(<span class="built_in">this</span>, combined)</span><br><span class="line">      <span class="comment">// 否则通过_arity固定新函数的参数个数</span></span><br><span class="line">      : _arity(left, _curryN(length, combined, fn));</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Ramda/" rel="tag">Ramda</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" rel="tag">函数式编程</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+   
+</article>
+
+    
+    <article
   id="post-typeScript/基本类型"
   class="article article-type-post"
   itemscope
@@ -495,69 +685,6 @@ var _hmt = _hmt || [];
 
     
     <article
-  id="post-algorithm/structure/数组"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/posts/340249a9/"
-    >数组</a> 
-</h2>
- 
-
-    </header>
-     
-    <div class="article-meta">
-      <a href="/posts/340249a9/" class="article-date">
-  <time datetime="2021-01-14T03:03:00.000Z" itemprop="datePublished">2021-01-14</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a> / <a class="article-category-link" href="/categories/%E7%AE%97%E6%B3%95/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h4 id="unshift-开头插入元素"><a href="#unshift-开头插入元素" class="headerlink" title="unshift 开头插入元素"></a>unshift 开头插入元素</h4><p>unshift 实现原理如下</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Array</span>.prototype.unshift = <span class="function"><span class="keyword">function</span> (<span class="params">value</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> len = <span class="built_in">this</span>.length;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = len; i &gt; <span class="number">0</span>; i--) &#123;</span><br><span class="line">    <span class="built_in">this</span>[i] = <span class="built_in">this</span>[i - <span class="number">1</span>];</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">this</span>[<span class="number">0</span>] = value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="shift-删除开头元素"><a href="#shift-删除开头元素" class="headerlink" title="shift 删除开头元素"></a>shift 删除开头元素</h4><p>如果只是单纯的用后一个位置覆盖前一个位置，数组的长度没有发生改变，最后一个将为<code>undefined</code>，可能导致错误</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; numbers.length; i++) &#123;</span><br><span class="line">  numbers[i] = numbers[i + <span class="number">1</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>可以通过<code>length</code>属性来修改</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Array</span>.prototype.shift = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> item = <span class="built_in">this</span>[<span class="number">0</span>];</span><br><span class="line">  length = <span class="built_in">this</span>.length;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; length - <span class="number">1</span>; i++) &#123;</span><br><span class="line">    <span class="built_in">this</span>[i] = <span class="built_in">this</span>[i + <span class="number">1</span>]</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">this</span>.length--;</span><br><span class="line">  <span class="keyword">return</span> item;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-<h4 id="类型数组"><a href="#类型数组" class="headerlink" title="类型数组"></a>类型数组</h4><p>类型数组则用于存储单一类型的数据。它的语法是 let myArray = new TypedArray(length) ,其中 TypedArray 需替换为下表所列之一。</p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%B0%E7%BB%84/" rel="tag">数组</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-   
-</article>
-
-    
-    <article
   id="post-node/nginx"
   class="article article-type-post"
   itemscope
@@ -766,159 +893,6 @@ var _hmt = _hmt || [];
     <footer class="article-footer">
        
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Koa/" rel="tag">Koa</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-   
-</article>
-
-    
-    <article
-  id="post-node/文件系统"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/posts/1b9c8662/"
-    >文件系统</a> 
-</h2>
- 
-
-    </header>
-     
-    <div class="article-meta">
-      <a href="/posts/1b9c8662/" class="article-date">
-  <time datetime="2021-01-09T11:13:33.000Z" itemprop="datePublished">2021-01-09</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Node/">Node</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h4 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h4><p>文件描述符 </p>
-<p>在 POSIX （可移植操作系统）系统上，对于每个进程，内核都维护着一张当前打开着的文件和资源的表格。 每个打开的文件都分配了一个称为文件描述符的简单的数字标识符。 在系统层，所有文件系统操作都使用这些文件描述符来标识和跟踪每个特定的文件。 Windows 系统使用了一个虽然不同但概念上类似的机制来跟踪资源。 为了简化用户的工作，Node.js 抽象出操作系统之间的特定差异，并为所有打开的文件分配一个数字型的文件描述符。</p>
-<p>fs.open() 方法用于分配新的文件描述符。 一旦被分配，则文件描述符可用于从文件读取数据、向文件写入数据、或请求关于文件的信息。</p>
-<p>大多数操作系统限制在任何给定时间内可能打开的文件描述符的数量，<strong>因此当操作完成时关闭描述符至关重要。 如果不这样做将导致内存泄漏，最终导致应用程序崩溃。</strong></p>
-<p>r+ 打开文件用于读写。<br>w+ 打开文件用于读写，将流定位到文件的开头。如果文件不存在则创建文件。<br>a 打开文件用于写入，将流定位到文件的末尾。如果文件不存在则创建文件。<br>a+ 打开文件用于读写，将流定位到文件的末尾。如果文件不存在则创建文件。</p>
-<h4 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h4> 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Node/" rel="tag">Node</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-   
-</article>
-
-    
-    <article
-  id="post-node/stream模块"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/posts/4a21a07/"
-    >stream模块</a> 
-</h2>
- 
-
-    </header>
-     
-    <div class="article-meta">
-      <a href="/posts/4a21a07/" class="article-date">
-  <time datetime="2021-01-07T10:53:23.000Z" itemprop="datePublished">2021-01-07</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Node/">Node</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h4 id="相关概念"><a href="#相关概念" class="headerlink" title="相关概念"></a>相关概念</h4><p>流有起点和终点，逐端读取文件,大文件</p>
-<p>为什么要使用？</p>
-<p>可以逐渐读取，内存效率</p>
-<p>把大的文件拆分成一块一块，时间效率</p>
-<p>一个简单的读写留的例子：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//文件模块</span></span><br><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">&#x27;fs&#x27;</span>);</span><br><span class="line"><span class="comment">//创建读取数据流 </span></span><br><span class="line"><span class="keyword">const</span> rs = fs.createReadStream(<span class="string">&#x27;./yarn.lock&#x27;</span>)</span><br><span class="line"><span class="comment">//创建写入数据流 </span></span><br><span class="line"><span class="keyword">const</span> ws = fs.createWriteStream(<span class="string">&#x27;./yarn.copy.lock&#x27;</span>)</span><br><span class="line"></span><br><span class="line">rs.on(<span class="string">&#x27;data&#x27;</span>, <span class="function"><span class="params">chunk</span> =&gt;</span> &#123;</span><br><span class="line">  ws.write(chunk)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">rs.on(<span class="string">&#x27;end&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  ws.end()</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-
-<p>使用这种方法不能保证读写一直，所以需要使用pipe</p>
-<p>注意只有可读流才有pipe方法</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//文件模块</span></span><br><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">&#x27;fs&#x27;</span>);</span><br><span class="line"><span class="comment">//创建读取数据流 </span></span><br><span class="line"><span class="keyword">const</span> rs = fs.createReadStream(<span class="string">&#x27;./yarn.lock&#x27;</span>)</span><br><span class="line"><span class="comment">//创建写入数据流 </span></span><br><span class="line"><span class="keyword">const</span> ws = fs.createWriteStream(<span class="string">&#x27;./yarn.copy.lock&#x27;</span>)</span><br><span class="line">rs.pipe(ws)</span><br></pre></td></tr></table></figure>
-
-<h4 id="流的类型"><a href="#流的类型" class="headerlink" title="流的类型"></a>流的类型</h4><ul>
-<li>可读流</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> rs = fs.createReadStream(<span class="string">&#x27;./yarn.lock&#x27;</span>, &#123;</span><br><span class="line">  <span class="comment">//设置编码方式</span></span><br><span class="line">  encoding: <span class="string">&#x27;utf8&#x27;</span>,</span><br><span class="line">  <span class="comment">//设置缓冲区大小,六个字节</span></span><br><span class="line">  highWaterMark: <span class="number">6</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">rs.on(<span class="string">&#x27;data&#x27;</span>, <span class="function">(<span class="params">chunk</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(chunk)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-
-<p>两种调用方式，自动调用(flowing)还是手动调用(pause)</p>
-<p>使用<code>stream.on(&quot;data&quot;,()=&gt;&#123;&#125;)</code> 为自动模式，读取的时候会不断触发 <code>data</code> 方法,resume pipe 都是自动模式</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">rs.on(<span class="string">&#x27;readable&#x27;</span>, <span class="function">(<span class="params">chunk</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(chunk)</span><br><span class="line">&#125;)</span><br><span class="line"><span class="comment">//手动读取数据</span></span><br><span class="line">rs.read()</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>可写流</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">&#x27;fs&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> ws = fs.createWriteStream(<span class="string">&#x27;a.txt&#x27;</span>)</span><br><span class="line">ws.write(<span class="string">&#x27;xxx&#x27;</span>);</span><br><span class="line"></span><br><span class="line">ws.on(<span class="string">&#x27;finish&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  ws.end()</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>Duplex: 双工流  net.socket</p>
-</li>
-<li><p>transform: 转换流 文件压缩</p>
-</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//文件模块</span></span><br><span class="line"><span class="keyword">const</span> stream = <span class="built_in">require</span>(<span class="string">&#x27;stream&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> transform = stream.Transform(&#123;</span><br><span class="line">  <span class="comment">//自定义转换方法</span></span><br><span class="line">  transform(chunk, encoding, cb) &#123;</span><br><span class="line">    <span class="comment">//大小写转换，放到缓冲区</span></span><br><span class="line">    <span class="built_in">this</span>.push(chunk.toString().toLowerCase())</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line">transform.write(<span class="string">&#x27;D&#x27;</span>);</span><br><span class="line"><span class="built_in">console</span>.log(transform.read().toString());</span><br></pre></td></tr></table></figure>
-
-<p>stream对象都是EventEmitter的实例，所以可以发布事件</p>
-<ul>
-<li>流的链式操作</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">&#x27;fs&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> zlib = <span class="built_in">require</span>(<span class="string">&#x27;zlib&#x27;</span>);</span><br><span class="line"></span><br><span class="line">fs.createReadStream(<span class="string">&#x27;a.txt&#x27;</span>)</span><br><span class="line">  .pipe(zlib.createGunzip)</span><br><span class="line">  .pipe(fs.createWriteStream(<span class="string">&#x27;a.zip&#x27;</span>))</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>使用readline逐行读取</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">&#x27;fs&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> readline = <span class="built_in">require</span>(<span class="string">&#x27;readline&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">&#x27;path&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> filePath = path.resolve(__dirname,<span class="string">&#x27;./yarn.lock&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> rs = fs.createReadStream(filePath);</span><br><span class="line"><span class="keyword">const</span> rl = readline.createInterface(&#123;</span><br><span class="line">  input:rs</span><br><span class="line">&#125;)</span><br><span class="line">rl.on(<span class="string">&#x27;line&#x27;</span>,<span class="function">(<span class="params">l</span>)=&gt;</span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(l)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Node/" rel="tag">Node</a></li></ul>
 
     </footer>
   </div>

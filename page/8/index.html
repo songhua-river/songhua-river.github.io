@@ -113,6 +113,241 @@ var _hmt = _hmt || [];
     
     
     <article
+  id="post-javascript/basic/array"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/posts/a10ceeb7/"
+    >Array</a> 
+</h2>
+ 
+
+    </header>
+     
+    <div class="article-meta">
+      <a href="/posts/a10ceeb7/" class="article-date">
+  <time datetime="2020-10-18T03:13:43.000Z" itemprop="datePublished">2020-10-18</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/JavaScript/">JavaScript</a> / <a class="article-category-link" href="/categories/JavaScript/%E5%9F%BA%E7%A1%80/">基础</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h4 id="扩展运算符"><a href="#扩展运算符" class="headerlink" title="扩展运算符"></a>扩展运算符</h4><p>扩展运算符（spread）是三个点（…）。它好比 rest 参数的逆运算，将一个数组转为用逗号分隔的参数序列。</p>
+<p><strong>只有函数调用时，扩展运算符才可以放在圆括号中，否则会报错</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(...[<span class="number">1</span>, <span class="number">2</span>])</span><br><span class="line"><span class="comment">// Uncaught SyntaxError: Unexpected number</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log((...[<span class="number">1</span>, <span class="number">2</span>]))</span><br><span class="line"><span class="comment">// Uncaught SyntaxError: Unexpected number</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(...[<span class="number">1</span>, <span class="number">2</span>])</span><br><span class="line"><span class="comment">// 1 2</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params">v, w, x, y, z</span>) </span>&#123; &#125;</span><br><span class="line"><span class="keyword">const</span> args = [<span class="number">0</span>, <span class="number">1</span>];</span><br><span class="line">f(<span class="number">-1</span>, ...args, <span class="number">2</span>, ...[<span class="number">3</span>]);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [</span><br><span class="line">  ...(x &gt; <span class="number">0</span> ? [<span class="string">&#x27;a&#x27;</span>] : []),</span><br><span class="line">  <span class="string">&#x27;b&#x27;</span>,</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+
+<p>代替apply</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ES5 的写法</span></span><br><span class="line"><span class="built_in">Math</span>.max.apply(<span class="literal">null</span>, [<span class="number">14</span>, <span class="number">3</span>, <span class="number">77</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment">// ES6 的写法</span></span><br><span class="line"><span class="built_in">Math</span>.max(...[<span class="number">14</span>, <span class="number">3</span>, <span class="number">77</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment">// 等同于</span></span><br><span class="line"><span class="built_in">Math</span>.max(<span class="number">14</span>, <span class="number">3</span>, <span class="number">77</span>);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ES5</span></span><br><span class="line"><span class="keyword">new</span> (<span class="built_in">Date</span>.bind.apply(<span class="built_in">Date</span>, [<span class="literal">null</span>, <span class="number">2015</span>, <span class="number">1</span>, <span class="number">1</span>]))</span><br><span class="line"><span class="comment">// ES6</span></span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Date</span>(...[<span class="number">2015</span>, <span class="number">1</span>, <span class="number">1</span>]);</span><br></pre></td></tr></table></figure>
+
+<h4 id="扩展运算符的应用"><a href="#扩展运算符的应用" class="headerlink" title="扩展运算符的应用"></a>扩展运算符的应用</h4><ul>
+<li><p>复制数组</p>
+</li>
+<li><p>合并数组</p>
+</li>
+<li><p>与解构赋值结合</p>
+<p>如果将扩展运算符用于数组赋值，只能放在参数的最后一位，否则会报错。</p>
+</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> [...butLast, last] = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];</span><br><span class="line"><span class="comment">// 报错</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>扩展运算符还可以将字符串转为真正的数组。</p>
+<p>能够正确识别四个字节的 Unicode 字符。</p>
+</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[...<span class="string">&#x27;hello&#x27;</span>]</span><br><span class="line"><span class="comment">// [ &quot;h&quot;, &quot;e&quot;, &quot;l&quot;, &quot;l&quot;, &quot;o&quot; ]</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;x\uD83D\uDE80y&#x27;</span>.length <span class="comment">// 4</span></span><br><span class="line">[...<span class="string">&#x27;x\uD83D\uDE80y&#x27;</span>].length <span class="comment">// 3</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>任何定义了遍历器（Iterator）接口的对象，都可以用扩展运算符转为真正的数组。</p>
+</li>
+<li><p>Map 和 Set 结构，Generator 函数</p>
+</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> map = <span class="keyword">new</span> <span class="built_in">Map</span>([</span><br><span class="line">  [<span class="number">1</span>, <span class="string">&#x27;one&#x27;</span>],</span><br><span class="line">  [<span class="number">2</span>, <span class="string">&#x27;two&#x27;</span>],</span><br><span class="line">  [<span class="number">3</span>, <span class="string">&#x27;three&#x27;</span>],</span><br><span class="line">]);</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> arr = [...map.keys()]; <span class="comment">// [1, 2, 3]</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> go = <span class="function"><span class="keyword">function</span>*(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">yield</span> <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">yield</span> <span class="number">2</span>;</span><br><span class="line">  <span class="keyword">yield</span> <span class="number">3</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">[...go()] <span class="comment">// [1, 2, 3]</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="Array-from"><a href="#Array-from" class="headerlink" title="Array.from()"></a>Array.from()</h4><p>Array.from方法用于将两类对象转为真正的数组：类似数组的对象（array-like object）和可遍历（iterable）的对象（包括 ES6 新增的数据结构 Set 和 Map）。</p>
+<p><strong>任何有length属性的对象，都可以通过Array.from方法转为数组，而此时扩展运算符就无法转换。</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Array</span>.from(&#123; <span class="attr">length</span>: <span class="number">3</span> &#125;);</span><br><span class="line"><span class="comment">// [ undefined, undefined, undefined ]</span></span><br></pre></td></tr></table></figure>
+
+<p>Array.from还可以接受第二个参数，作用类似于数组的map方法，用来对每个元素进行处理，将处理后的值放入返回的数组。</p>
+<p>如果map函数里面用到了this关键字，还可以传入Array.from的第三个参数，用来绑定this。</p>
+<p><strong>使用第三个参数时不能写箭头函数</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Array</span>.from(&#123;</span><br><span class="line">    <span class="number">0</span>: <span class="string">&quot;a&quot;</span>,</span><br><span class="line">    <span class="number">1</span>: <span class="string">&quot;b&quot;</span>,</span><br><span class="line">    <span class="string">&quot;c&quot;</span>: <span class="string">&quot;c&quot;</span>,</span><br><span class="line">    length: <span class="number">4</span></span><br><span class="line">&#125;, <span class="function"><span class="keyword">function</span> (<span class="params">val</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">`<span class="subst">$&#123;val&#125;</span>_XX_<span class="subst">$&#123;<span class="built_in">this</span>.z&#125;</span>`</span></span><br><span class="line">&#125;, &#123;</span><br><span class="line">    z: <span class="number">100</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h4 id="Array-of"><a href="#Array-of" class="headerlink" title="Array.of()"></a>Array.of()</h4><p>这个方法的主要目的，是弥补数组构造函数Array()的不足。因为参数个数的不同，会导致Array()的行为有差异。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Array</span>() <span class="comment">// []</span></span><br><span class="line"><span class="built_in">Array</span>(<span class="number">3</span>) <span class="comment">// [, , ,]</span></span><br><span class="line"><span class="built_in">Array</span>(<span class="number">3</span>, <span class="number">11</span>, <span class="number">8</span>) <span class="comment">// [3, 11, 8]</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">ArrayOf</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> [].slice.call(<span class="built_in">arguments</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="数组实例的-copyWithin"><a href="#数组实例的-copyWithin" class="headerlink" title="数组实例的 copyWithin()"></a>数组实例的 copyWithin()</h4><p>数组实例的copyWithin()方法，在当前数组内部，将指定位置的成员复制到其他位置（会覆盖原有成员），然后返回当前数组。也就是说，使用这个方法，会修改当前数组。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Array</span>.prototype.copyWithin(target, start = <span class="number">0</span>, end = <span class="built_in">this</span>.length)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>target（必需）：从该位置开始替换数据。如果为负值，表示倒数。</p>
+</li>
+<li><p>start（可选）：从该位置开始读取数据，默认为 0。如果为负值，表示从末尾开始计算。</p>
+</li>
+<li><p>end（可选）：到该位置前停止读取数据，默认等于数组长度。如果为负值，表示从末尾开始计算。</p>
+</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 将3号位复制到0号位</span></span><br><span class="line">[].copyWithin.call(&#123;<span class="attr">length</span>: <span class="number">5</span>, <span class="number">3</span>: <span class="number">1</span>&#125;, <span class="number">0</span>, <span class="number">3</span>)</span><br><span class="line"><span class="comment">// &#123;0: 1, 3: 1, length: 5&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="find-和-findIndex"><a href="#find-和-findIndex" class="headerlink" title="find() 和 findIndex()"></a>find() 和 findIndex()</h4><p>find() 数组成员依次执行该回调函数，直到找出第一个返回值为true的成员,如果没有符合条件的成员，则返回undefined。</p>
+<p>findIndex() 返回第一个符合条件的数组成员的位置，如果所有成员都不符合条件，则返回-1。</p>
+<p>第二个参数，用来绑定回调函数的this对象。</p>
+<p>indexOf方法无法识别数组的NaN成员，但是findIndex方法可以借助Object.is方法做到。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="literal">NaN</span>].findIndex(<span class="function"><span class="params">y</span> =&gt;</span> <span class="built_in">Object</span>.is(<span class="literal">NaN</span>, y))</span><br></pre></td></tr></table></figure>
+
+<h4 id="数组实例的-fill"><a href="#数组实例的-fill" class="headerlink" title="数组实例的 fill()"></a>数组实例的 fill()</h4><p>接受第二个和第三个参数，用于指定填充的起始位置和结束位置。</p>
+<p><strong>注意：如果第一个参数为引用类型，填入的所有值都为同一个对象</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;c&#x27;</span>].fill(<span class="number">7</span>, <span class="number">1</span>, <span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+
+<h4 id="数组实例的-entries-，keys-和-values"><a href="#数组实例的-entries-，keys-和-values" class="headerlink" title="数组实例的 entries()，keys() 和 values()"></a>数组实例的 entries()，keys() 和 values()</h4><p>ES6 提供三个新的方法——entries()，keys()和values()——用于遍历数组。</p>
+<p>它们都返回一个遍历器对象，可以用for…of循环进行遍历，唯一的区别是keys()是对键名的遍历、values()是对键值的遍历，entries()是对键值对的遍历。</p>
+<h4 id="数组实例的-includes"><a href="#数组实例的-includes" class="headerlink" title="数组实例的 includes()"></a>数组实例的 includes()</h4><p>Array.prototype.includes方法返回一个布尔值，表示某个数组是否包含给定的值，与字符串的includes方法类似。ES2016 引入了该方法。</p>
+<p>该方法的第二个参数表示搜索的起始位置，默认为0。如果第二个参数为负数，则表示倒数的位置，如果这时它大于数组长度（比如第二个参数为-4，但数组长度为3），则会重置为从0开始。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[<span class="literal">NaN</span>].includes(<span class="literal">NaN</span>)</span><br><span class="line"><span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<p>Map 和 Set 数据结构有一个has方法，需要注意与includes区分。</p>
+<p>Map 结构的has方法，是用来查找键名的，比如Map.prototype.has(key)、WeakMap.prototype.has(key)、Reflect.has(target, propertyKey)。<br>Set 结构的has方法，是用来查找值的，比如Set.prototype.has(value)、WeakSet.prototype.has(value)。</p>
+<h4 id="数组实例的-flat-，flatMap"><a href="#数组实例的-flat-，flatMap" class="headerlink" title="数组实例的 flat()，flatMap()"></a>数组实例的 flat()，flatMap()</h4><p>flat()默认只会“拉平”一层</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">1</span>, [<span class="number">2</span>, [<span class="number">3</span>]]].flat(<span class="literal">Infinity</span>)</span><br></pre></td></tr></table></figure>
+
+<p>如果原数组有空位，flat()方法会跳过空位。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">1</span>, <span class="number">2</span>, , <span class="number">4</span>, <span class="number">5</span>].flat()</span><br><span class="line"><span class="comment">// [1, 2, 4, 5]</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="数组的空位"><a href="#数组的空位" class="headerlink" title="数组的空位"></a>数组的空位</h4><p>数组的空位指，数组的某一个位置没有任何值。比如，Array构造函数返回的数组都是空位。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0</span> <span class="keyword">in</span> [<span class="literal">undefined</span>, <span class="literal">undefined</span>, <span class="literal">undefined</span>] <span class="comment">// true</span></span><br><span class="line"><span class="number">0</span> <span class="keyword">in</span> [, , ,] <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+
+<p>ES5 对空位的处理，已经很不一致了，大多数情况下会忽略空位。</p>
+<ul>
+<li><p>forEach(), filter(), reduce(), every() 和some()都会跳过空位。</p>
+</li>
+<li><p>map()会跳过空位，但会保留这个值</p>
+</li>
+<li><p>join()和toString()会将空位视为undefined，而undefined和null会被处理成空字符串。</p>
+</li>
+</ul>
+<p>ES6 则是明确将空位转为undefined。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Array</span>.from([<span class="string">&#x27;a&#x27;</span>,,<span class="string">&#x27;b&#x27;</span>])</span><br><span class="line"><span class="comment">// [ &quot;a&quot;, undefined, &quot;b&quot; ]</span></span><br><span class="line"></span><br><span class="line">[...[<span class="string">&#x27;a&#x27;</span>,,<span class="string">&#x27;b&#x27;</span>]]</span><br><span class="line"><span class="comment">// [ &quot;a&quot;, undefined, &quot;b&quot; ]</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Array</span>(<span class="number">3</span>).fill(<span class="string">&#x27;a&#x27;</span>) <span class="comment">// [&quot;a&quot;,&quot;a&quot;,&quot;a&quot;]</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> arr = [, ,];</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i <span class="keyword">of</span> arr) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 1</span></span><br><span class="line"><span class="comment">// 1</span></span><br></pre></td></tr></table></figure>
+
+<p>entries()、keys()、values()、find()和findIndex()会将空位处理成undefined。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// entries()</span></span><br><span class="line">[...[,<span class="string">&#x27;a&#x27;</span>].entries()] <span class="comment">// [[0,undefined], [1,&quot;a&quot;]]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// keys()</span></span><br><span class="line">[...[,<span class="string">&#x27;a&#x27;</span>].keys()] <span class="comment">// [0,1]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// values()</span></span><br><span class="line">[...[,<span class="string">&#x27;a&#x27;</span>].values()] <span class="comment">// [undefined,&quot;a&quot;]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// find()</span></span><br><span class="line">[,<span class="string">&#x27;a&#x27;</span>].find(<span class="function"><span class="params">x</span> =&gt;</span> <span class="literal">true</span>) <span class="comment">// undefinedq</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// findIndex()</span></span><br><span class="line">[,<span class="string">&#x27;a&#x27;</span>].findIndex(<span class="function"><span class="params">x</span> =&gt;</span> <span class="literal">true</span>) <span class="comment">// 0</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="Array-prototype-sort-的排序稳定性"><a href="#Array-prototype-sort-的排序稳定性" class="headerlink" title="Array.prototype.sort() 的排序稳定性"></a>Array.prototype.sort() 的排序稳定性</h4><p>早先的 ECMAScript 没有规定，Array.prototype.sort()的默认排序算法是否稳定，留给浏览器自己决定，这导致某些实现是不稳定的。<br>ES2019 明确规定，Array.prototype.sort()的默认排序算法必须稳定。这个规定已经做到了，现在 JavaScript 各个主要实现的默认排序算法都是稳定的。</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ES6%E5%9F%BA%E7%A1%80/" rel="tag">ES6基础</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+   
+</article>
+
+    
+    <article
+  id="post-javascript/basic/encode_decode"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h2 itemprop="name">
+  <a class="article-title" href="/posts/6f8a188e/"
+    >编码</a> 
+</h2>
+ 
+
+    </header>
+     
+    <div class="article-meta">
+      <a href="/posts/6f8a188e/" class="article-date">
+  <time datetime="2020-10-17T06:22:37.000Z" itemprop="datePublished">2020-10-17</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/JavaScript/">JavaScript</a> / <a class="article-category-link" href="/categories/JavaScript/%E5%9F%BA%E7%A1%80/">基础</a>
+  </div>
+   
+    </div>
+      
+    <div class="article-entry" itemprop="articleBody">
+       
+  <p>计算机自己能理解的“语言”是二进制数，最小的信息标识是二进制位，8个二进制位表示一个字节；而我们人类所能理解的语言文字则是一套由英文字母、汉语汉字、标点符号字符、阿拉伯数字等等很多的字符构成的<strong>字符集</strong></p>
+<p>如果要让计算机来按照人类的意愿进行工作，则必须把人类所使用的这些字符集转换为计算机所能理解的二级制码，这个过程就是<strong>编码</strong>，他的逆过程称为<strong>解码</strong>。</p>
+<p>最开始计算机在美国发明使用，需要编码的<strong>字符集</strong>,并不是很大，无外乎英文字母、数字和一些简单的标点符号，因此采用了一种单字节编码系统。在这套编码规则中，人们将所需字符集中的字符一一映射到128个二进制数上，这128个二进制数是最高位为0，利用剩余低7位组成00000000~01111111（0X00~0X7F）。0X00到0X1F共32个二进制数来对控制字符或通信专用字符（如LF换行、DEL删除、BS退格）编码，0X20到0X7F共96个二进制数来对阿拉伯数字、英文字母大小写和下划线、括号等符号进行编码。</p>
+<p><strong>将这套字符集映射到0X00~0X7F二进制码的过程就称为基础ASCII编码</strong></p>
+<p>通过这个编码过程，计算机就将人类的语言转化为自己的语言存储了起来，反之从磁盘中读取二级制数并转化为字母数字等字符以供显示的过程就是<strong>解码</strong>。</p>
+<p>随着计算机被迅速推广使用，欧洲的非英语国家的人们发现这套由美国人设计的字符集不够用了，比如一些带重音的字符、希腊字母等都不在这个字符集中</p>
+<p><strong>于是扩充了ASCII编码规则，将原本为0的最高位改为1，因此扩展出了10000000~11111111（0X80~0XFF）这128个二进制数。</strong></p>
+<p>这其中，最优秀的扩展方案是ISO 8859-1，通常称之为<strong>Latin-1</strong>。Latin-1利用128~255这128个二进制数，包括了足够的附加字符集来涵盖基本的西欧语言，同时在0~127的范围内兼容ASCII编码规则。</p>
+<p>随着使用计算机的国家越来越多，自然而然需要编码的字符集就越来越庞大，早先的ASCII编码字符集由于受到单字节的限制，其容量就远远不够了，比方说面对成千上万的汉字，其压力可想而知。</p>
+<p><strong>因此中国国家标准总局发布了一套《信息交换用汉字编码字符集》的国家标准，其标准号就是GB 2312—1980。</strong></p>
+<p>这个字符集共收入汉字6763个和非汉字图形字符682个，采用两个字节对字符集进行编码，并向下兼容ASCII编码方式。简言之，整个字符集分成94个区，每区有94个位，分别用一个字节对应表示相应的区和位。每个区位对应一个字符，因此可用所在的区和位来对汉字进行两字节编码。</p>
+<p><strong>再后来生僻字、繁体字及日韩汉字也被纳入字符集，就又有了后来的GBK字符集及相应的编码规范，GBK编码规范也是向下兼容GBK2312的。</strong></p>
+<p>在中国发展的同时，计算机在全世界各个国家不断普及，不同的国家地区都会开发出自己的一套编码系统，因此编码系统五花八门，这时候问题就开始凸显了，特别是在互联网通信的大环境下，装有不同编码系统的计算机之间通信就会彼此不知道对方在“说”些什么，按照A编码系统的编码方式将所需字符转换成二进制码后，在B编码系统的计算机上解码是无法得到原始字符的，相反会出现一些出人意料的古怪字符，这就是所谓的</p>
+<p>为了实现跨语言、跨平台的文本转换和处理需求，ISO国际标准化组织提出了Unicode的新标准，这套标准中包含了Unicode字符集和一套编码规范。Unicode字符集涵盖了世界上所有的文字和符号字符，Unicode编码方案为字符集中的每一个字符指定了统一且唯一的二进制编码，这就能彻底解决之前不同编码系统的冲突和乱码问题。这套编码方案简单来说是这样的：编码规范中含有17个组（称为平面），每一个组含有65536个码位（例如组0就是0X0000~0XFFFF），每一个码位就唯一对应一个字符，大部分的字符都位于字符集平面0的码位中，少量位于其他平面。</p>
+<p>既然提到了Unicode编码，那么常常与之相伴的UTF-8，UTF-16编码方案又是什么？</p>
+<p>其实到目前为止我们都一致混淆了两个概念，即字符代码和字符编码，字符代码是特定字符在某个字符集中的序号，而字符编码是在传输、存储过程当中用于表示字符的以字节为单位的二进制序列。ASCII编码系统中，字符代码和字符编码是一致的，比如字符A，在ASCII字符集中的序号，也就是所谓的字符代码是65，存储在磁盘中的二进制比特序列是01000001（0X41，十进制也是65），另外的，如在GB2312编码系统中字符代码和字符编码的值也是一致的，所以无形之中我们就忽略了二者的差异性。而在Unicode标准中，我们目前使用的是UCS-4，即字符集中每一个字符的字符代码都是用4个字节来表示，其中字符代码0~127兼容ASCII字符集，一般的通用汉字的字符代码也都集中在65535之前，使用大于65535的字符代码，即需要超过两个字节来表示的字符代码是比较少的。因此，如果仍然依旧采用字符代码和字符编码相一致的编码方式，那么英语字母、数字原本仅需一个字节编码，目前就需要4个字节进行编码，汉字原本仅需两个字节进行编码，目前也需要4个字节进行编码，这对于存储或传输资源而言是很不划算的。</p>
+<p><strong>因此就需要在字符代码和字符编码间进行再编码，这样就引出了UTF-8、UTF-16等编码方式</strong></p>
+<p>基于上述需求，UTF-8就是针对位于不同范围的字符代码转化成不同长度的字符编码，同时这种编码方式是以字节为单位，并且完全兼容ASCII编码，即0X00-0X7F的字符代码和字符编码完全一致，也是用一个字节来编码ASCII字符集，而常用汉字在Unicode中的字符代码是4E00-9FA5，在文末的对应关系中我们看到是用三个字节来进行汉字字符的编码。UTF-16同理，就是以16位二进制数为基本单位对Unicode字符集中的字符代码进行再编码，原理和UTF-8一致。</p>
+<p>文末的对应关系中我们看到是用三个字节来进行汉字字符的编码。UTF-16同理，就是以16位二进制数为基本单位对Unicode字符集中的字符代码进行再编码，原理和UTF-8一致。</p>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ES6%E5%9F%BA%E7%A1%80/" rel="tag">ES6基础</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li></ul>
+
+    </footer>
+  </div>
+
+    
+ 
+   
+</article>
+
+    
+    <article
   id="post-javascript/basic/string"
   class="article article-type-post"
   itemscope
@@ -1113,207 +1348,6 @@ op3=>operation: 词法分析器
 op1(right)->op2(right)->op3</textarea><textarea id="flowchart-0-options" style="display: none">{"scale":1,"line-width":2,"line-length":50,"text-margin":10,"font-size":12}</textarea><script>  var code = document.getElementById("flowchart-0-code").value;  var options = JSON.parse(decodeURIComponent(document.getElementById("flowchart-0-options").value));  var diagram = flowchart.parse(code);  diagram.drawSVG("flowchart-0", options);</script></li>
 </ul>
  
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/" rel="tag">编译原理</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-   
-</article>
-
-    
-    <article
-  id="post-compile/(2-1)词法分析"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/posts/54df2ad9/"
-    >词法分析</a> 
-</h2>
- 
-
-    </header>
-     
-    <div class="article-meta">
-      <a href="/posts/54df2ad9/" class="article-date">
-  <time datetime="2020-10-14T11:07:32.000Z" itemprop="datePublished">2020-10-14</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/">编译原理</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h4 id="此法分析流程"><a href="#此法分析流程" class="headerlink" title="此法分析流程"></a>此法分析流程</h4><div id="flowchart-0" class="flow-chart"></div>
-
-<p>字符流为一段文本，注意在windows下每行的末尾是一个换行符和一个回车符 <code>\r\n</code>, 在linux下只有一个回车符<code>\n</code></p>
-<p>在字符流的末尾会有一个EOF标识，为Scii码不能编码的为-1</p>
-<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">if (x &gt; 5) &#123;</span><br><span class="line">    y = true;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>通过词法分析，把字符流切分成单词,其中的空格被舍去</p>
-<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">IF LPAREN IDENT(x) GT INT(5) RPAREN LPAREN</span><br><span class="line">    IDENT(y) ASSIGN BOOLEN(true) SEMICOLON</span><br><span class="line">RPAREN EOF</span><br></pre></td></tr></table></figure>
-
-<p>核心在于记号的数据结构的定义和字符流到记号流转换的算法</p>
-<h4 id="记号的数据结构定义"><a href="#记号的数据结构定义" class="headerlink" title="记号的数据结构定义"></a>记号的数据结构定义</h4><p>通过一个有限数字来定义所有可能遇到的记号，包括 关键字，括号等</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> kind = [<span class="string">&#x27;IF&#x27;</span>,<span class="string">&quot;LPAREN&quot;</span>,<span class="string">&quot;ID&quot;</span>,<span class="string">&quot;INTLIT&quot;</span>,...];</span><br></pre></td></tr></table></figure>
-
-<p><strong>记号描述对象</strong></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> token = &#123;</span><br><span class="line">    kind: <span class="string">&quot;IF&quot;</span>,</span><br><span class="line">    <span class="comment">// lexeme标识当前记号的单词</span></span><br><span class="line">    <span class="comment">// 因为if与标识唯一对应，所以不需要写</span></span><br><span class="line">    lexeme:<span class="number">0</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> token = &#123;</span><br><span class="line">    kind: <span class="string">&#x27;ID&#x27;</span>,</span><br><span class="line">    lexeme :<span class="string">&#x27;x&#x27;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="词法分析器的任务"><a href="#词法分析器的任务" class="headerlink" title="词法分析器的任务"></a>词法分析器的任务</h4><p>字符流到记号流</p>
-<ul>
-<li><p>字符流：和被编译的语言密切相关 （ASCII,Unicode,or…）</p>
-</li>
-<li><p>记号流：编译器内部定义的数据结构，编码所识别出的词法单元</p>
-</li>
-</ul>
-<h4 id="词法分析器实现-手工编码"><a href="#词法分析器实现-手工编码" class="headerlink" title="词法分析器实现-手工编码"></a>词法分析器实现-手工编码</h4><p>相对复杂，容易出错，是目前主流的实现方法</p>
-<p>转移</p>
-<p><img src="/0002.png"> </p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">token</span>(<span class="params">char</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">let</span> index= <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">const</span> c = char[index];</span><br><span class="line">    <span class="keyword">if</span>(c===<span class="string">&#x27;&lt;&#x27;</span>)&#123;</span><br><span class="line">        c = char[index++];</span><br><span class="line">        <span class="keyword">if</span>(c===<span class="string">&#x27;=&#x27;</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;LE&quot;</span>;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="comment">// 如果是其他字符</span></span><br><span class="line">            <span class="comment">// 说明下一个字符并不是集合中的一种可能</span></span><br><span class="line">            <span class="comment">// 所以需要回滚放回到解析队列中，并返回结果</span></span><br><span class="line">            rollback();</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;LT&quot;</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;<span class="keyword">else</span> <span class="keyword">if</span>(c===<span class="string">&#x27;=&#x27;</span>)&#123;</span><br><span class="line">        c = char[index++];</span><br><span class="line">        <span class="keyword">if</span>(c===<span class="string">&#x27;=&#x27;</span>)&#123;</span><br><span class="line">            c = char[index++];</span><br><span class="line">            <span class="keyword">if</span>(c===<span class="string">&#x27;=&#x27;</span>)&#123;</span><br><span class="line">                <span class="comment">//全等</span></span><br><span class="line">                <span class="keyword">return</span> <span class="string">&quot;FEQ&quot;</span></span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                rollback();</span><br><span class="line">                <span class="keyword">return</span> <span class="string">&quot;EQ&quot;</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="comment">// 赋值</span></span><br><span class="line">            rollback();</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&#x27;ASSIGNMENT&#x27;</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;<span class="keyword">else</span> <span class="keyword">if</span>(c===<span class="string">&#x27;&gt;&#x27;</span>)&#123;</span><br><span class="line">        <span class="comment">//与小于号类似</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="标识符和关键字"><a href="#标识符和关键字" class="headerlink" title="标识符和关键字"></a>标识符和关键字</h4><p>很多语言的标识符和关键字是有交集的</p>
-<p>标识符（变量）以字母下划线开头，后面可以是多个数字，字母下划线</p>
-<p>通过转移表分析标识符</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">token</span>(<span class="params">char</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> index = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">let</span> c = char[index];</span><br><span class="line">    <span class="keyword">if</span> (<span class="regexp">/[a-zA-Z_]/</span>.text(c)) &#123;</span><br><span class="line">        c = char[index++];</span><br><span class="line">        <span class="keyword">while</span> (<span class="regexp">/[a-zA-Z0-9_]/</span>.test(c)) &#123;</span><br><span class="line">            c = char[index];</span><br><span class="line">        &#125;</span><br><span class="line">        rollback();</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;ID&#x27;</span>;</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>关键字 <code>if</code>,<code>class</code>,等也满足标识符的规则</p>
-<h4 id="通过修改转移表区分关键字"><a href="#通过修改转移表区分关键字" class="headerlink" title="通过修改转移表区分关键字"></a>通过修改转移表区分关键字</h4><p>如果在转移过程与遇到有关键字的情况，把关键字单独处理</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">token</span>(<span class="params">char</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> index = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">let</span> c = char[index];</span><br><span class="line">    <span class="keyword">if</span> (<span class="regexp">/[a-hj-zA-Z_]/</span>.text(c)) &#123;</span><br><span class="line">        c = char[index++];</span><br><span class="line">        <span class="keyword">if</span> (<span class="regexp">/[a-zA-Z0-9_]/</span>.test(c)) &#123;</span><br><span class="line">            <span class="keyword">while</span> (<span class="regexp">/[a-zA-Z0-9_]/</span>.test(c)) &#123;</span><br><span class="line">                c = char[index];</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&#x27;IDENT&#x27;</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            rollback();</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&#x27;ID&#x27;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (c === <span class="string">&#x27;i&#x27;</span>) &#123;</span><br><span class="line">        c = char[index++];</span><br><span class="line">        <span class="keyword">if</span> (c === <span class="string">&#x27;f&#x27;</span>) &#123;</span><br><span class="line">            c = char[index++];</span><br><span class="line">            <span class="keyword">if</span> (<span class="regexp">/[a-zA-Z0-9_]/</span>.test(c)) &#123;</span><br><span class="line">                <span class="keyword">while</span> (<span class="regexp">/[a-zA-Z0-9_]/</span>.test(c)) &#123;</span><br><span class="line">                    c = char[index];</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">return</span> <span class="string">&#x27;IDENT&#x27;</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                rollback();</span><br><span class="line">                <span class="keyword">return</span> <span class="string">&#x27;IF&#x27;</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="通过哈希表区分关键字"><a href="#通过哈希表区分关键字" class="headerlink" title="通过哈希表区分关键字"></a>通过哈希表区分关键字</h4><p>对所有的标识符和关键字统一按照标识符的转移表进行识别</p>
-<p>识别完成后进一步看是否是关键字</p>
-<p>通过构建哈希表（完美哈希），实现 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.566ex" xmlns="http://www.w3.org/2000/svg" width="4.618ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 2041 1000" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><path id="MJX-1-TEX-I-1D442" d="M740 435Q740 320 676 213T511 42T304 -22Q207 -22 138 35T51 201Q50 209 50 244Q50 346 98 438T227 601Q351 704 476 704Q514 704 524 703Q621 689 680 617T740 435ZM637 476Q637 565 591 615T476 665Q396 665 322 605Q242 542 200 428T157 216Q157 126 200 73T314 19Q404 19 485 98T608 313Q637 408 637 476Z"></path><path id="MJX-1-TEX-N-28" d="M94 250Q94 319 104 381T127 488T164 576T202 643T244 695T277 729T302 750H315H319Q333 750 333 741Q333 738 316 720T275 667T226 581T184 443T167 250T184 58T225 -81T274 -167T316 -220T333 -241Q333 -250 318 -250H315H302L274 -226Q180 -141 137 -14T94 250Z"></path><path id="MJX-1-TEX-N-31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path><path id="MJX-1-TEX-N-29" d="M60 749L64 750Q69 750 74 750H86L114 726Q208 641 251 514T294 250Q294 182 284 119T261 12T224 -76T186 -143T145 -194T113 -227T90 -246Q87 -249 86 -250H74Q66 -250 63 -250T58 -247T55 -238Q56 -237 66 -225Q221 -64 221 250T66 725Q56 737 55 738Q55 746 60 749Z"></path></defs><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="matrix(1 0 0 -1 0 0)"><g data-mml-node="math"><g data-mml-node="mi"><use xlink:href="#MJX-1-TEX-I-1D442"></use></g><g data-mml-node="mo" transform="translate(763, 0)"><use xlink:href="#MJX-1-TEX-N-28"></use></g><g data-mml-node="mn" transform="translate(1152, 0)"><use xlink:href="#MJX-1-TEX-N-31"></use></g><g data-mml-node="mo" transform="translate(1652, 0)"><use xlink:href="#MJX-1-TEX-N-29"></use></g></g></g></svg></mjx-container> 时间复杂度 <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js"></script><textarea id="flowchart-0-code" style="display: none">op1=>operation: 源程序
-op2=>operation: 词法分析器
-（字符流）
-op3=>operation: 记号
-对字符流切分，变为记号流）
-op4=>operation: 语法分析器
-op5=>operation: 抽象语法树
-op6=>operation: 语义分析器
-op7=>operation: 中间表示
-op1->op2(right)->op3->op4->op5(right)->op6->op7(right)</textarea><textarea id="flowchart-0-options" style="display: none">{"scale":1,"line-width":2,"line-length":50,"text-margin":10,"font-size":12}</textarea><script>  var code = document.getElementById("flowchart-0-code").value;  var options = JSON.parse(decodeURIComponent(document.getElementById("flowchart-0-options").value));  var diagram = flowchart.parse(code);  diagram.drawSVG("flowchart-0", options);</script></p>
- 
-      <!-- reward -->
-      
-    </div>
-    
-
-    <!-- copyright -->
-    
-    <footer class="article-footer">
-       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/" rel="tag">编译原理</a></li></ul>
-
-    </footer>
-  </div>
-
-    
- 
-   
-</article>
-
-    
-    <article
-  id="post-compile/(1-1)编译原理概述"
-  class="article article-type-post"
-  itemscope
-  itemprop="blogPost"
-  data-scroll-reveal
->
-  <div class="article-inner">
-    
-    <header class="article-header">
-       
-<h2 itemprop="name">
-  <a class="article-title" href="/posts/eab560c/"
-    >编译原理概述</a> 
-</h2>
- 
-
-    </header>
-     
-    <div class="article-meta">
-      <a href="/posts/eab560c/" class="article-date">
-  <time datetime="2020-10-14T10:31:02.000Z" itemprop="datePublished">2020-10-14</time>
-</a> 
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/">编译原理</a>
-  </div>
-   
-    </div>
-      
-    <div class="article-entry" itemprop="articleBody">
-       
-  <h3 id="什么是编译器"><a href="#什么是编译器" class="headerlink" title="什么是编译器"></a>什么是编译器</h3><ul>
-<li><p>计算设备包括个人计算机、大型机、嵌入式系统、智能设备等</p>
-</li>
-<li><p>核心的问题都是软件的构造</p>
-<ul>
-<li>而目前绝大部分软件都由高级语言书写</li>
-<li>成百种高级语言</li>
-</ul>
-</li>
-<li><p>这些语言是如何运行在计算机系统上的？</p>
-<ul>
-<li><strong>编译器</strong>  例如c语言到汇编语言，中间层就是编译器</li>
-<li>编译器是一个程序</li>
-<li>核心功能就是把源代码翻译成目标代码</li>
-</ul>
-</li>
-</ul>
-<p><img src="/posts/eab560c/0001.png"></p>
-<ul>
-<li>解释器也是处理程序的一种程序</li>
-</ul>
-<div id="flowchart-0" class="flow-chart"></div>
-
-<h3 id="Fortran-编译器"><a href="#Fortran-编译器" class="headerlink" title="Fortran 编译器"></a>Fortran 编译器</h3><p>对计算机发展的影响</p>
-<ul>
-<li><p>理论上： 形式语言，自动机，文法，语法指导翻译</p>
-</li>
-<li><p>实践上： 算法，数据结构</p>
-</li>
-<li><p>架构</p>
-</li>
-</ul>
-<h3 id="学习的意义"><a href="#学习的意义" class="headerlink" title="学习的意义"></a>学习的意义</h3><p>编译原理集中体现了计算机科学的很多 核心思想</p>
-<ul>
-<li><p>算法，数据结构，软件工程等</p>
-</li>
-<li><p>编译器是其他领域的重要研究基础</p>
-</li>
-<li><p>编译器本身就是非常重要的研究领域</p>
-</li>
-<li><p>新的语言设计</p>
-</li>
-<li><p>大型软件的构造和维护</p>
-</li>
-</ul>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js"></script><textarea id="flowchart-0-code" style="display: none">op=>operation: 输入
-op2=>operation: 解释器（在线）
-op3=>operation: 输出
-
-op(right)->op2(right)->op3(right)</textarea><textarea id="flowchart-0-options" style="display: none">{"scale":1,"line-width":2,"line-length":50,"text-margin":10,"font-size":12}</textarea><script>  var code = document.getElementById("flowchart-0-code").value;  var options = JSON.parse(decodeURIComponent(document.getElementById("flowchart-0-options").value));  var diagram = flowchart.parse(code);  diagram.drawSVG("flowchart-0", options);</script> 
       <!-- reward -->
       
     </div>

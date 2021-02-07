@@ -88,7 +88,7 @@ var _hmt = _hmt || [];
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> 字数统计:</span>
-            <span class="post-count">1.2k</span>
+            <span class="post-count">1.6k</span>
         </span>
     </span>
 
@@ -97,7 +97,7 @@ var _hmt = _hmt || [];
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> 阅读时长≈</span>
-            <span class="post-count">5 分钟</span>
+            <span class="post-count">6 分钟</span>
         </span>
     </span>
 </div>
@@ -143,8 +143,16 @@ var _hmt = _hmt || [];
 <p>index.js 增加代码</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="built_in">module</span>.hot) &#123;</span><br><span class="line">  <span class="built_in">module</span>.hot.accept(<span class="string">&#x27;./print.js&#x27;</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">&#x27;Accepting the updated printMe module!&#x27;</span>);</span><br><span class="line">   printMe();</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-
-<h4 id="output-和-devserver-中的-publicpath-作用"><a href="#output-和-devserver-中的-publicpath-作用" class="headerlink" title="output 和 devserver 中的 publicpath 作用"></a>output 和 devserver 中的 publicpath 作用</h4><p><a target="_blank" rel="noopener" href="https://webpack.js.org/configuration/output/#outputpublicpath">output 中的 publicpath</a></p>
+<h4 id="entry"><a href="#entry" class="headerlink" title="entry"></a>entry</h4><p><strong>string</strong> : 所有的资源打包成一个chunk,输出一个<code>bundle</code>文件，默认的名称是<code>main.js</code></p>
+<p><strong>array</strong>: 多入口，所有的文件也只会被打包成一个<code>chunk</code>,通常只在配置html的HMR时使用</p>
+<p><strong>object</strong> 多入口，有几个入口文件就可以形成几个<code>chunk</code>,输出几个<code>bundle</code>文件，文件的名称时对象中的<code>key</code>，每个key后面可以写一个数组，可以将数组中的文件打包成一个<code>bundle</code>,(参照dll的用法)</p>
+<h4 id="output"><a href="#output" class="headerlink" title="output"></a>output</h4><p><strong>filename</strong> 输出的文件名称，可以指定目录和文件名 <code>js/[name].js</code></p>
+<p><strong>publicpath</strong> 所有资源引入时候的公共路径，会拼在资源路径的前面作为基础路径， <code>publicpath:/</code>,<code>img/a.png</code> =&gt; <code>/img/a.png</code>, <strong>注意：不是资源的输出路径</strong></p>
+<p><strong>chunkFilename</strong> 非入口<code>chunk</code>的名称，通过动态<code>import</code>引入的文件名称通过id的形式命名，从0开始，依次递增，<strong>通常会使用<a target="_blank" rel="noopener" href="https://webpack.js.org/migrate/5/#using--webpackchunkname--">webpackchunkname</a>来重命名</strong></p>
+<p><strong>library</strong> 会将<code>chunk</code>文件用一个变量接受，暴露给全局使用</p>
+<p><strong>libraryTarget</strong> 指明以那种方式引入,<code>window</code>把输入的变量添加到浏览器全局环境<code>window[name]=xxx</code>, <code>global</code>把输入的变量添加到node全局环境<code>global[name]=xxx</code>,<code>commonjs</code>以commonjs模块化规范引入，通常配合<code>dll</code>使用 </p>
+<p><strong>与 devserver 中的 publicpath 区别</strong></p>
+<p><a target="_blank" rel="noopener" href="https://webpack.js.org/configuration/output/#outputpublicpath">output 中的 publicpath</a></p>
 <p>这是一个在使用按需加载和引入外部资源（图片,文件等）非常重要的属性，如果设置了一个错误的值，当加载这些资源时会报404错误</p>
 <p>这个配置项指定了输出目录在浏览器中引用时的公共路径（publicpath）,一个相对路径被解析为相对于HTML页面或[‵<base>`标签](<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base">https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base</a>)</p>
 <blockquote>
