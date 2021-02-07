@@ -114,8 +114,28 @@ if (module.hot) {
 }
 ```
 
+#### entry
 
-#### output 和 devserver 中的 publicpath 作用
+**string** : 所有的资源打包成一个chunk,输出一个`bundle`文件，默认的名称是`main.js`
+
+**array**: 多入口，所有的文件也只会被打包成一个`chunk`,通常只在配置html的HMR时使用
+
+**object** 多入口，有几个入口文件就可以形成几个`chunk`,输出几个`bundle`文件，文件的名称时对象中的`key`，每个key后面可以写一个数组，可以将数组中的文件打包成一个`bundle`,(参照dll的用法)
+
+#### output 
+
+**filename** 输出的文件名称，可以指定目录和文件名 `js/[name].js`
+
+**publicpath** 所有资源引入时候的公共路径，会拼在资源路径的前面作为基础路径， `publicpath:/`,`img/a.png` => `/img/a.png`, **注意：不是资源的输出路径**
+
+**chunkFilename** 非入口`chunk`的名称，通过动态`import`引入的文件名称通过id的形式命名，从0开始，依次递增，**通常会使用[webpackchunkname](https://webpack.js.org/migrate/5/#using--webpackchunkname--)来重命名**
+
+**library** 会将`chunk`文件用一个变量接受，暴露给全局使用
+
+**libraryTarget** 指明以那种方式引入,`window`把输入的变量添加到浏览器全局环境`window[name]=xxx`, `global`把输入的变量添加到node全局环境`global[name]=xxx`,`commonjs`以commonjs模块化规范引入，通常配合`dll`使用 
+
+
+**与 devserver 中的 publicpath 区别**
 
 [output 中的 publicpath](https://webpack.js.org/configuration/output/#outputpublicpath)
 
@@ -155,7 +175,6 @@ module.exports = {
 如果 publicPath 改为 `/assets/`, 那么可以在 `http://localhost:8080/assets/bundle.js`访问，也可以把 publicPath 改为 `http://localhost:8080/assets/`
 
 这说明了 devServer.publicPath 与 output.publicPath 是一致的
-
 
 
 ##### @babel/polyfill  @babel/plugin-transform-runtime @babel/runtime-corejs2
