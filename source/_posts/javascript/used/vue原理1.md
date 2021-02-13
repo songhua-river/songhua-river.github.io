@@ -1,7 +1,6 @@
 ---
 title: vue原理A
 mathjax: true
-date: 2021-02-02 08:28:18
 categories:
   - JavaScript
   - 应用案例
@@ -9,7 +8,8 @@ tags:
   - JavaScript
   - 应用案例
   - Vue
-abbrlink:
+abbrlink: c62f768f
+date: 2021-02-02 08:28:18
 ---
 
 #### 目录分析
